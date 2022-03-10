@@ -14,10 +14,11 @@ import math
 
 import toolkit.prf
 import toolkit.prp
-from toolkit.symmetric_encryption import AESxCBC as PCPASecureSE
+import toolkit.symmetric_encryption
 
 PRF = toolkit.prf.get_prf_implementation("HmacPRF")
 PRP = toolkit.prp.get_prp_implementation("HmacLubyRackoffPRP")
+PCPASecureSE = toolkit.symmetric_encryption.get_symmetric_encryption_implementation("AES-CBC")
 
 # todo In the future, it might be possible to switch to the profile form
 # GLOBAL PARAMETER
