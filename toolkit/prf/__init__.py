@@ -22,8 +22,8 @@ def get_prf_implementation(prf_name: str):
 
     try:
         if prf_name.lower() in {'hmacprf', 'hmac-prf', 'hmac_prf'}:
-            import toolkit.prf.hmac_prf
-            cache['hmacprf'] = cache['hmac-prf'] = cache['hmac_prf'] = toolkit.prf.hmac_prf.HmacPRF
+            from toolkit.prf.hmac_prf import HmacPRF
+            cache['hmacprf'] = cache['hmac-prf'] = cache['hmac_prf'] = HmacPRF
     except ImportError:
         pass  # no extension module, this hash is unsupported.
 

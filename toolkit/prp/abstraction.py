@@ -7,9 +7,7 @@ LIB-SSE CODE
 @time: 2022/03/10
 @contact: jeza@vip.qq.com
 @site:  
-@software: PyCharm 
-@description: Pseudorandom Permutation Implementation
-@chinese_description: 伪随机置换实现
+@software: PyCharm
 """
 import abc
 

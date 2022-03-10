@@ -12,9 +12,12 @@ LIB-SSE CODE
 """
 import math
 
-from toolkit.prf import HmacPRF as PRF
-from toolkit.prp import HmacLubyRackoffPRP as PRP
+import toolkit.prf
+import toolkit.prp
 from toolkit.symmetric_encryption import AESxCBC as PCPASecureSE
+
+PRF = toolkit.prf.get_prf_implementation("HmacPRF")
+PRP = toolkit.prp.get_prp_implementation("HmacLubyRackoffPRP")
 
 # todo In the future, it might be possible to switch to the profile form
 # GLOBAL PARAMETER
