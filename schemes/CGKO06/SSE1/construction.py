@@ -30,7 +30,10 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         pass
 
     def _Gen(self):
-        """Generate Key"""
+        """
+        Generate Key
+        K4 is not used here now.
+        """
         key_tuple = tuple(os.urandom(param_k) for _ in range(4))
         return key_tuple
 
