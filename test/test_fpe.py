@@ -18,7 +18,7 @@ from toolkit.symmetric_encryption.fpe import BitwiseFFX
 
 class TestFPE(unittest.TestCase):
     def test_fpe_correctness(self):
-        fpe = BitwiseFFX(b'')
+        fpe = BitwiseFFX()
         keys = [
             b"JezaChen",
             b"Sun yat-sen university",

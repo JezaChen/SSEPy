@@ -29,6 +29,10 @@ def get_prp_implementation(prp_name: str):
             from .hmac_luby_rackoff_prp import HmacLubyRackoffPRP
             cache['hmaclubyrackoffprp'] = cache['hmac-luby-rackoff-prp'] = cache['hmac_luby_rackoff_prp'] = \
                 HmacLubyRackoffPRP
+        elif prp_name.lower() in {'bitwise_fpe_prp', 'bitwise-fpe-prp', 'bitwisefpeprp'}:
+            from .bitwise_fpe_prp import BitwiseFPEPRP
+            cache['bitwise_fpe_prp'] = cache['bitwise-fpe-prp'] = cache['bitwisefpeprp'] = \
+                BitwiseFPEPRP
     except ImportError:
         pass  # no extension module, this hash is unsupported.
 
