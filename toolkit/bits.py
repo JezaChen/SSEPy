@@ -81,12 +81,12 @@ class Bitset(Sequence):
 
     def __and__(self, other):
         b = Bitset(self.value & int(other))
-        b.length = max((self.length, b.length))
+        b.length = max((self.length, other.length))
         return b
 
     def __or__(self, other):
         b = Bitset(self.value | int(other))
-        b.length = max((self.length, b.length))
+        b.length = max((self.length, other.length))
         return b
 
     def __invert__(self):
@@ -96,12 +96,12 @@ class Bitset(Sequence):
 
     def __xor__(self, value):
         b = Bitset(self.value ^ int(value))
-        b.length = max((self.length, b.length))
+        b.length = max((self.length, value.length))
         return b
 
     def __lshift__(self, value):
         """Logical left shift, high bits will be lost"""
-        b = Bitset(self.value << int(value)) & ((1 << self.length) - 1)
+        b = Bitset(self.value << int(value) & ((1 << self.length) - 1))
         b.length = self.length  # fixed length
         return b
 
@@ -112,7 +112,7 @@ class Bitset(Sequence):
 
     def __eq__(self, other):
         try:
-            return self.value == other.value
+            return self.value == other.value and self.length == other.length
         except Exception:
             return self.value == other
 

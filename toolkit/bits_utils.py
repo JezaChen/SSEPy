@@ -29,3 +29,17 @@ def half_bits(xbits: typing.Union[int, Bitset]) -> (Bitset, Bitset):
         left_half.length = half_len
 
     return left_half, right_half
+
+
+def half_bits_not_padding(xbits: typing.Union[int, Bitset]) -> (Bitset, Bitset):
+    """Get the first half of xbits and the second half of bits,
+    where the length of the two bits are not equal when len(xbits) % 2 == 1
+    """
+    if isinstance(xbits, int):
+        xbits = Bitset(xbits)
+
+    half_len = (len(xbits) + 1) // 2
+    right_half = xbits.get_lower_bits(half_len)
+    left_half = xbits.get_higher_bits(len(xbits) - half_len)
+
+    return left_half, right_half

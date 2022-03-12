@@ -16,7 +16,7 @@ import hmac
 import struct
 
 from toolkit.bits import Bitset
-from toolkit.bits_utils import half_bits
+from toolkit.bits_utils import half_bits, half_bits_not_padding
 
 DEFAULT_ROUNDS = 10
 
@@ -27,12 +27,15 @@ class BitwiseFFX:
     For performance reasons, we only implement the binary version of this
     """
 
-    def __init__(self, key: bytes, rounds=DEFAULT_ROUNDS, digest_mod=hashlib.sha1):
+    def __init__(self, rounds=DEFAULT_ROUNDS, digest_mod=hashlib.sha1):
         self.rounds = rounds
         self.digest_mod = digest_mod
         self.digest_size = self.digest_mod().digest_size
 
-    def round(self, key: bytes, i: int, s: Bitset) -> Bitset:
+    def round(self, key: bytes, i: int, s: Bitset, output_len=0) -> Bitset:
+        if output_len == 0:
+            output_len = len(s)
+
         pre = struct.pack('I%sI' % len(s), i, *s)
         output_len_per_hash = int(self.digest_size * 8)
         i = 0
@@ -41,18 +44,18 @@ class BitwiseFFX:
             h = hmac.new(key, pre + struct.pack('I', i), self.digest_mod)
             d = Bitset(int(h.hexdigest(), 16), output_len_per_hash)
             result = result + d
-            if len(result) >= len(s):
+            if len(result) >= output_len:
                 break
 
-        return result.get_higher_bits(len(s))
+        return result.get_higher_bits(output_len)
 
     def split(self, v: Bitset) -> (Bitset, Bitset):
-        return half_bits(v)
+        return half_bits_not_padding(v)
 
     def encrypt(self, key: bytes, v: Bitset) -> Bitset:
         a, b = self.split(v)
         for i in range(self.rounds):
-            c = a ^ self.round(key, i, b)
+            c = a ^ self.round(key, i, b, len(a))
             a, b = b, c
         return a + b
 
@@ -60,5 +63,5 @@ class BitwiseFFX:
         a, b = self.split(v)
         for i in range(self.rounds - 1, -1, -1):
             b, c = a, b
-            a = c ^ self.round(key, i, b)
+            a = c ^ self.round(key, i, b, len(c))
         return a + b
