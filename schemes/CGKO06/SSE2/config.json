@@ -1,0 +1,13 @@
+{
+  "param_k": 24,
+  "param_l": 32,
+  "param_n": -1,
+  "param_max": -1,
+  "param_dictionary_size": 65536,
+  "param_identifier_size": 8,
+
+  "prf_f": "HmacPRF",
+  "prp_pi": "HmacLubyRackoffPRP",
+  "prp_psi": "HmacLubyRackoffPRP",
+  "ske": "AES-CBC"
+}

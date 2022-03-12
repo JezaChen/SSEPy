@@ -13,11 +13,18 @@ LIB-SSE CODE
 
 import abc
 
+from schemes.interface.config import SSEConfig
+
 
 class SSEObject(metaclass=abc.ABCMeta):
+    def __init__(self, config: SSEConfig):
+        pass
+
+    @abc.abstractmethod
     def serialize(self) -> bytes:
         pass
 
     @classmethod
-    def deserialize(cls, xbytes: bytes):
+    @abc.abstractmethod
+    def deserialize(cls, xbytes: bytes, config: SSEConfig):
         pass

@@ -3,7 +3,7 @@
 LIB-SSE CODE
 @author: Jeza Chen
 @license: Apache Licence 
-@file: test_utils.py 
+@file: tools.py
 @time: 2022/03/09
 @contact: jeza@vip.qq.com
 @site:  
@@ -12,6 +12,8 @@ LIB-SSE CODE
 """
 import os
 import random
+
+from toolkit.bits import Bitset
 
 
 def fake_db_for_inverted_index_based_sse(fixed_keyword_size: int,
@@ -35,3 +37,8 @@ def fake_db_for_inverted_index_based_sse(fixed_keyword_size: int,
         for _ in range(random.randint(*db_w_size_range)):
             db[keyword].append(os.urandom(fixed_file_id_size))
     return db
+
+
+def generate_random_bitset(bit_len):
+    num = random.getrandbits(bit_len)
+    return Bitset(num, length=bit_len)

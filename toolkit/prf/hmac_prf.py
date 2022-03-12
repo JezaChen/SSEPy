@@ -3,29 +3,20 @@
 LIB-SSE CODE
 @author: Jeza Chen
 @license: Apache Licence 
-@file: prf.py 
-@time: 2022/03/09
+@file: hmac_prf.py 
+@time: 2022/03/10
 @contact: jeza@vip.qq.com
+@site:  
 @software: PyCharm 
-@description: Pseudorandom Function Implementation
-@chinese_description: 伪随机函数实现
+@description: 
 """
-import abc
+
 import functools
 import hashlib
 import hmac
 
 from toolkit.constants import LENGTH_NOT_LIMIT
-
-
-class AbstractPRF(metaclass=abc.ABCMeta):
-    def __init__(self, *, output_length: int, key_length: int, message_length: int):
-        self.output_length = output_length
-        self.key_length = key_length
-        self.message_length = message_length
-
-    def __call__(self, key: bytes, message: bytes) -> bytes:
-        raise NotImplementedError("Class AbstractPRF is an abstract class.")
+from toolkit.prf.abstraction import AbstractPRF
 
 
 def _tls_p_hash(key: bytes, message: bytes, output_len: int, hash_func_name: "str" = "sha1") -> bytes:
