@@ -42,11 +42,9 @@ class PiBas(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         for keyword in database:
             K1 = self.config.prf_f(K, b'\x01' + keyword)
             K2 = self.config.prf_f(K, b'\x02' + keyword)
-            c = 0
-            for identifier in database[keyword]:
+            for c, identifier in enumerate(database[keyword]):
                 l = self.config.prf_f(K1, int_to_bytes(c))
                 d = self.config.ske.Encrypt(K2, identifier)
-                c += 1
                 L.append((l, d))
         return PiBasEncryptedDatabase.build_from_list(L)
 

@@ -28,7 +28,7 @@ class PiBasKey(SSEKey):
 
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiBasConfig):
-        if len(xbytes) != config.param_k:
+        if len(xbytes) != config.param_lambda:
             raise ValueError("The length of xbytes must be the same as the length of the parameter param_k.")
 
         return cls(xbytes)
