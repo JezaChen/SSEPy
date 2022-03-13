@@ -38,13 +38,14 @@ class TestPiBas(unittest.TestCase):
         self.assertEqual(db[b"China"], result.result)
 
     def test_method_correctness(self):
-        keyword_count = 100
+        keyword_count = 1000
 
         config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
 
         db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
                                                   TEST_FILE_ID_SIZE,
-                                                  keyword_count)
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
         scheme = PiBas(config_dict)
         key = scheme._Gen()
@@ -56,13 +57,14 @@ class TestPiBas(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_interface_correctness(self):
-        keyword_count = 100
+        keyword_count = 1000
 
         config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
 
         db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
                                                   TEST_FILE_ID_SIZE,
-                                                  keyword_count)
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
         scheme = PiBas(config_dict)
         key = scheme.KeyGen()

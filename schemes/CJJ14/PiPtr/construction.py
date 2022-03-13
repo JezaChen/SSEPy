@@ -22,7 +22,7 @@ import schemes.interface.inverted_index_sse
 from schemes.CJJ14.PiPtr.config import DEFAULT_CONFIG, PiPtrConfig
 from schemes.CJJ14.PiPtr.structures import PiPtrKey, PiPtrToken, PiPtrEncryptedDatabase, PiPtrResult
 from toolkit.bytes_utils import int_to_bytes, int_from_bytes
-from toolkit.database_utils import partition_identifiers_to_blocks, parse_identifiers_from_block_given_block_size, \
+from toolkit.database_utils import partition_identifiers_to_blocks, parse_identifiers_from_block_given_entry_count_in_one_block, \
     parse_identifiers_from_block_given_identifier_size
 
 
@@ -54,8 +54,7 @@ class PiPtr(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         for keyword in database:
             K1 = self.config.prf_f(K, b'\x01' + keyword)
             K2 = self.config.prf_f(K, b'\x02' + keyword)
-            file_id_block_list = partition_identifiers_to_blocks(database[keyword],
-                                                                 self.config.param_B,
+            file_id_block_list = partition_identifiers_to_blocks(database[keyword], self.config.param_B,
                                                                  self.config.param_identifier_size)
             index_list_in_A = []
 
@@ -69,9 +68,7 @@ class PiPtr(schemes.interface.inverted_index_sse.InvertedIndexSSE):
                 A[index_in_A] = d
 
             # partition indices
-            index_block_list = partition_identifiers_to_blocks(index_list_in_A,
-                                                               self.config.param_b,
-                                                               index_size_in_A)
+            index_block_list = partition_identifiers_to_blocks(index_list_in_A, self.config.param_b, index_size_in_A)
             for c, index_block in enumerate(index_block_list):
                 l = self.config.prf_f(K1, int_to_bytes(c))
                 d_prime = self.config.ske.Encrypt(K2, index_block)
@@ -102,8 +99,8 @@ class PiPtr(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             if index_block_cipher is None:
                 break
             index_list.extend(
-                parse_identifiers_from_block_given_block_size(self.config.ske.Decrypt(K2, index_block_cipher),
-                                                              self.config.param_b))
+                parse_identifiers_from_block_given_entry_count_in_one_block(
+                    self.config.ske.Decrypt(K2, index_block_cipher), self.config.param_b))
             c += 1
 
         for index_in_A in index_list:

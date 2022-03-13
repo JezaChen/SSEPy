@@ -44,3 +44,6 @@ class SSEConfig(metaclass=abc.ABCMeta):
         for param_field in param_field_to_check:
             if config_dict.get(param_field, -1) == -1:
                 raise ValueError("Parameter {} is missing".format(param_field))
+
+    def __getitem__(self, item):
+        return getattr(self, item)

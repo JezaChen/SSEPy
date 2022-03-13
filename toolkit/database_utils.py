@@ -29,11 +29,21 @@ def get_distinct_file_count(db: dict):
     return len(file_set)
 
 
-def partition_identifiers_to_blocks(identifier_list: list, block_size: int, identifier_size: int):
-    for i in range(0, len(identifier_list), block_size):
-        block = b''.join(identifier_list[i: i + block_size])
-        if len(block) < block_size * identifier_size:
-            block += b'\x00' * (block_size * identifier_size - len(block))
+def partition_identifiers_to_blocks(identifier_list: list,
+                                    entry_count_in_one_block: int,
+                                    identifier_size: int,
+                                    block_size_bytes: int = 0):
+    if block_size_bytes == 0:
+        block_size_bytes = entry_count_in_one_block * identifier_size
+
+    if block_size_bytes < entry_count_in_one_block * identifier_size:
+        raise ValueError("parameter block_size_bytes should be greater than or equal to "
+                         "entry_count_in_one_block * identifier_size")
+
+    for i in range(0, len(identifier_list), entry_count_in_one_block):
+        block = b''.join(identifier_list[i: i + entry_count_in_one_block])
+        if len(block) < block_size_bytes:
+            block += b'\x00' * (block_size_bytes - len(block))
         yield block
 
 
@@ -41,14 +51,14 @@ def parse_identifiers_from_block_given_identifier_size(block: bytes, identifier_
     result = []
     for i in range(0, len(block), identifier_size):
         identifier = block[i:i + identifier_size]
-        if identifier == b'\x00' * identifier_size:
+        if identifier == b'\x00' * len(identifier):
             break
         result.append(identifier)
     return result
 
 
-def parse_identifiers_from_block_given_block_size(block: bytes, block_size: int):
-    identifier_size = len(block) // block_size
+def parse_identifiers_from_block_given_entry_count_in_one_block(block: bytes, entry_count_in_one_block: int):
+    identifier_size = len(block) // entry_count_in_one_block
     return parse_identifiers_from_block_given_identifier_size(block, identifier_size)
 
 

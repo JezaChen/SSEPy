@@ -9,6 +9,10 @@ LIB-SSE CODE
 @site:  
 @software: PyCharm 
 @description: ΠPack Construction described by Cash et al. [CJJ+14]
+
+@note:
+Here, we define the file identifier to start from 1,
+to eliminate the misunderstanding of the de-padding algorithm due to the misunderstanding of 0 as the padding value !!!
 """
 import os
 
@@ -43,8 +47,7 @@ class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         for keyword in database:
             K1 = self.config.prf_f(K, b'\x01' + keyword)
             K2 = self.config.prf_f(K, b'\x02' + keyword)
-            block_list = partition_identifiers_to_blocks(database[keyword],
-                                                         self.config.param_B,
+            block_list = partition_identifiers_to_blocks(database[keyword], self.config.param_B,
                                                          self.config.param_identifier_size)
 
             for c, block in enumerate(block_list):

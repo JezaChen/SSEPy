@@ -37,13 +37,14 @@ class TestPiPack(unittest.TestCase):
         self.assertEqual(db[b"China"], result.result)
 
     def test_method_correctness(self):
-        keyword_count = 100
+        keyword_count = 1000
 
         config_dict = schemes.CJJ14.PiPack.config.DEFAULT_CONFIG
 
         db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
                                                   config_dict.get("param_identifier_size"),
-                                                  keyword_count)
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
         scheme = PiPack(config_dict)
         key = scheme._Gen()
@@ -55,13 +56,14 @@ class TestPiPack(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_interface_correctness(self):
-        keyword_count = 100
+        keyword_count = 1000
 
         config_dict = schemes.CJJ14.PiPack.config.DEFAULT_CONFIG
 
         db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
                                                   config_dict.get("param_identifier_size"),
-                                                  keyword_count)
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
         scheme = PiPack(config_dict)
         key = scheme.KeyGen()
