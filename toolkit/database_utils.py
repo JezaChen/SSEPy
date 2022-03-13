@@ -29,6 +29,24 @@ def get_distinct_file_count(db: dict):
     return len(file_set)
 
 
+def partition_identifiers_to_blocks(identifier_list: list, block_size: int, identifier_size: int):
+    for i in range(0, len(identifier_list), block_size):
+        block = b''.join(identifier_list[i: i + block_size])
+        if len(block) < block_size * identifier_size:
+            block += b'\x00' * (block_size * identifier_size - len(block))
+        yield block
+
+
+def parse_identifiers_from_block(block: bytes, identifier_size: int):
+    result = []
+    for i in range(0, len(block), identifier_size):
+        identifier = block[i:i + identifier_size]
+        if identifier == b'\x00' * identifier_size:
+            break
+        result.append(identifier)
+    return result
+
+
 if __name__ == '__main__':
     test_db = {
         b"a": [1, 2, 3, 4, 6],
