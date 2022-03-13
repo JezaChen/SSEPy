@@ -13,7 +13,7 @@ LIB-SSE CODE
 import os
 import unittest
 
-from toolkit.database_utils import parse_identifiers_from_block, partition_identifiers_to_blocks
+from toolkit.database_utils import parse_identifiers_from_block_given_identifier_size, partition_identifiers_to_blocks
 
 
 def fake_identifiers(identifier_size: int, identifier_count: int) -> list:
@@ -31,5 +31,5 @@ class TestDatabaseUtils(unittest.TestCase):
 
         parse_result = []
         for block in block_list:
-            parse_result.extend(parse_identifiers_from_block(block, identifier_size))
+            parse_result.extend(parse_identifiers_from_block_given_identifier_size(block, identifier_size))
         self.assertListEqual(identifier_list, parse_result)

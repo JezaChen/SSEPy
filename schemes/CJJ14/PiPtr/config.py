@@ -17,7 +17,7 @@ import toolkit.prp
 import toolkit.symmetric_encryption
 from schemes.interface.config import SSEConfig
 
-PI_PACK_HEADER = b"\x93\x94Cash2014PiPack"
+PI_PTR_HEADER = b"\x93\x94Cash2014PiPtr"
 
 # If the param of the specified length is not suffixed, the default is in bytes
 # The length parameter of the bit suffix is the length in bits
@@ -25,6 +25,7 @@ PI_PACK_HEADER = b"\x93\x94Cash2014PiPack"
 DEFAULT_CONFIG = {
     "param_lambda": 32,  # key size (bytes)
     "param_B": 64,  # a fixed block size, process B identifiers at a time and pack them into one ciphertext d
+    "param_b": 64,  # store encrypted blocks of b pointers to these encrypted blocks
     "param_identifier_size": 8,
     "prf_f_output_length": 32,
 
@@ -33,10 +34,11 @@ DEFAULT_CONFIG = {
 }
 
 
-class PiPackConfig(SSEConfig):
+class PiPtrConfig(SSEConfig):
     __slots__ = [
         "param_lambda",
         "param_B",
+        "param_b",
         "prf_f_output_length",
         "param_identifier_size",
 
@@ -45,12 +47,13 @@ class PiPackConfig(SSEConfig):
     ]
 
     def __init__(self, config_dict: dict):
-        super(PiPackConfig, self).__init__(config_dict)
+        super(PiPtrConfig, self).__init__(config_dict)
         self._parse_config(config_dict)
 
     def _parse_config(self, config_dict: dict):
         SSEConfig.check_param_exist(["param_lambda",
                                      "param_B",
+                                     "param_b",
                                      "prf_f_output_length",
                                      "param_identifier_size",
                                      "prf_f",
@@ -59,6 +62,7 @@ class PiPackConfig(SSEConfig):
 
         self.param_lambda = config_dict.get("param_lambda")
         self.param_B = config_dict.get("param_B")
+        self.param_b = config_dict.get("param_b")
         self.prf_f_output_length = config_dict.get("prf_f_output_length")
         self.param_identifier_size = config_dict.get("param_identifier_size")
 

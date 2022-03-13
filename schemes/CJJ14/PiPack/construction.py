@@ -8,7 +8,7 @@ LIB-SSE CODE
 @contact: jeza@vip.qq.com
 @site:  
 @software: PyCharm 
-@description: ΠBas Construction described by Cash et al. [CJJ+14]
+@description: ΠPack Construction described by Cash et al. [CJJ+14]
 """
 import os
 
@@ -16,7 +16,7 @@ import schemes.interface.inverted_index_sse
 from schemes.CJJ14.PiPack.config import DEFAULT_CONFIG, PiPackConfig
 from schemes.CJJ14.PiPack.structures import PiPackKey, PiPackToken, PiPackEncryptedDatabase, PiPackResult
 from toolkit.bytes_utils import int_to_bytes
-from toolkit.database_utils import partition_identifiers_to_blocks, parse_identifiers_from_block
+from toolkit.database_utils import partition_identifiers_to_blocks, parse_identifiers_from_block_given_identifier_size
 
 
 class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
@@ -71,8 +71,8 @@ class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             cipher = D.get(addr)
             if cipher is None:
                 break
-            result.extend(parse_identifiers_from_block(self.config.ske.Decrypt(K2, cipher),
-                                                       self.config.param_identifier_size))
+            result.extend(parse_identifiers_from_block_given_identifier_size(self.config.ske.Decrypt(K2, cipher),
+                                                                             self.config.param_identifier_size))
             c += 1
 
         return PiPackResult(result)

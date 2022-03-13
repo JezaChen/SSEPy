@@ -37,7 +37,7 @@ def partition_identifiers_to_blocks(identifier_list: list, block_size: int, iden
         yield block
 
 
-def parse_identifiers_from_block(block: bytes, identifier_size: int):
+def parse_identifiers_from_block_given_identifier_size(block: bytes, identifier_size: int):
     result = []
     for i in range(0, len(block), identifier_size):
         identifier = block[i:i + identifier_size]
@@ -45,6 +45,11 @@ def parse_identifiers_from_block(block: bytes, identifier_size: int):
             break
         result.append(identifier)
     return result
+
+
+def parse_identifiers_from_block_given_block_size(block: bytes, block_size: int):
+    identifier_size = len(block) // block_size
+    return parse_identifiers_from_block_given_identifier_size(block, identifier_size)
 
 
 if __name__ == '__main__':
