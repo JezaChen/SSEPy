@@ -8,7 +8,7 @@ LIB-SSE CODE
 @contact: jeza@vip.qq.com
 @site:  
 @software: PyCharm 
-@description: ΠPtr Construction described by Cash et al. [CJJ+14]
+@description: ΠLev Construction described by Cash et al. [CJJ+14]
 
 @note:
 Here, we define the file identifier to start from 1, and the index amount of A to start from 1,
