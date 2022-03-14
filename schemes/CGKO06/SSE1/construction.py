@@ -19,7 +19,7 @@ import schemes.interface.inverted_index_sse
 from schemes.CGKO06.SSE1.config import DEFAULT_CONFIG, SSE1Config
 from schemes.CGKO06.SSE1.structures import SSE1Key, SSE1EncryptedDatabase, SSE1Token, SSE1Result
 from toolkit.bits import Bitset
-from toolkit.bytes_utils import int_from_bytes, bytes_xor, add_leading_zeros
+from toolkit.bytes_utils import int_from_bytes, bytes_xor, add_leading_zeros, split_bytes_given_slice_len
 
 
 class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
@@ -131,19 +131,17 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         xor_result = bytes_xor(theta, eta)  # θ ⊕ η
 
         # parse θ ⊕ η as α||K', α is the first node address, K' is the key to decrypt
-        node_addr, K_prime = xor_result[:self.config.param_log2_s_bytes], xor_result[
-                                                                          self.config.param_log2_s_bytes:]
-
+        node_addr, K_prime = split_bytes_given_slice_len(xor_result, [self.config.param_log2_s_bytes,
+                                                                      self.config.param_k])
         result = []
         while True:
             node_cipher = A[int_from_bytes(node_addr)]
             node = self.config.ske1.Decrypt(K_prime, node_cipher)
             # parse the node
-            file_identifier, next_key, next_node_addr = node[:self.config.param_identifier_size], \
-                                                        node[
-                                                        self.config.param_identifier_size:self.config.param_identifier_size + self.config.param_k], \
-                                                        node[self.config.param_identifier_size + self.config.param_k:]
-
+            file_identifier, next_key, next_node_addr = split_bytes_given_slice_len(node,
+                                                                                    [self.config.param_identifier_size,
+                                                                                     self.config.param_k,
+                                                                                     self.config.param_log2_s_bytes])
             result.append(file_identifier)
             node_addr, K_prime = next_node_addr, next_key
             # current node is the last node
