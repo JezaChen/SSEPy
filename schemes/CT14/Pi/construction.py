@@ -10,6 +10,7 @@ LIB-SSE CODE
 @software: PyCharm 
 @description: Π Construction described by Cash et al. [CT14]
 """
+import copy
 import math
 import os
 import random
@@ -22,7 +23,7 @@ from toolkit.database_utils import get_total_size, parse_identifiers_from_block_
 
 
 class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
-    """Pi Construction described by Cash et al. [CJJ+14]"""
+    """Pi Construction described by Cash et al. [CT14]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):
         super(Pi, self).__init__()
@@ -43,27 +44,29 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         N = get_total_size(database)
         t = math.ceil(math.log2(N))
 
+        padded_database = copy.deepcopy(database)  # need to deep copy!! Otherwise, it will affect the original database
+
         # If N is not a power of two, we need to pad DB to
         # satisfy this by adding some dummy keyword-identifier pairs.
         while N < 2 ** t:
             random_keyword = os.urandom(32)
             random_id_list_len = random.randint(1, (2 ** t) - N)
             random_id_list = [os.urandom(self.config.param_identifier_size) for _ in range(random_id_list_len)]
-            database[random_keyword] = random_id_list
+            padded_database[random_keyword] = random_id_list
 
             N += random_id_list_len
 
         L_list = [[] for _ in range(t)]  # t empty lists L0, L1, ... , Lt−1
 
-        for keyword in database:
+        for keyword in padded_database:
             Kw0_concat_Kw1 = self.config.prf_f(K, keyword)
             Kw0, Kw1 = Kw0_concat_Kw1[:self.config.param_k], Kw0_concat_Kw1[self.config.param_k:]
 
             c = 0
-            for j in range(int(math.log2(len(database[keyword]))), -1, -1):
-                if 2 ** j > len(database[keyword]) - c:
+            for j in range(int(math.log2(len(padded_database[keyword]))), -1, -1):
+                if 2 ** j > len(padded_database[keyword]) - c:
                     continue
-                cipher_list = [self.config.ske.Encrypt(Kw1, database[keyword][i]) for i in
+                cipher_list = [self.config.ske.Encrypt(Kw1, padded_database[keyword][i]) for i in
                                range(c, c + 2 ** j)]
                 d = b''.join(cipher_list)
                 l = self.config.prf_f_prime(Kw0, int_to_bytes(j))

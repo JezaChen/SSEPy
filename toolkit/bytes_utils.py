@@ -9,6 +9,7 @@ LIB-SSE CODE
 @software: PyCharm 
 @description: Collection of tools for byte manipulation
 """
+import itertools
 
 
 def bytes_xor(a: bytes, b: bytes):
@@ -31,3 +32,17 @@ def int_from_bytes(xbytes: bytes) -> int:
 
 def add_leading_zeros(xbytes: bytes, output_len: int):
     return b'\x00' * max(output_len - len(xbytes), 0) + xbytes
+
+
+def split_bytes_given_slice_len(xbytes: bytes, slice_len_list: list) -> list:
+    if len(xbytes) != sum(slice_len for slice_len in slice_len_list):
+        raise ValueError("Length mismatch, please ensure that the length of xbytes is equal to "
+                         "the sum of the individual values of slice_len_list")
+    result = []
+    c = 0
+    slice_len_accumulation = itertools.accumulate(slice_len_list)
+    while c != len(xbytes):
+        next_c = next(slice_len_accumulation)
+        result.append(xbytes[c: next_c])
+        c = next_c
+    return result

@@ -12,8 +12,8 @@ LIB-SSE CODE
 """
 import unittest
 
-import schemes.CT14.Pi.config
-from schemes.CT14.Pi.construction import Pi
+import schemes.ANSS16.Scheme3.config
+from schemes.ANSS16.Scheme3.construction import Pi
 from test.tools import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
@@ -26,7 +26,7 @@ class TestPi(unittest.TestCase):
             b"Ukraine": [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
-        config_dict = schemes.CT14.Pi.config.DEFAULT_CONFIG
+        config_dict = schemes.ANSS16.Scheme3.config.DEFAULT_CONFIG
 
         scheme = Pi(config_dict)
         key = scheme._Gen()
@@ -39,7 +39,7 @@ class TestPi(unittest.TestCase):
     def test_method_correctness(self):
         keyword_count = 1000
 
-        config_dict = schemes.CT14.Pi.config.DEFAULT_CONFIG
+        config_dict = schemes.ANSS16.Scheme3.config.DEFAULT_CONFIG
 
         db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
                                                   config_dict.get("param_identifier_size"),
@@ -58,7 +58,7 @@ class TestPi(unittest.TestCase):
     def test_interface_correctness(self):
         keyword_count = 1000
 
-        config_dict = schemes.CT14.Pi.config.DEFAULT_CONFIG
+        config_dict = schemes.ANSS16.Scheme3.config.DEFAULT_CONFIG
 
         db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
                                                   config_dict.get("param_identifier_size"),
