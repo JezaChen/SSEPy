@@ -1,4 +1,4 @@
-# SSEPy: Python implementation of searchable symmetric encryption
+# SSEPy: Implementation of searchable symmetric encryption in pure Python
 
 This is a project that is moving forward...
 
