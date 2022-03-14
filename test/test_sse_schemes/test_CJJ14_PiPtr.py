@@ -3,7 +3,7 @@
 LIB-SSE CODE
 @author: Jeza Chen
 @license: Apache Licence 
-@file: test.py 
+@file: test_CJJ14_PiPtr.py
 @time: 2022/03/09
 @contact: jeza@vip.qq.com
 @site:  
@@ -12,22 +12,23 @@ LIB-SSE CODE
 """
 import unittest
 
-import schemes.CGKO06.SSE2.config
-from schemes.CGKO06.SSE2.construction import SSE2
+import schemes.CJJ14.PiPtr.config
+from schemes.CJJ14.PiPtr.construction import PiPtr
 from test.tools import fake_db_for_inverted_index_based_sse
 
+TEST_KEYWORD_SIZE = 16
 
-class TestSSE2(unittest.TestCase):
+
+class TestPiPtr(unittest.TestCase):
     def test_method_correctness_simple_version(self):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine": [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
-        config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
-        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(config_dict, database=db)
+        config_dict = schemes.CJJ14.PiPtr.config.DEFAULT_CONFIG
 
-        scheme = SSE2(config_dict)
+        scheme = PiPtr(config_dict)
         key = scheme._Gen()
 
         encrypted_index = scheme._Enc(key, db)
@@ -36,17 +37,16 @@ class TestSSE2(unittest.TestCase):
         self.assertEqual(db[b"China"], result.result)
 
     def test_method_correctness(self):
-        keyword_count = 100
+        keyword_count = 1000
 
-        config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
+        config_dict = schemes.CJJ14.PiPtr.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
-                                                  config_dict["param_identifier_size"],
-                                                  keyword_count)
+        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
+                                                  config_dict.get("param_identifier_size"),
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
-        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(config_dict, database=db)
-
-        scheme = SSE2(config_dict)
+        scheme = PiPtr(config_dict)
         key = scheme._Gen()
 
         encrypted_index = scheme._Enc(key, db)
@@ -56,17 +56,16 @@ class TestSSE2(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_interface_correctness(self):
-        keyword_count = 100
+        keyword_count = 1000
 
-        config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
+        config_dict = schemes.CJJ14.PiPtr.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
-                                                  config_dict["param_identifier_size"],
-                                                  keyword_count)
+        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
+                                                  config_dict.get("param_identifier_size"),
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
-        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(config_dict, database=db)
-
-        scheme = SSE2(config_dict)
+        scheme = PiPtr(config_dict)
         key = scheme.KeyGen()
         encrypted_index = scheme.EDBSetup(key, db)
         for keyword in db:

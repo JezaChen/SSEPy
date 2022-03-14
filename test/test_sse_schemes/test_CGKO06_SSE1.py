@@ -3,7 +3,7 @@
 LIB-SSE CODE
 @author: Jeza Chen
 @license: Apache Licence 
-@file: test.py 
+@file: test_CGKO06_SSE1.py
 @time: 2022/03/09
 @contact: jeza@vip.qq.com
 @site:  
@@ -12,24 +12,21 @@ LIB-SSE CODE
 """
 import unittest
 
-import schemes.CJJ14.PiBas.config
-from schemes.CJJ14.PiBas.construction import PiBas
+import schemes.CGKO06.SSE1.config
+from schemes.CGKO06.SSE1.construction import SSE1
 from test.tools import fake_db_for_inverted_index_based_sse
 
-TEST_KEYWORD_SIZE = 16
-TEST_FILE_ID_SIZE = 4
 
-
-class TestPiBas(unittest.TestCase):
+class TestSSE1(unittest.TestCase):
     def test_method_correctness_simple_version(self):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine": [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
-        config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
+        config_dict = schemes.CGKO06.SSE1.config.DEFAULT_CONFIG
 
-        scheme = PiBas(config_dict)
+        scheme = SSE1(config_dict)
         key = scheme._Gen()
 
         encrypted_index = scheme._Enc(key, db)
@@ -38,16 +35,15 @@ class TestPiBas(unittest.TestCase):
         self.assertEqual(db[b"China"], result.result)
 
     def test_method_correctness(self):
-        keyword_count = 1000
+        keyword_count = 100
 
-        config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
+        config_dict = schemes.CGKO06.SSE1.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
-                                                  TEST_FILE_ID_SIZE,
-                                                  keyword_count,
-                                                  db_w_size_range=(1, 200))
+        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
+                                                  config_dict["param_identifier_size"],
+                                                  keyword_count)
 
-        scheme = PiBas(config_dict)
+        scheme = SSE1(config_dict)
         key = scheme._Gen()
 
         encrypted_index = scheme._Enc(key, db)
@@ -57,16 +53,15 @@ class TestPiBas(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_interface_correctness(self):
-        keyword_count = 1000
+        keyword_count = 100
 
-        config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
+        config_dict = schemes.CGKO06.SSE1.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
-                                                  TEST_FILE_ID_SIZE,
-                                                  keyword_count,
-                                                  db_w_size_range=(1, 200))
+        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
+                                                  config_dict["param_identifier_size"],
+                                                  keyword_count)
 
-        scheme = PiBas(config_dict)
+        scheme = SSE1(config_dict)
         key = scheme.KeyGen()
         encrypted_index = scheme.EDBSetup(key, db)
         for keyword in db:

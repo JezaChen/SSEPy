@@ -12,7 +12,7 @@ LIB-SSE CODE
 """
 
 import math
-from collections import Sequence
+from collections.abc import Sequence
 
 from toolkit.bytes_utils import int_from_bytes
 
