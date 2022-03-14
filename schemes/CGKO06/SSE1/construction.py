@@ -75,11 +75,17 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
 
                 ctr += 1
 
+            ###
             # For the last node of Li
+            # Collisions may occur, but with probability N/(2^{param_k} + s)
+            # where N is the total size of db,
+            # and we consider this probability of error negligible
+            ###
             last_node = database[keyword][
                             -1] + b"\x00" * self.config.param_k + b"\x00" * self.config.param_log2_s_bytes
             last_node_addr_in_A = self.config.prp_psi(Bitset(K1, length=self.config.param_k_bits),
                                                       Bitset(ctr, length=self.config.param_log2_s))
+
             A[int(last_node_addr_in_A)] = self.config.ske1.Encrypt(K_i[-1], last_node)
             if first_node_addr is None:  # only one entry
                 first_node_addr = last_node_addr_in_A
@@ -102,9 +108,9 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             if A[i] == b'\x00':
                 A[i] = os.urandom(existing_entry_size)  # the same size as the existing s' entries of A
 
-                # Fill random values to T so that |T| = |∆|
-                for _ in range(self.config.param_dictionary_size - len(T)):
-                    T[os.urandom(self.config.param_l)] = os.urandom(self.config.prf_f.output_length)
+        # Fill random values to T so that |T| = |∆|
+        for _ in range(self.config.param_dictionary_size - len(T)):
+            T[os.urandom(self.config.param_l)] = os.urandom(self.config.prf_f.output_length)
 
         return SSE1EncryptedDatabase(A, T)
 
@@ -140,7 +146,8 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
 
             result.append(file_identifier)
             node_addr, K_prime = next_node_addr, next_key
-            if node_addr == b'\x00' * self.config.param_log2_s_bytes:  # next ptr is null
+            # current node is the last node
+            if K_prime == b'\x00' * len(K_prime) and node_addr == b'\x00' * len(node_addr):
                 break
         return SSE1Result(result)
 
