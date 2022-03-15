@@ -31,7 +31,8 @@ def half_bits(xbits: typing.Union[int, Bitset]) -> (Bitset, Bitset):
     return left_half, right_half
 
 
-def half_bits_not_padding(xbits: typing.Union[int, Bitset]) -> (Bitset, Bitset):
+def half_bits_not_padding(
+        xbits: typing.Union[int, Bitset]) -> (Bitset, Bitset):
     """Get the first half of xbits and the second half of bits,
     where the length of the two bits are not equal when len(xbits) % 2 == 1
     """

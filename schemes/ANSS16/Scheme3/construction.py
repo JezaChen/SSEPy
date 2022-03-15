@@ -44,14 +44,19 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         N = get_total_size(database)
         t = math.ceil(math.log2(N))
 
-        padded_database = copy.deepcopy(database)  # need to deep copy!! Otherwise, it will affect the original database
+        padded_database = copy.deepcopy(
+            database
+        )  # need to deep copy!! Otherwise, it will affect the original database
 
         # If N is not a power of two, we need to pad DB to
         # satisfy this by adding some dummy keyword-identifier pairs.
-        while N < 2 ** t:
+        while N < 2**t:
             random_keyword = os.urandom(32)
-            random_id_list_len = random.randint(1, (2 ** t) - N)
-            random_id_list = [os.urandom(self.config.param_identifier_size) for _ in range(random_id_list_len)]
+            random_id_list_len = random.randint(1, (2**t) - N)
+            random_id_list = [
+                os.urandom(self.config.param_identifier_size)
+                for _ in range(random_id_list_len)
+            ]
             padded_database[random_keyword] = random_id_list
 
             N += random_id_list_len
@@ -63,34 +68,42 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             ni = len(padded_database[keyword])
             pi = math.ceil(math.log2(ni))
             # If necessary, pad DB(wi) with dummy identifiers in order to contain exactly 2^{pi} elements.
-            padded_database[keyword].extend((os.urandom(self.config.param_identifier_size) for _ in range((2 ** pi) - ni)))
+            padded_database[keyword].extend(
+                (os.urandom(self.config.param_identifier_size)
+                 for _ in range((2**pi) - ni)))
 
             prf_output = self.config.prf(K, keyword)
-            li, Ki, li_prime, Ki_prime = split_bytes_given_slice_len(prf_output, [self.config.param_l,
-                                                                                  self.config.param_k,
-                                                                                  self.config.param_l_prime,
-                                                                                  self.config.param_k_prime])
+            li, Ki, li_prime, Ki_prime = split_bytes_given_slice_len(
+                prf_output, [
+                    self.config.param_l, self.config.param_k,
+                    self.config.param_l_prime, self.config.param_k_prime
+                ])
 
-            cipher_list = [self.config.ske.Encrypt(Ki, identifier) for identifier in padded_database[keyword]]
+            cipher_list = [
+                self.config.ske.Encrypt(Ki, identifier)
+                for identifier in padded_database[keyword]
+            ]
             di = b"".join(cipher_list)
 
             # math.ceil(t / 8) --> max_bytes represent |DB(w)|
-            ni_prime = self.config.ske.Encrypt(Ki_prime, int_to_bytes(ni, math.ceil(t / 8)))
+            ni_prime = self.config.ske.Encrypt(
+                Ki_prime, int_to_bytes(ni, math.ceil(t / 8)))
             T_list[pi].append((li, di))
             S.append((li_prime, ni_prime))
 
         # padding each list
         for i in range(t + 1):
-            d_len = (2 ** i) * len(self.config.ske.Encrypt(b"\x00" * self.config.param_k_prime,
-                                                           b"\x00" * self.config.param_identifier_size))
+            d_len = (2**i) * len(
+                self.config.ske.Encrypt(
+                    b"\x00" * self.config.param_k_prime,
+                    b"\x00" * self.config.param_identifier_size))
             T_list[i].extend(
-                ((os.urandom(self.config.param_l), os.urandom(d_len)) for _ in range((2 ** (t - i)) - len(T_list[i]))))
+                ((os.urandom(self.config.param_l), os.urandom(d_len))
+                 for _ in range((2**(t - i)) - len(T_list[i]))))
 
         # padding list S to N elements
-        S.extend(
-            ((os.urandom(self.config.param_l_prime), os.urandom(math.ceil(t / 8)))
-             for _ in range(N - len(S)))
-        )
+        S.extend(((os.urandom(self.config.param_l_prime),
+                   os.urandom(math.ceil(t / 8))) for _ in range(N - len(S))))
 
         # create HT(L0), ..., HT(Lt)
         HT_L_list = []
@@ -105,10 +118,11 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         """Trapdoor Generation Algorithm"""
         K = K.K
         prf_output = self.config.prf(K, keyword)
-        li, Ki, li_prime, Ki_prime = split_bytes_given_slice_len(prf_output, [self.config.param_l,
-                                                                              self.config.param_k,
-                                                                              self.config.param_l_prime,
-                                                                              self.config.param_k_prime])
+        li, Ki, li_prime, Ki_prime = split_bytes_given_slice_len(
+            prf_output, [
+                self.config.param_l, self.config.param_k,
+                self.config.param_l_prime, self.config.param_k_prime
+            ])
         return PiToken(li, Ki, li_prime, Ki_prime)
 
     def _Search(self, edb: PiEncryptedDatabase, tk: PiToken) -> PiResult:
@@ -135,10 +149,12 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             return PiResult(result)
 
         # Parse block di
-        cipher_list = parse_identifiers_from_block_given_entry_count_in_one_block(di, 2 ** pi)
+        cipher_list = parse_identifiers_from_block_given_entry_count_in_one_block(
+            di, 2**pi)
 
         # Decrypt the first ni elements of this block using the key Ki
-        result.extend((self.config.ske.Decrypt(Ki, cipher) for cipher in cipher_list[:ni]))
+        result.extend((self.config.ske.Decrypt(Ki, cipher)
+                       for cipher in cipher_list[:ni]))
 
         return PiResult(result)
 
@@ -146,16 +162,11 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         key = self._Gen()
         return key
 
-    def EDBSetup(self,
-                 key: PiKey,
-                 database: dict
-                 ) -> PiEncryptedDatabase:
+    def EDBSetup(self, key: PiKey, database: dict) -> PiEncryptedDatabase:
         return self._Enc(key, database)
 
     def TokenGen(self, key: PiKey, keyword: bytes) -> PiToken:
         return self._Trap(key, keyword)
 
-    def Search(self,
-               edb: PiEncryptedDatabase,
-               token: PiToken) -> PiResult:
+    def Search(self, edb: PiEncryptedDatabase, token: PiToken) -> PiResult:
         return self._Search(edb, token)

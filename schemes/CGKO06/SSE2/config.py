@@ -35,11 +35,13 @@ def determine_param_max(max_document_size: int):
     curr_document_size = 0
 
     while True:
-        if curr_document_size + 2 ** (curr_keyword_size * 8) * curr_keyword_size > max_document_size:
-            result += (max_document_size - curr_document_size) // curr_keyword_size
+        if curr_document_size + 2**(curr_keyword_size *
+                                    8) * curr_keyword_size > max_document_size:
+            result += (max_document_size -
+                       curr_document_size) // curr_keyword_size
             break
-        result += 2 ** (curr_keyword_size * 8)
-        curr_document_size += 2 ** (curr_keyword_size * 8) * curr_keyword_size
+        result += 2**(curr_keyword_size * 8)
+        curr_document_size += 2**(curr_keyword_size * 8) * curr_keyword_size
         curr_keyword_size += 1
 
     return result
@@ -54,11 +56,11 @@ DEFAULT_CONFIG = {
     "param_k": 24,  # key size (bytes)
     "param_l": 32,  # max keyword size (bytes)
     "param_n": -1,  # number of files
-    "param_max": -1,  # parameter max, need to be determined at first # todo need document scan
+    "param_max":
+    -1,  # parameter max, need to be determined at first # todo need document scan
     "param_dictionary_size": 65536,
     "param_identifier_size": 8,
     "param_max_file_size": 1024 * 1024,
-
     "prp_pi": "BitwiseFPEPRP",
     "ske": "AES-CBC"
 }
@@ -89,11 +91,9 @@ class SSE2Config(SSEConfig):
         self._parse_config(config_dict)
 
     def _parse_config(self, config_dict: dict):
-        SSEConfig.check_param_exist(["param_k",
-                                     "param_l",
-                                     "param_n",
-                                     "param_max_file_size"],
-                                    config_dict)
+        SSEConfig.check_param_exist(
+            ["param_k", "param_l", "param_n", "param_max_file_size"],
+            config_dict)
 
         self.param_k = config_dict.get("param_k")
         self.param_l = config_dict.get("param_l")
@@ -102,23 +102,26 @@ class SSE2Config(SSEConfig):
         self.param_k_bits = self.param_k * 8
         self.param_l_bits = self.param_l * 8
 
-        self.param_max = determine_param_max(config_dict.get("param_max_file_size"))
+        self.param_max = determine_param_max(
+            config_dict.get("param_max_file_size"))
 
         self.param_log2_n = math.ceil(math.log2(self.param_n))
         self.param_log2_n_bytes = math.ceil(self.param_log2_n / 8)
 
-        self.param_log2_n_plus_max = math.ceil(math.log2(self.param_n + self.param_max))
-        self.param_log2_n_plus_max_bytes = math.ceil(self.param_log2_n_plus_max / 8)
+        self.param_log2_n_plus_max = math.ceil(
+            math.log2(self.param_n + self.param_max))
+        self.param_log2_n_plus_max_bytes = math.ceil(
+            self.param_log2_n_plus_max / 8)
 
         self.param_s = self.param_max * self.param_n
 
-        self.prp_pi = toolkit.prp.get_prp_implementation(config_dict.get("prp_pi", ""))(
-            key_bit_length=self.param_k_bits,
-            message_bit_length=self.param_l_bits + self.param_log2_n_plus_max
-        )
-        self.ske = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(config_dict.get("ske", ""))(
-            key_length=self.param_k
-        )
+        self.prp_pi = toolkit.prp.get_prp_implementation(
+            config_dict.get("prp_pi",
+                            ""))(key_bit_length=self.param_k_bits,
+                                 message_bit_length=self.param_l_bits +
+                                 self.param_log2_n_plus_max)
+        self.ske = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(
+            config_dict.get("ske", ""))(key_length=self.param_k)
 
 
 def scan_database_and_update_config_dict(config_dict: dict, database: dict):

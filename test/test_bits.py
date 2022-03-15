@@ -18,29 +18,25 @@ from toolkit.bits_utils import half_bits
 
 
 class TestBits(unittest.TestCase):
+
     def test_bits_class_len(self):
-        test_list = [
-            {
-                "value": 0b11011,
-                "length": 5,
-                "fixed_length": False
-            },
-            {
-                "value": 0b00000,
-                "length": 0,
-                "fixed_length": False
-            },
-            {
-                "value": 0b00000,
-                "length": 5,
-                "fixed_length": True
-            },
-            {
-                "value": 0b001001,
-                "length": 6,
-                "fixed_length": True
-            }
-        ]
+        test_list = [{
+            "value": 0b11011,
+            "length": 5,
+            "fixed_length": False
+        }, {
+            "value": 0b00000,
+            "length": 0,
+            "fixed_length": False
+        }, {
+            "value": 0b00000,
+            "length": 5,
+            "fixed_length": True
+        }, {
+            "value": 0b001001,
+            "length": 6,
+            "fixed_length": True
+        }]
 
         for case in test_list:
             value = case.get("value")
@@ -56,28 +52,23 @@ class TestBits(unittest.TestCase):
             self.assertEqual(xbits.length, length)
 
     def test_bits_and_op(self):
-        test_list = [
-            {
-                "a": Bitset(0b100101, 6),
-                "b": Bitset(0b001001, 6),
-                "r": Bitset(0b000001, 6)
-            },
-            {
-                "a": Bitset(0b110100, 6),
-                "b": Bitset(0b000010, 6),
-                "r": Bitset(0b000000, 6)
-            },
-            {
-                "a": Bitset(0b0011, 4),
-                "b": Bitset(0b110001, 6),
-                "r": Bitset(0b000001, 6)
-            },
-            {
-                "a": Bitset(0b001110, 6),
-                "b": Bitset(0b11, 2),
-                "r": Bitset(0b000010, 6)
-            }
-        ]
+        test_list = [{
+            "a": Bitset(0b100101, 6),
+            "b": Bitset(0b001001, 6),
+            "r": Bitset(0b000001, 6)
+        }, {
+            "a": Bitset(0b110100, 6),
+            "b": Bitset(0b000010, 6),
+            "r": Bitset(0b000000, 6)
+        }, {
+            "a": Bitset(0b0011, 4),
+            "b": Bitset(0b110001, 6),
+            "r": Bitset(0b000001, 6)
+        }, {
+            "a": Bitset(0b001110, 6),
+            "b": Bitset(0b11, 2),
+            "r": Bitset(0b000010, 6)
+        }]
         for case in test_list:
             a = case.get("a")
             b = case.get("b")
@@ -85,28 +76,23 @@ class TestBits(unittest.TestCase):
             self.assertEqual(a & b, r)
 
     def test_bits_or_op(self):
-        test_list = [
-            {
-                "a": Bitset(0b100101, 6),
-                "b": Bitset(0b001001, 6),
-                "r": Bitset(0b101101, 6)
-            },
-            {
-                "a": Bitset(0b110100, 6),
-                "b": Bitset(0b000010, 6),
-                "r": Bitset(0b110110, 6)
-            },
-            {
-                "a": Bitset(0b0011, 4),
-                "b": Bitset(0b110001, 6),
-                "r": Bitset(0b110011, 6)
-            },
-            {
-                "a": Bitset(0b001110, 6),
-                "b": Bitset(0b11, 2),
-                "r": Bitset(0b001111, 6)
-            }
-        ]
+        test_list = [{
+            "a": Bitset(0b100101, 6),
+            "b": Bitset(0b001001, 6),
+            "r": Bitset(0b101101, 6)
+        }, {
+            "a": Bitset(0b110100, 6),
+            "b": Bitset(0b000010, 6),
+            "r": Bitset(0b110110, 6)
+        }, {
+            "a": Bitset(0b0011, 4),
+            "b": Bitset(0b110001, 6),
+            "r": Bitset(0b110011, 6)
+        }, {
+            "a": Bitset(0b001110, 6),
+            "b": Bitset(0b11, 2),
+            "r": Bitset(0b001111, 6)
+        }]
         for case in test_list:
             a = case.get("a")
             b = case.get("b")
@@ -114,28 +100,23 @@ class TestBits(unittest.TestCase):
             self.assertEqual(a | b, r)
 
     def test_bits_xor_op(self):
-        test_list = [
-            {
-                "a": Bitset(0b100101, 6),
-                "b": Bitset(0b001001, 6),
-                "r": Bitset(0b101100, 6)
-            },
-            {
-                "a": Bitset(0b110100, 6),
-                "b": Bitset(0b000010, 6),
-                "r": Bitset(0b110110, 6)
-            },
-            {
-                "a": Bitset(0b0011, 4),
-                "b": Bitset(0b110001, 6),
-                "r": Bitset(0b110010, 6)
-            },
-            {
-                "a": Bitset(0b001110, 6),
-                "b": Bitset(0b11, 2),
-                "r": Bitset(0b001101, 6)
-            }
-        ]
+        test_list = [{
+            "a": Bitset(0b100101, 6),
+            "b": Bitset(0b001001, 6),
+            "r": Bitset(0b101100, 6)
+        }, {
+            "a": Bitset(0b110100, 6),
+            "b": Bitset(0b000010, 6),
+            "r": Bitset(0b110110, 6)
+        }, {
+            "a": Bitset(0b0011, 4),
+            "b": Bitset(0b110001, 6),
+            "r": Bitset(0b110010, 6)
+        }, {
+            "a": Bitset(0b001110, 6),
+            "b": Bitset(0b11, 2),
+            "r": Bitset(0b001101, 6)
+        }]
         for case in test_list:
             a = case.get("a")
             b = case.get("b")
@@ -432,38 +413,31 @@ class TestBits(unittest.TestCase):
             self.assertEqual(half_bits(a), r)
 
     def test_bits_add_op(self):
-        test_list = [
-            {
-                "a": Bitset(0b100101, 6),
-                "b": Bitset(0b001001, 6),
-                "r": Bitset(0b100101001001, 12)
-            },
-            {
-                "a": Bitset(0b110100, 6),
-                "b": Bitset(0b000010, 6),
-                "r": Bitset(0b110100000010, 12)
-            },
-            {
-                "a": Bitset(0b0011, 4),
-                "b": Bitset(0b110001, 6),
-                "r": Bitset(0b0011110001, 10)
-            },
-            {
-                "a": Bitset(0b001110, 6),
-                "b": Bitset(0b11, 2),
-                "r": Bitset(0b00111011, 8)
-            },
-            {
-                "a": Bitset(0b001110, 6),
-                "b": Bitset(0, 0),
-                "r": Bitset(0b001110, 6)
-            },
-            {
-                "a": Bitset(0, 0),
-                "b": Bitset(0b001110, 6),
-                "r": Bitset(0b001110, 6)
-            }
-        ]
+        test_list = [{
+            "a": Bitset(0b100101, 6),
+            "b": Bitset(0b001001, 6),
+            "r": Bitset(0b100101001001, 12)
+        }, {
+            "a": Bitset(0b110100, 6),
+            "b": Bitset(0b000010, 6),
+            "r": Bitset(0b110100000010, 12)
+        }, {
+            "a": Bitset(0b0011, 4),
+            "b": Bitset(0b110001, 6),
+            "r": Bitset(0b0011110001, 10)
+        }, {
+            "a": Bitset(0b001110, 6),
+            "b": Bitset(0b11, 2),
+            "r": Bitset(0b00111011, 8)
+        }, {
+            "a": Bitset(0b001110, 6),
+            "b": Bitset(0, 0),
+            "r": Bitset(0b001110, 6)
+        }, {
+            "a": Bitset(0, 0),
+            "b": Bitset(0b001110, 6),
+            "r": Bitset(0b001110, 6)
+        }]
         for case in test_list:
             a = case.get("a")
             b = case.get("b")
@@ -471,32 +445,25 @@ class TestBits(unittest.TestCase):
             self.assertEqual(a + b, r)
 
     def test_bits_to_bytes(self):
-        test_list = [
-            {
-                "a": Bitset(0b001101, 6),
-                "r": b"\x0d"
-            },
-            {
-                "a": Bitset(0b00110101, 8),
-                "r": b"\x35"
-            },
-            {
-                "a": Bitset(0b01, 2),
-                "r": b"\x01"
-            },
-            {
-                "a": Bitset(0b0110110100111111, 16),
-                "r": b"\x6d\x3f"
-            },
-            {
-                "a": Bitset(0b10110100111111, 14),
-                "r": b"\x2d\x3f"
-            },
-            {
-                "a": Bitset(0b10110100111111, 32),
-                "r": b"\x00\x00\x2d\x3f"
-            }
-        ]
+        test_list = [{
+            "a": Bitset(0b001101, 6),
+            "r": b"\x0d"
+        }, {
+            "a": Bitset(0b00110101, 8),
+            "r": b"\x35"
+        }, {
+            "a": Bitset(0b01, 2),
+            "r": b"\x01"
+        }, {
+            "a": Bitset(0b0110110100111111, 16),
+            "r": b"\x6d\x3f"
+        }, {
+            "a": Bitset(0b10110100111111, 14),
+            "r": b"\x2d\x3f"
+        }, {
+            "a": Bitset(0b10110100111111, 32),
+            "r": b"\x00\x00\x2d\x3f"
+        }]
 
         for case in test_list:
             a = case.get("a")

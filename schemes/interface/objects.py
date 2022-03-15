@@ -17,6 +17,7 @@ from schemes.interface.config import SSEConfig
 
 
 class SSEObject(metaclass=abc.ABCMeta):
+
     def __init__(self, config: SSEConfig):
         pass
 

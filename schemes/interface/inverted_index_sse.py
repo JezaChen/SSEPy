@@ -34,19 +34,17 @@ class InvertedIndexSSE(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def EDBSetup(self,
-                 key: SSEKey,
-                 database) -> SSEEncryptedDatabase:  # todo database abstraction
+    def EDBSetup(
+            self, key: SSEKey,
+            database) -> SSEEncryptedDatabase:  # todo database abstraction
         pass
 
     @abc.abstractmethod
-    def TokenGen(self,
-                 key: SSEKey,
-                 keyword: bytes) -> SSEToken:  # todo keyword abstraction, now is single-keyword
+    def TokenGen(
+        self, key: SSEKey, keyword: bytes
+    ) -> SSEToken:  # todo keyword abstraction, now is single-keyword
         pass
 
     @abc.abstractmethod
-    def Search(self,
-               edb: SSEEncryptedDatabase,
-               token: SSEToken) -> SSEResult:
+    def Search(self, edb: SSEEncryptedDatabase, token: SSEToken) -> SSEResult:
         pass

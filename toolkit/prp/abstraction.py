@@ -15,6 +15,7 @@ from toolkit.bits import Bitset
 
 
 class AbstractPRP(metaclass=abc.ABCMeta):
+
     def __init__(self, *, message_length: int, key_length: int):
         self.key_length = key_length
         self.message_length = message_length
@@ -24,9 +25,11 @@ class AbstractPRP(metaclass=abc.ABCMeta):
 
 
 class AbstractBitwisePRP(metaclass=abc.ABCMeta):
+
     def __init__(self, *, message_bit_length: int, key_bit_length: int):
         self.key_bit_length = key_bit_length
         self.message_bit_length = message_bit_length
 
     def __call__(self, key: bytes, message: Bitset) -> Bitset:
-        raise NotImplementedError("Class AbstractBitwisePRP is an abstract class.")
+        raise NotImplementedError(
+            "Class AbstractBitwisePRP is an abstract class.")

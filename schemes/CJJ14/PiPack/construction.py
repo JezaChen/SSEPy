@@ -47,8 +47,9 @@ class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         for keyword in database:
             K1 = self.config.prf_f(K, b'\x01' + keyword)
             K2 = self.config.prf_f(K, b'\x02' + keyword)
-            block_list = partition_identifiers_to_blocks(database[keyword], self.config.param_B,
-                                                         self.config.param_identifier_size)
+            block_list = partition_identifiers_to_blocks(
+                database[keyword], self.config.param_B,
+                self.config.param_identifier_size)
 
             for c, block in enumerate(block_list):
                 l = self.config.prf_f(K1, int_to_bytes(c))
@@ -63,7 +64,8 @@ class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         K2 = self.config.prf_f(K, b'\x02' + keyword)
         return PiPackToken(K1, K2)
 
-    def _Search(self, edb: PiPackEncryptedDatabase, tk: PiPackToken) -> PiPackResult:
+    def _Search(self, edb: PiPackEncryptedDatabase,
+                tk: PiPackToken) -> PiPackResult:
         """Search Algorithm"""
         D = edb.D
         K1, K2 = tk.K1, tk.K2
@@ -74,8 +76,10 @@ class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             cipher = D.get(addr)
             if cipher is None:
                 break
-            result.extend(parse_identifiers_from_block_given_identifier_size(self.config.ske.Decrypt(K2, cipher),
-                                                                             self.config.param_identifier_size))
+            result.extend(
+                parse_identifiers_from_block_given_identifier_size(
+                    self.config.ske.Decrypt(K2, cipher),
+                    self.config.param_identifier_size))
             c += 1
 
         return PiPackResult(result)
@@ -84,16 +88,13 @@ class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         key = self._Gen()
         return key
 
-    def EDBSetup(self,
-                 key: PiPackKey,
-                 database: dict
-                 ) -> PiPackEncryptedDatabase:
+    def EDBSetup(self, key: PiPackKey,
+                 database: dict) -> PiPackEncryptedDatabase:
         return self._Enc(key, database)
 
     def TokenGen(self, key: PiPackKey, keyword: bytes) -> PiPackToken:
         return self._Trap(key, keyword)
 
-    def Search(self,
-               edb: PiPackEncryptedDatabase,
+    def Search(self, edb: PiPackEncryptedDatabase,
                token: PiPackToken) -> PiPackResult:
         return self._Search(edb, token)

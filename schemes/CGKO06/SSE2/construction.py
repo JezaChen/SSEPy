@@ -42,35 +42,40 @@ class SSE2(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         I = {}
 
         s_prime = 0  # total_size
-        document_count_dict = {}  # the number of entries in I that already contain id(Di)
+        document_count_dict = {
+        }  # the number of entries in I that already contain id(Di)
 
         for keyword in database:
             s_prime += len(database[keyword])
             for j, identifier in enumerate(database[keyword], start=1):
                 I[int(
-                    self.config.prp_pi(Bitset(K1,
-                                              length=self.config.param_k_bits),
-                                       Bitset(keyword, length=self.config.param_l_bits) +
-                                       Bitset(int_to_bytes(j, self.config.param_log2_n_plus_max_bytes),
-                                              length=self.config.param_log2_n_plus_max),
-                                       )
-                )] = identifier
+                    self.config.prp_pi(
+                        Bitset(K1, length=self.config.param_k_bits),
+                        Bitset(keyword, length=self.config.param_l_bits) +
+                        Bitset(int_to_bytes(
+                            j, self.config.param_log2_n_plus_max_bytes),
+                            length=self.config.param_log2_n_plus_max),
+                    ))] = identifier
 
-                document_count_dict[identifier] = document_count_dict.get(identifier, 0) + 1
+                document_count_dict[identifier] = document_count_dict.get(
+                    identifier, 0) + 1
 
         n = self.config.param_n
 
         if s_prime < self.config.param_s:
             for identifier in document_count_dict:
-                for l in range(document_count_dict[identifier] - self.config.param_max):
+                for l in range(document_count_dict[identifier] -
+                               self.config.param_max):
                     I[int(
-                        self.config.prp_pi(Bitset(K1,
-                                                  length=self.config.param_k_bits),
-                                           Bitset(b"\x00" * self.config.param_l,
-                                                  length=self.config.param_l_bits) +
-                                           Bitset(int_to_bytes(n + l, self.config.param_log2_n_plus_max_bytes),
-                                                  length=self.config.param_log2_n_plus_max)
-                                           ))] = identifier
+                        self.config.prp_pi(
+                            Bitset(K1, length=self.config.param_k_bits),
+                            Bitset(b"\x00" * self.config.param_l,
+                                   length=self.config.param_l_bits) +
+                            Bitset(int_to_bytes(
+                                n + l,
+                                self.config.param_log2_n_plus_max_bytes),
+                                length=self.config.param_log2_n_plus_max))
+                    )] = identifier
                 n += document_count_dict[identifier] - self.config.param_max
         return SSE2EncryptedDatabase(I)
 
@@ -79,12 +84,14 @@ class SSE2(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         K1 = K.K1
         t = []
         for i in range(1, self.config.param_n + 1):
-            t.append(int(self.config.prp_pi(Bitset(K1,
-                                                   length=self.config.param_k_bits),
-                                            Bitset(keyword, length=self.config.param_l_bits) +
-                                            Bitset(int_to_bytes(i, self.config.param_log2_n_plus_max_bytes),
-                                                   length=self.config.param_log2_n_plus_max))
-                         ))
+            t.append(
+                int(
+                    self.config.prp_pi(
+                        Bitset(K1, length=self.config.param_k_bits),
+                        Bitset(keyword, length=self.config.param_l_bits) +
+                        Bitset(int_to_bytes(
+                            i, self.config.param_log2_n_plus_max_bytes),
+                            length=self.config.param_log2_n_plus_max))))
         return SSE2Token(t)
 
     def _Search(self, edb: SSE2EncryptedDatabase, tk: SSE2Token) -> SSE2Result:
@@ -105,16 +112,12 @@ class SSE2(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         key = self._Gen()
         return key
 
-    def EDBSetup(self,
-                 key: SSE2Key,
-                 database: dict
-                 ) -> SSE2EncryptedDatabase:
+    def EDBSetup(self, key: SSE2Key, database: dict) -> SSE2EncryptedDatabase:
         return self._Enc(key, database)
 
     def TokenGen(self, key: SSE2Key, keyword: bytes) -> SSE2Token:
         return self._Trap(key, keyword)
 
-    def Search(self,
-               edb: SSE2EncryptedDatabase,
+    def Search(self, edb: SSE2EncryptedDatabase,
                token: SSE2Token) -> SSE2Result:
         return self._Search(edb, token)

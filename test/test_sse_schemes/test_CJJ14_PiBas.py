@@ -21,10 +21,12 @@ TEST_FILE_ID_SIZE = 4
 
 
 class TestPiBas(unittest.TestCase):
+
     def test_method_correctness_simple_version(self):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
-            b"Ukraine": [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+            b"Ukraine":
+            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG

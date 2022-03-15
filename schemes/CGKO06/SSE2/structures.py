@@ -29,9 +29,14 @@ class SSE2Key(SSEKey):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: SSE2Config):
         if len(xbytes) != 2 * config.param_k:
-            raise ValueError("The length of xbytes must be 2 times the length of the parameter param_k.")
+            raise ValueError(
+                "The length of xbytes must be 2 times the length of the parameter param_k."
+            )
 
-        key_list = [xbytes[i: i + config.param_k] for i in range(0, len(xbytes), config.param_k)]
+        key_list = [
+            xbytes[i:i + config.param_k]
+            for i in range(0, len(xbytes), config.param_k)
+        ]
         return cls(*key_list)
 
 

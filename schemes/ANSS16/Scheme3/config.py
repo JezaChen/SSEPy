@@ -30,7 +30,6 @@ DEFAULT_CONFIG = {
     "param_l_prime": 32,
     # "param_t": -1,  # need to scan, N = 2 ^ t, N is the total size of database
     "param_identifier_size": 4,
-
     "prf": "HmacPRF",
     "ske": "AES-CBC"
 }
@@ -38,15 +37,8 @@ DEFAULT_CONFIG = {
 
 class PiConfig(SSEConfig):
     __slots__ = [
-        "param_lambda",
-        "param_k",
-        "param_k_prime",
-        "param_l",
-        "param_l_prime",
-        "param_identifier_size",
-
-        "prf",
-        "ske"
+        "param_lambda", "param_k", "param_k_prime", "param_l", "param_l_prime",
+        "param_identifier_size", "prf", "ske"
     ]
 
     def __init__(self, config_dict: dict):
@@ -54,16 +46,10 @@ class PiConfig(SSEConfig):
         self._parse_config(config_dict)
 
     def _parse_config(self, config_dict: dict):
-        SSEConfig.check_param_exist(["param_lambda",
-                                     "param_k",
-                                     "param_k_prime",
-                                     "param_l",
-                                     "param_l_prime",
-                                     "param_identifier_size",
-
-                                     "prf",
-                                     "ske"],
-                                    config_dict)
+        SSEConfig.check_param_exist([
+            "param_lambda", "param_k", "param_k_prime", "param_l",
+            "param_l_prime", "param_identifier_size", "prf", "ske"
+        ], config_dict)
 
         self.param_lambda = config_dict.get("param_lambda")
         self.param_k = config_dict.get("param_k")
@@ -74,9 +60,10 @@ class PiConfig(SSEConfig):
 
         self.param_identifier_size = config_dict.get("param_identifier_size")
 
-        self.prf = toolkit.prf.get_prf_implementation(config_dict.get("prf", ""))(
-            output_length=self.param_k + self.param_k_prime + self.param_l + self.param_l_prime)
+        self.prf = toolkit.prf.get_prf_implementation(
+            config_dict.get(
+                "prf", ""))(output_length=self.param_k + self.param_k_prime +
+                            self.param_l + self.param_l_prime)
 
-        self.ske = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(config_dict.get("ske", ""))(
-            key_length=self.param_k
-        )
+        self.ske = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(
+            config_dict.get("ske", ""))(key_length=self.param_k)

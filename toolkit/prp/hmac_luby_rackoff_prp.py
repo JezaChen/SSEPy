@@ -19,8 +19,13 @@ from toolkit.prp.luby_rackoff_prp import LubyRackoffPRP
 class HmacLubyRackoffPRP(AbstractPRP):
     """Luby-Rackoff Construction where its underlying prp is HMAC-PRP"""
 
-    def __init__(self, *, message_length: int, key_length: int, hash_func_name: "str" = "sha1"):
-        super(HmacLubyRackoffPRP, self).__init__(message_length=message_length, key_length=key_length)
+    def __init__(self,
+                 *,
+                 message_length: int,
+                 key_length: int,
+                 hash_func_name: "str" = "sha1"):
+        super(HmacLubyRackoffPRP, self).__init__(message_length=message_length,
+                                                 key_length=key_length)
         if message_length % 2:
             raise ValueError("The message length needs to be divisible by 2.")
         if key_length % 3:

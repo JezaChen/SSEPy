@@ -21,6 +21,7 @@ def fake_identifiers(identifier_size: int, identifier_count: int) -> list:
 
 
 class TestDatabaseUtils(unittest.TestCase):
+
     def test_identifiers_partition(self):
         identifier_count = 2000
         identifier_size = 8
@@ -28,11 +29,15 @@ class TestDatabaseUtils(unittest.TestCase):
 
         identifier_list = fake_identifiers(identifier_size, identifier_count)
         block_list = list(
-            partition_identifiers_to_blocks(identifier_list, identifier_count_in_one_block, identifier_size))
+            partition_identifiers_to_blocks(identifier_list,
+                                            identifier_count_in_one_block,
+                                            identifier_size))
 
         parse_result = []
         for block in block_list:
-            parse_result.extend(parse_identifiers_from_block_given_identifier_size(block, identifier_size))
+            parse_result.extend(
+                parse_identifiers_from_block_given_identifier_size(
+                    block, identifier_size))
         self.assertListEqual(identifier_list, parse_result)
 
     def test_identifiers_partition_given_block_size(self):
@@ -43,10 +48,14 @@ class TestDatabaseUtils(unittest.TestCase):
 
         identifier_list = fake_identifiers(identifier_size, identifier_count)
         block_list = list(
-            partition_identifiers_to_blocks(identifier_list, identifier_count_in_one_block, identifier_size,
+            partition_identifiers_to_blocks(identifier_list,
+                                            identifier_count_in_one_block,
+                                            identifier_size,
                                             block_size_bytes=block_size))
 
         parse_result = []
         for block in block_list:
-            parse_result.extend(parse_identifiers_from_block_given_identifier_size(block, identifier_size))
+            parse_result.extend(
+                parse_identifiers_from_block_given_identifier_size(
+                    block, identifier_size))
         self.assertListEqual(identifier_list, parse_result)

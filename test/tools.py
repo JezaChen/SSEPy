@@ -16,11 +16,12 @@ import random
 from toolkit.bits import Bitset
 
 
-def fake_db_for_inverted_index_based_sse(fixed_keyword_size: int,
-                                         fixed_file_id_size: int,
-                                         distinct_keyword_count: int,
-                                         db_w_size_range: tuple = (1, 10),
-                                         ):
+def fake_db_for_inverted_index_based_sse(
+        fixed_keyword_size: int,
+        fixed_file_id_size: int,
+        distinct_keyword_count: int,
+        db_w_size_range: tuple = (1, 10),
+):
     """
     Generate a test database for inverted index-based SSE schemes
     Note that the sizes of keywords and file identifiers are fixed

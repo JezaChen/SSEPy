@@ -22,14 +22,22 @@ def get_prp_implementation(prp_name: str):
         return prp
 
     try:
-        if prp_name.lower() in {'lubyrackoffprp', 'luby-rackoff-prp', 'luby_rackoff_prp'}:
+        if prp_name.lower() in {
+                'lubyrackoffprp', 'luby-rackoff-prp', 'luby_rackoff_prp'
+        }:
             from .luby_rackoff_prp import LubyRackoffPRP
-            cache['lubyrackoffprp'] = cache['luby-rackoff-prp'] = cache['luby_rackoff_prp'] = LubyRackoffPRP
-        elif prp_name.lower() in {'hmaclubyrackoffprp', 'hmac-luby-rackoff-prp', 'hmac_luby_rackoff_prp'}:
+            cache['lubyrackoffprp'] = cache['luby-rackoff-prp'] = cache[
+                'luby_rackoff_prp'] = LubyRackoffPRP
+        elif prp_name.lower() in {
+                'hmaclubyrackoffprp', 'hmac-luby-rackoff-prp',
+                'hmac_luby_rackoff_prp'
+        }:
             from .hmac_luby_rackoff_prp import HmacLubyRackoffPRP
             cache['hmaclubyrackoffprp'] = cache['hmac-luby-rackoff-prp'] = cache['hmac_luby_rackoff_prp'] = \
                 HmacLubyRackoffPRP
-        elif prp_name.lower() in {'bitwise_fpe_prp', 'bitwise-fpe-prp', 'bitwisefpeprp'}:
+        elif prp_name.lower() in {
+                'bitwise_fpe_prp', 'bitwise-fpe-prp', 'bitwisefpeprp'
+        }:
             from .bitwise_fpe_prp import BitwiseFPEPRP
             cache['bitwise_fpe_prp'] = cache['bitwise-fpe-prp'] = cache['bitwisefpeprp'] = \
                 BitwiseFPEPRP

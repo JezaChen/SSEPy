@@ -19,8 +19,9 @@ class BitwiseFPEPRP(AbstractBitwisePRP):
     """Luby-Rackoff Construction where its underlying prp is HMAC-PRP"""
 
     def __init__(self, *, message_bit_length: int, key_bit_length: int):
-        super(BitwiseFPEPRP, self).__init__(message_bit_length=message_bit_length,
-                                                 key_bit_length=key_bit_length)
+        super(BitwiseFPEPRP,
+              self).__init__(message_bit_length=message_bit_length,
+                             key_bit_length=key_bit_length)
         self.underlying_fpe = BitwiseFFX()
 
     def __call__(self, key: Bitset, message: Bitset) -> Bitset:

@@ -56,7 +56,7 @@ class Bitset(Sequence):
         """
         n = 0
         for index, value in enumerate(reversed(seq)):
-            n += 2 ** index * bool(int(value))
+            n += 2**index * bool(int(value))
         b = Bitset(n)
         return b
 
@@ -68,10 +68,13 @@ class Bitset(Sequence):
             value = int_from_bytes(value)
 
         if not isinstance(value, int):
-            raise ValueError("The Bitset constructor only supports copyig of BitSet or int.")
+            raise ValueError(
+                "The Bitset constructor only supports copyig of BitSet or int."
+            )
 
         if length and value.bit_length() > length:
-            raise ValueError("The bit length of value if larger than given length.")
+            raise ValueError(
+                "The bit length of value if larger than given length.")
 
         self.value = value
         try:
@@ -185,7 +188,8 @@ class Bitset(Sequence):
     def concat(self, b):
         if not isinstance(b, Bitset):
             raise ValueError("Only allow concat between Bitset")
-        return Bitset((self.value << b.length) + b.value, self.length + b.length)
+        return Bitset((self.value << b.length) + b.value,
+                      self.length + b.length)
 
     def __add__(self, other):
         return self.concat(other)
@@ -195,18 +199,25 @@ class Bitset(Sequence):
 
     def get_higher_bits(self, bit_len: int):
         if bit_len < 0:
-            raise ValueError("The parameter bit_len is less than or equal to 0")
+            raise ValueError(
+                "The parameter bit_len is less than or equal to 0")
 
         if bit_len > self.length:
-            raise ValueError("The parameter bit_len is greater than the actual length of the bits")
+            raise ValueError(
+                "The parameter bit_len is greater than the actual length of the bits"
+            )
 
         return Bitset(self >> max(self.length - bit_len, 0), bit_len)
 
     def get_lower_bits(self, bit_len: int):
         if bit_len < 0:
-            raise ValueError("The parameter bit_len is less than or equal to 0")
+            raise ValueError(
+                "The parameter bit_len is less than or equal to 0")
 
         if bit_len > self.length:
-            raise ValueError("The parameter bit_len is greater than the actual length of the bits")
+            raise ValueError(
+                "The parameter bit_len is greater than the actual length of the bits"
+            )
 
-        return Bitset((self << max(self.length - bit_len, 0)) >> max(self.length - bit_len, 0), bit_len)
+        return Bitset((self << max(self.length - bit_len, 0)) >> max(
+            self.length - bit_len, 0), bit_len)

@@ -55,7 +55,8 @@ class PiBas(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         K2 = self.config.prf_f(K, b'\x02' + keyword)
         return PiBasToken(K1, K2)
 
-    def _Search(self, edb: PiBasEncryptedDatabase, tk: PiBasToken) -> PiBasResult:
+    def _Search(self, edb: PiBasEncryptedDatabase,
+                tk: PiBasToken) -> PiBasResult:
         """Search Algorithm"""
         D = edb.D
         K1, K2 = tk.K1, tk.K2
@@ -75,16 +76,13 @@ class PiBas(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         key = self._Gen()
         return key
 
-    def EDBSetup(self,
-                 key: PiBasKey,
-                 database: dict
-                 ) -> PiBasEncryptedDatabase:
+    def EDBSetup(self, key: PiBasKey,
+                 database: dict) -> PiBasEncryptedDatabase:
         return self._Enc(key, database)
 
     def TokenGen(self, key: PiBasKey, keyword: bytes) -> PiBasToken:
         return self._Trap(key, keyword)
 
-    def Search(self,
-               edb: PiBasEncryptedDatabase,
+    def Search(self, edb: PiBasEncryptedDatabase,
                token: PiBasToken) -> PiBasResult:
         return self._Search(edb, token)

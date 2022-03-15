@@ -51,7 +51,8 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             # Sample a key Ki,0 <-$- {0, 1}k
             K_i = [os.urandom(self.config.param_k)]
 
-            for j, identifier in enumerate(database[keyword], start=1):  # j begins from 1
+            for j, identifier in enumerate(database[keyword],
+                                           start=1):  # j begins from 1
                 if j == len(database[keyword]):  # not process last node here
                     break
 
@@ -59,14 +60,15 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
                 K_i.append(self.config.ske1.KeyGen())
 
                 # Create a node
-                N_i_j = identifier + K_i[j] + bytes(self.config.prp_psi(
-                    Bitset(K1, length=self.config.param_k_bits),
-                    Bitset(ctr + 1, length=self.config.param_log2_s)
-                ))
+                N_i_j = identifier + K_i[j] + bytes(
+                    self.config.prp_psi(
+                        Bitset(K1, length=self.config.param_k_bits),
+                        Bitset(ctr + 1, length=self.config.param_log2_s)))
 
                 # Encrypt node N_i_j under key Ki,j-1
-                addr_in_A = self.config.prp_psi(Bitset(K1, length=self.config.param_k_bits),
-                                                Bitset(ctr, length=self.config.param_log2_s))
+                addr_in_A = self.config.prp_psi(
+                    Bitset(K1, length=self.config.param_k_bits),
+                    Bitset(ctr, length=self.config.param_log2_s))
                 A[int(addr_in_A)] = self.config.ske1.Encrypt(K_i[j - 1], N_i_j)
 
                 # Record first node address
@@ -82,11 +84,13 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             # and we consider this probability of error negligible
             ###
             last_node = database[keyword][
-                            -1] + b"\x00" * self.config.param_k + b"\x00" * self.config.param_log2_s_bytes
-            last_node_addr_in_A = self.config.prp_psi(Bitset(K1, length=self.config.param_k_bits),
-                                                      Bitset(ctr, length=self.config.param_log2_s))
+                -1] + b"\x00" * self.config.param_k + b"\x00" * self.config.param_log2_s_bytes
+            last_node_addr_in_A = self.config.prp_psi(
+                Bitset(K1, length=self.config.param_k_bits),
+                Bitset(ctr, length=self.config.param_log2_s))
 
-            A[int(last_node_addr_in_A)] = self.config.ske1.Encrypt(K_i[-1], last_node)
+            A[int(last_node_addr_in_A)] = self.config.ske1.Encrypt(
+                K_i[-1], last_node)
             if first_node_addr is None:  # only one entry
                 first_node_addr = last_node_addr_in_A
             ctr += 1
@@ -98,28 +102,35 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
                           self.config.prf_f(K2, add_leading_zeros(keyword, self.config.param_l)))
 
         # Fill random values for empty entry in A
-        existing_entry_size = len(self.config.ske1.Encrypt(b"\x00" * self.config.param_k,
-                                                           b"\x00" * (self.config.param_identifier_size +
-                                                                      self.config.param_k +
-                                                                      self.config.param_log2_s_bytes))
-                                  )
+        existing_entry_size = len(
+            self.config.ske1.Encrypt(
+                b"\x00" * self.config.param_k, b"\x00" *
+                (self.config.param_identifier_size + self.config.param_k +
+                 self.config.param_log2_s_bytes)))
 
         for i in range(len(A)):
             if A[i] == b'\x00':
-                A[i] = os.urandom(existing_entry_size)  # the same size as the existing s' entries of A
+                A[i] = os.urandom(
+                    existing_entry_size
+                )  # the same size as the existing s' entries of A
 
         # Fill random values to T so that |T| = |∆|
         for _ in range(self.config.param_dictionary_size - len(T)):
-            T[os.urandom(self.config.param_l)] = os.urandom(self.config.prf_f.output_length)
+            T[os.urandom(self.config.param_l)] = os.urandom(
+                self.config.prf_f.output_length)
 
         return SSE1EncryptedDatabase(A, T)
 
     def _Trap(self, K: SSE1Key, keyword: bytes) -> SSE1Token:
         """Trapdoor Generation Algorithm"""
         K2, K3 = K.K2, K.K3
-        return SSE1Token(bytes(self.config.prp_pi(Bitset(K3, length=self.config.param_k_bits),
-                                                  Bitset(keyword, length=self.config.param_l_bits))),
-                         self.config.prf_f(K2, add_leading_zeros(keyword, self.config.param_l)))
+        return SSE1Token(
+            bytes(
+                self.config.prp_pi(
+                    Bitset(K3, length=self.config.param_k_bits),
+                    Bitset(keyword, length=self.config.param_l_bits))),
+            self.config.prf_f(K2,
+                              add_leading_zeros(keyword, self.config.param_l)))
 
     def _Search(self, I: SSE1EncryptedDatabase, t: SSE1Token) -> SSE1Result:
         """Search Algorithm"""
@@ -131,21 +142,23 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         xor_result = bytes_xor(theta, eta)  # θ ⊕ η
 
         # parse θ ⊕ η as α||K', α is the first node address, K' is the key to decrypt
-        node_addr, K_prime = split_bytes_given_slice_len(xor_result, [self.config.param_log2_s_bytes,
-                                                                      self.config.param_k])
+        node_addr, K_prime = split_bytes_given_slice_len(
+            xor_result, [self.config.param_log2_s_bytes, self.config.param_k])
         result = []
         while True:
             node_cipher = A[int_from_bytes(node_addr)]
             node = self.config.ske1.Decrypt(K_prime, node_cipher)
             # parse the node
-            file_identifier, next_key, next_node_addr = split_bytes_given_slice_len(node,
-                                                                                    [self.config.param_identifier_size,
-                                                                                     self.config.param_k,
-                                                                                     self.config.param_log2_s_bytes])
+            file_identifier, next_key, next_node_addr = split_bytes_given_slice_len(
+                node, [
+                    self.config.param_identifier_size, self.config.param_k,
+                    self.config.param_log2_s_bytes
+                ])
             result.append(file_identifier)
             node_addr, K_prime = next_node_addr, next_key
             # current node is the last node
-            if K_prime == b'\x00' * len(K_prime) and node_addr == b'\x00' * len(node_addr):
+            if K_prime == b'\x00' * len(
+                    K_prime) and node_addr == b'\x00' * len(node_addr):
                 break
         return SSE1Result(result)
 
@@ -153,16 +166,12 @@ class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
         key = self._Gen()
         return key
 
-    def EDBSetup(self,
-                 key: SSE1Key,
-                 database: dict
-                 ) -> SSE1EncryptedDatabase:
+    def EDBSetup(self, key: SSE1Key, database: dict) -> SSE1EncryptedDatabase:
         return self._Enc(key, database)
 
     def TokenGen(self, key: SSE1Key, keyword: bytes) -> SSE1Token:
         return self._Trap(key, keyword)
 
-    def Search(self,
-               edb: SSE1EncryptedDatabase,
+    def Search(self, edb: SSE1EncryptedDatabase,
                token: SSE1Token) -> SSE1Result:
         return self._Search(edb, token)

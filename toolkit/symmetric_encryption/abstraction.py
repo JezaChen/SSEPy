@@ -14,7 +14,9 @@ import abc
 
 
 class AbstractSymmetricEncryption(metaclass=abc.ABCMeta):
-    def __init__(self, *, cipher_length: int, key_length: int, message_length: int):
+
+    def __init__(self, *, cipher_length: int, key_length: int,
+                 message_length: int):
         self.cipher_length = cipher_length
         self.key_length = key_length
         self.message_length = message_length
