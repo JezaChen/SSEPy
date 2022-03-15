@@ -2,7 +2,7 @@
 """ 
 LIB-SSE CODE
 @author: Jeza Chen
-@license: Apache Licence 
+@license: GPL-3.0 License 
 @file: test_database_utils.py 
 @time: 2022/03/13
 @contact: jeza@vip.qq.com

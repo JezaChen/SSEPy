@@ -2,7 +2,7 @@
 """ 
 LIB-SSE CODE
 @author: Jeza Chen
-@license: Apache Licence 
+@license: GPL-3.0 License 
 @file: luby_rackoff_prp.py 
 @time: 2022/03/10
 @contact: jeza@vip.qq.com

@@ -1,1 +1,2 @@
 cryptography~=36.0.0
+websockets~=10.2
