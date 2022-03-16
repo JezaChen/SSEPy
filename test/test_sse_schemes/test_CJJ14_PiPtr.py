@@ -13,7 +13,9 @@ LIB-SSE CODE
 import unittest
 
 import schemes.CJJ14.PiPtr.config
+from schemes.CJJ14.PiPtr.config import PiPtrConfig
 from schemes.CJJ14.PiPtr.construction import PiPtr
+from schemes.CJJ14.PiPtr.structures import PiPtrKey, PiPtrToken, PiPtrEncryptedDatabase, PiPtrResult
 from test.tools import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
@@ -72,3 +74,12 @@ class TestPiPtr(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("CJJ14.PiPtr")
+        self.assertEqual(loader.SSEScheme, PiPtr)
+        self.assertEqual(loader.SSEConfig, PiPtrConfig)
+        self.assertEqual(loader.SSEKey, PiPtrKey)
+        self.assertEqual(loader.SSEToken, PiPtrToken)
+        self.assertEqual(loader.SSEEncryptedDatabase, PiPtrEncryptedDatabase)
+        self.assertEqual(loader.SSEResult, PiPtrResult)

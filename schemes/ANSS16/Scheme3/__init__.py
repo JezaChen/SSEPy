@@ -10,3 +10,13 @@ LIB-SSE CODE
 @software: PyCharm 
 @description: 
 """
+import schemes.interface.module_loader
+
+
+class ModuleClassLoader(schemes.interface.module_loader.SSEModuleClassLoader):
+    _sse_name = "Pi"
+    _module_name = "ANSS16.Scheme3"
+
+
+# __init__.py in every SSE module must have sse_module_class_loader attribute
+sse_module_class_loader = ModuleClassLoader()

@@ -13,7 +13,9 @@ LIB-SSE CODE
 import unittest
 
 import schemes.CGKO06.SSE2.config
+from schemes.CGKO06.SSE2.config import SSE2Config
 from schemes.CGKO06.SSE2.construction import SSE2
+from schemes.CGKO06.SSE2.structures import SSE2Token, SSE2EncryptedDatabase, SSE2Result, SSE2Key
 from test.tools import fake_db_for_inverted_index_based_sse
 
 
@@ -73,3 +75,12 @@ class TestSSE2(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("CGKO06.SSE2")
+        self.assertEqual(loader.SSEScheme, SSE2)
+        self.assertEqual(loader.SSEConfig, SSE2Config)
+        self.assertEqual(loader.SSEKey, SSE2Key)
+        self.assertEqual(loader.SSEToken, SSE2Token)
+        self.assertEqual(loader.SSEEncryptedDatabase, SSE2EncryptedDatabase)
+        self.assertEqual(loader.SSEResult, SSE2Result)

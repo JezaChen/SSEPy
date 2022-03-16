@@ -12,8 +12,11 @@ LIB-SSE CODE
 """
 import unittest
 
+import schemes
 import schemes.CJJ14.PiBas.config
 from schemes.CJJ14.PiBas.construction import PiBas
+from schemes.CJJ14.PiBas.config import PiBasConfig
+from schemes.CJJ14.PiBas.structures import PiBasKey, PiBasToken, PiBasEncryptedDatabase, PiBasResult
 from test.tools import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
@@ -73,3 +76,12 @@ class TestPiBas(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("CJJ14.PiBas")
+        self.assertEqual(loader.SSEScheme, PiBas)
+        self.assertEqual(loader.SSEConfig, PiBasConfig)
+        self.assertEqual(loader.SSEKey, PiBasKey)
+        self.assertEqual(loader.SSEToken, PiBasToken)
+        self.assertEqual(loader.SSEEncryptedDatabase, PiBasEncryptedDatabase)
+        self.assertEqual(loader.SSEResult, PiBasResult)

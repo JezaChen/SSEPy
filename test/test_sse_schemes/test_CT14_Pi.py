@@ -13,7 +13,9 @@ LIB-SSE CODE
 import unittest
 
 import schemes.CT14.Pi.config
+from schemes.CT14.Pi.config import PiConfig
 from schemes.CT14.Pi.construction import Pi
+from schemes.CT14.Pi.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
 from test.tools import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
@@ -72,3 +74,12 @@ class TestPi(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("CT14.Pi")
+        self.assertEqual(loader.SSEScheme, Pi)
+        self.assertEqual(loader.SSEConfig, PiConfig)
+        self.assertEqual(loader.SSEKey, PiKey)
+        self.assertEqual(loader.SSEToken, PiToken)
+        self.assertEqual(loader.SSEEncryptedDatabase, PiEncryptedDatabase)
+        self.assertEqual(loader.SSEResult, PiResult)

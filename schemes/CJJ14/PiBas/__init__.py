@@ -10,3 +10,14 @@ LIB-SSE CODE
 @software: PyCharm 
 @description: 
 """
+
+import schemes.interface.module_loader
+
+
+class ModuleClassLoader(schemes.interface.module_loader.SSEModuleClassLoader):
+    _sse_name = "PiBas"
+    _module_name = "CJJ14.PiBas"
+
+
+# __init__.py in every SSE module must have sse_module_class_loader attribute
+sse_module_class_loader = ModuleClassLoader()

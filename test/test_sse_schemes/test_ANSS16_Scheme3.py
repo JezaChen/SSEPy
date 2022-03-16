@@ -14,7 +14,10 @@ import unittest
 
 import schemes.ANSS16.Scheme3.config
 from schemes.ANSS16.Scheme3.construction import Pi
+from schemes.ANSS16.Scheme3.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
 from test.tools import fake_db_for_inverted_index_based_sse
+from schemes.ANSS16.Scheme3.config import PiConfig
+
 
 TEST_KEYWORD_SIZE = 16
 
@@ -72,3 +75,12 @@ class TestPi(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("ANSS16.Scheme3")
+        self.assertEqual(loader.SSEScheme, Pi)
+        self.assertEqual(loader.SSEConfig, PiConfig)
+        self.assertEqual(loader.SSEKey, PiKey)
+        self.assertEqual(loader.SSEToken, PiToken)
+        self.assertEqual(loader.SSEEncryptedDatabase, PiEncryptedDatabase)
+        self.assertEqual(loader.SSEResult, PiResult)
