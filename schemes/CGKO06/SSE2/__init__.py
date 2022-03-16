@@ -10,3 +10,14 @@ LIB-SSE CODE
 @software: PyCharm 
 @description: 
 """
+
+import schemes.interface.module_loader
+
+
+class PiBasModuleClassLoader(schemes.interface.module_loader.SSEModuleClassLoader):
+    _sse_name = "SSE2"
+    _module_name = "CGKO06.SSE2"
+
+
+# __init__.py in every SSE module must have sse_module_class_loader attribute
+sse_module_class_loader = PiBasModuleClassLoader()

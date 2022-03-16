@@ -13,7 +13,9 @@ LIB-SSE CODE
 import unittest
 
 import schemes.CJJ14.Pi2Lev.config
+from schemes.CJJ14.Pi2Lev.config import Pi2LevConfig
 from schemes.CJJ14.Pi2Lev.construction import Pi2Lev
+from schemes.CJJ14.Pi2Lev.structures import Pi2LevKey, Pi2LevToken, Pi2LevEncryptedDatabase, Pi2LevResult
 from test.tools import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
@@ -72,3 +74,12 @@ class TestPi2Lev(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("CJJ14.Pi2Lev")
+        self.assertEqual(loader.SSEScheme, Pi2Lev)
+        self.assertEqual(loader.SSEConfig, Pi2LevConfig)
+        self.assertEqual(loader.SSEKey, Pi2LevKey)
+        self.assertEqual(loader.SSEToken, Pi2LevToken)
+        self.assertEqual(loader.SSEEncryptedDatabase, Pi2LevEncryptedDatabase)
+        self.assertEqual(loader.SSEResult, Pi2LevResult)

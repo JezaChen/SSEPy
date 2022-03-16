@@ -18,6 +18,12 @@ class SSEConfig(metaclass=abc.ABCMeta):
     def __init__(self, *args, **kwargs):
         pass
 
+    DEFAULT_CONFIG = {}
+
+    @classmethod
+    def get_default_config(cls):
+        return cls.DEFAULT_CONFIG
+
     @abc.abstractmethod
     def _parse_config(self, config_dict: dict):
         return

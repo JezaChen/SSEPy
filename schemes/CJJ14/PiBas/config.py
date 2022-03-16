@@ -40,6 +40,8 @@ class PiBasConfig(SSEConfig):
         "ske"
     ]
 
+    DEFAULT_CONFIG = DEFAULT_CONFIG
+
     def __init__(self, config_dict: dict):
         super(PiBasConfig, self).__init__(config_dict)
         self._parse_config(config_dict)

@@ -13,7 +13,9 @@ LIB-SSE CODE
 import unittest
 
 import schemes.CJJ14.PiPack.config
+from schemes.CJJ14.PiPack.config import PiPackConfig
 from schemes.CJJ14.PiPack.construction import PiPack
+from schemes.CJJ14.PiPack.structures import PiPackKey, PiPackToken, PiPackEncryptedDatabase, PiPackResult
 from test.tools import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
@@ -72,3 +74,12 @@ class TestPiPack(unittest.TestCase):
             token = scheme.TokenGen(key, keyword)
             result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
+
+    def test_module_loader(self):
+        loader = schemes._load_sse_module("CJJ14.PiPack")
+        self.assertEqual(loader.SSEScheme, PiPack)
+        self.assertEqual(loader.SSEConfig, PiPackConfig)
+        self.assertEqual(loader.SSEKey, PiPackKey)
+        self.assertEqual(loader.SSEToken, PiPackToken)
+        self.assertEqual(loader.SSEEncryptedDatabase, PiPackEncryptedDatabase)
+        self.assertEqual(loader.SSEResult, PiPackResult)
