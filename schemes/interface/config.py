@@ -15,6 +15,7 @@ import json
 
 
 class SSEConfig(metaclass=abc.ABCMeta):
+
     def __init__(self, *args, **kwargs):
         pass
 

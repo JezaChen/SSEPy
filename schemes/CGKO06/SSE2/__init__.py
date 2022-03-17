@@ -14,7 +14,8 @@ LIB-SSE CODE
 import schemes.interface.module_loader
 
 
-class PiBasModuleClassLoader(schemes.interface.module_loader.SSEModuleClassLoader):
+class PiBasModuleClassLoader(
+        schemes.interface.module_loader.SSEModuleClassLoader):
     _sse_name = "SSE2"
     _module_name = "CGKO06.SSE2"
 
