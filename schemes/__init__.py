@@ -8,7 +8,7 @@ __loader_name = "sse_module_class_loader"
 __schemes_module_path = "schemes"  #
 
 
-def _load_sse_module(sse_module_name: str) -> SSEModuleClassLoader:
+def load_sse_module(sse_module_name: str) -> SSEModuleClassLoader:
     if sse_module_name in __builtin_module_class_loader_cache:
         return __builtin_module_class_loader_cache[sse_module_name]
 

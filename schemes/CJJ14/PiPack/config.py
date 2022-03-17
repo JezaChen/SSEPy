@@ -23,6 +23,7 @@ PI_PACK_HEADER = b"\x93\x94Cash2014PiPack"
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CJJ14.PiPack",
     "param_lambda": 32,  # key size (bytes)
     "param_B": 64,  # a fixed block size, process B identifiers at a time and pack them into one ciphertext d
     "param_identifier_size": 8,

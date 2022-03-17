@@ -23,6 +23,7 @@ PI_BAS_HEADER = b"\x93\x94Cash2014PiBas"
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CJJ14.PiBas",
     "param_lambda": 32,  # key size (bytes)
     "prf_f_output_length": 32,
 

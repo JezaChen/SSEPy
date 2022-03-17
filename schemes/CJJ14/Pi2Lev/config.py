@@ -26,6 +26,7 @@ LEVEL_POINTER_OF_ARRAY = b"\x01"  # current level is storing pointers of array A
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CJJ14.Pi2Lev",
     "param_lambda": 32,  # key size (bytes)
     "param_B": 64,  # store identifiers in the array (in the medium and large cases), it packs up to B of them together
     "param_b": 64,  # store identifiers in the dictionary (in the small case), it packs up to b of them together

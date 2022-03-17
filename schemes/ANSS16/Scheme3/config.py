@@ -23,6 +23,7 @@ PI_HEADER = b"\x93\x94Asharov2014Scheme3"
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "ANSS16.Scheme3",
     "param_lambda": 32,
     "param_k": 32,  # key space K
     "param_k_prime": 32,  # key space K'

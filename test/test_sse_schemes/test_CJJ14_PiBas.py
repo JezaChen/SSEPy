@@ -78,7 +78,7 @@ class TestPiBas(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CJJ14.PiBas")
+        loader = schemes.load_sse_module("CJJ14.PiBas")
         self.assertEqual(loader.SSEScheme, PiBas)
         self.assertEqual(loader.SSEConfig, PiBasConfig)
         self.assertEqual(loader.SSEKey, PiBasKey)

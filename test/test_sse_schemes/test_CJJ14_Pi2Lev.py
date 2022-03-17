@@ -76,7 +76,7 @@ class TestPi2Lev(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CJJ14.Pi2Lev")
+        loader = schemes.load_sse_module("CJJ14.Pi2Lev")
         self.assertEqual(loader.SSEScheme, Pi2Lev)
         self.assertEqual(loader.SSEConfig, Pi2LevConfig)
         self.assertEqual(loader.SSEKey, Pi2LevKey)

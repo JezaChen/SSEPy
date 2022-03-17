@@ -100,3 +100,6 @@ class PiPtrResult(SSEResult):
             return ValueError("The data contained in xbytes is not a list.")
 
         return cls(result, config)
+
+    def __str__(self):
+        return self.result.__str__()

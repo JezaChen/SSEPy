@@ -23,6 +23,7 @@ PI_HEADER = b"\x93\x94Cash2014LocalityPi"
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CT14.Pi",
     "param_k": 32,  # key space K
     "param_k_prime": 32,  # key space K'
     "param_l": 32,  # key size (bytes)

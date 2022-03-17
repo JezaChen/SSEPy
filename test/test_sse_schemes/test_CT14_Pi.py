@@ -76,7 +76,7 @@ class TestPi(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CT14.Pi")
+        loader = schemes.load_sse_module("CT14.Pi")
         self.assertEqual(loader.SSEScheme, Pi)
         self.assertEqual(loader.SSEConfig, PiConfig)
         self.assertEqual(loader.SSEKey, PiKey)

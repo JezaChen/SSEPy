@@ -24,6 +24,7 @@ SSE1_HEADER = b"\x93\x94Curtomola2006SSE1"
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CGKO06.SSE1",
     "param_k": 24,  # key size (bytes)
     "param_l": 32,  # max keyword size (bytes)
     "param_s": 2 ** 16,  # size of array A

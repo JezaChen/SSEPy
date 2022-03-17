@@ -76,7 +76,7 @@ class TestPiPack(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CJJ14.PiPack")
+        loader = schemes.load_sse_module("CJJ14.PiPack")
         self.assertEqual(loader.SSEScheme, PiPack)
         self.assertEqual(loader.SSEConfig, PiPackConfig)
         self.assertEqual(loader.SSEKey, PiPackKey)

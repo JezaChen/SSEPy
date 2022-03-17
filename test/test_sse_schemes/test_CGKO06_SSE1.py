@@ -84,7 +84,7 @@ class TestSSE1(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CGKO06.SSE1")
+        loader = schemes.load_sse_module("CGKO06.SSE1")
         self.assertEqual(loader.SSEScheme, SSE1)
         self.assertEqual(loader.SSEConfig, SSE1Config)
         self.assertEqual(loader.SSEKey, SSE1Key)

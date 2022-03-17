@@ -23,6 +23,7 @@ PI_PTR_HEADER = b"\x93\x94Cash2014PiPtr"
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CJJ14.PiPtr",
     "param_lambda": 32,  # key size (bytes)
     "param_B": 64,  # a fixed block size, process B identifiers at a time and pack them into one ciphertext d
     "param_b": 64,  # store encrypted blocks of b pointers to these encrypted blocks

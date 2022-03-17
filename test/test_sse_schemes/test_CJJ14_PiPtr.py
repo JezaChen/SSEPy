@@ -76,7 +76,7 @@ class TestPiPtr(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CJJ14.PiPtr")
+        loader = schemes.load_sse_module("CJJ14.PiPtr")
         self.assertEqual(loader.SSEScheme, PiPtr)
         self.assertEqual(loader.SSEConfig, PiPtrConfig)
         self.assertEqual(loader.SSEKey, PiPtrKey)
