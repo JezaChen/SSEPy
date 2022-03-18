@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce0e9a63-a4ec-4a9d-9448-cd1fd6dfa424" name="Changes" comment="Preliminary completion of the front-end module">
+    <list default="true" id="ce0e9a63-a4ec-4a9d-9448-cd1fd6dfa424" name="Changes" comment="[feature] Toyed Frontend Module Completed">
       <change afterPath="$PROJECT_DIR$/example_db.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frontend/client/commands.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/global_config.py" afterDir="false" />
@@ -14,6 +14,7 @@
       <change afterPath="$PROJECT_DIR$/toolkit/logger/logger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/client/services/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/client/services/file_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/client/services/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/client/services/service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/server/connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/connector.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/server/services/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/file_manager.py" afterDir="false" />
@@ -228,7 +229,7 @@
       <workItem from="1646880152031" duration="7600000" />
       <workItem from="1647481826995" duration="2926000" />
       <workItem from="1647486784775" duration="41675000" />
-      <workItem from="1647568402483" duration="27423000" />
+      <workItem from="1647568402483" duration="27770000" />
     </task>
     <task id="LOCAL-00001" summary="First Commit">
       <created>1646892340440</created>
@@ -251,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1647530064197</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="[feature] Toyed Frontend Module Completed">
+      <created>1647597071491</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1647597071491</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -284,7 +292,8 @@
     <MESSAGE value="First Commit" />
     <MESSAGE value="SSE-1 in [CGKO06] completed" />
     <MESSAGE value="Preliminary completion of the front-end module" />
-    <option name="LAST_COMMIT_MESSAGE" value="Preliminary completion of the front-end module" />
+    <MESSAGE value="[feature] Toyed Frontend Module Completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="[feature] Toyed Frontend Module Completed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
