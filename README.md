@@ -6,6 +6,13 @@ This is a project that is moving forward...
 
 ## Usage
 
+### Environment
+
+- Python 3.8
+- OpenSSL
+- libffi
+- build-essential (for Debain), build-base (for Alpine)
+
 ### Install Required Packages
 Before running, you need to install the necessary packages
 
