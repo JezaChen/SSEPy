@@ -1,0 +1,6 @@
+# For local development
+services:
+  web:
+    build: .
+    ports:
+      - "8001:5000"
