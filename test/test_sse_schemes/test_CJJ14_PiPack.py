@@ -87,3 +87,37 @@ class TestPiPack(unittest.TestCase):
         self.assertEqual(loader.SSEToken, PiPackToken)
         self.assertEqual(loader.SSEEncryptedDatabase, PiPackEncryptedDatabase)
         self.assertEqual(loader.SSEResult, PiPackResult)
+
+    def test_structure_serialization(self):
+        keyword_count = 10
+
+        config_dict = schemes.CJJ14.PiPack.config.DEFAULT_CONFIG
+
+        db = fake_db_for_inverted_index_based_sse(
+            TEST_KEYWORD_SIZE,
+            config_dict.get("param_identifier_size"),
+            keyword_count,
+            db_w_size_range=(1, 200))
+
+        scheme = PiPack(config_dict)
+        key = scheme.KeyGen()
+        self.assertEqual(key,
+                         PiPackKey.deserialize(key.serialize(), scheme.config))
+
+        encrypted_index = scheme.EDBSetup(key, db)
+        self.assertEqual(
+            encrypted_index,
+            PiPackEncryptedDatabase.deserialize(encrypted_index.serialize(),
+                                                scheme.config))
+
+        for keyword in db:
+            token = scheme.TokenGen(key, keyword)
+            self.assertEqual(
+                token, PiPackToken.deserialize(token.serialize(),
+                                               scheme.config))
+            result = scheme.Search(encrypted_index, token)
+            self.assertEqual(
+                result,
+                PiPackResult.deserialize(result.serialize(), scheme.config))
+
+            self.assertEqual(db[keyword], result.result)

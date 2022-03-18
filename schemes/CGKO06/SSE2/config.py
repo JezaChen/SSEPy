@@ -87,6 +87,8 @@ class SSE2Config(SSEConfig):
         "ske"
     ]
 
+    DEFAULT_CONFIG = DEFAULT_CONFIG
+
     def __init__(self, config_dict: dict):
         super(SSE2Config, self).__init__(config_dict)
         self._parse_config(config_dict)

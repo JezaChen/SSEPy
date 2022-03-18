@@ -87,3 +87,37 @@ class TestPi2Lev(unittest.TestCase):
         self.assertEqual(loader.SSEToken, Pi2LevToken)
         self.assertEqual(loader.SSEEncryptedDatabase, Pi2LevEncryptedDatabase)
         self.assertEqual(loader.SSEResult, Pi2LevResult)
+
+    def test_structure_serialization(self):
+        keyword_count = 10
+
+        config_dict = schemes.CJJ14.Pi2Lev.config.DEFAULT_CONFIG
+
+        db = fake_db_for_inverted_index_based_sse(
+            TEST_KEYWORD_SIZE,
+            config_dict.get("param_identifier_size"),
+            keyword_count,
+            db_w_size_range=(1, 200))
+
+        scheme = Pi2Lev(config_dict)
+        key = scheme.KeyGen()
+        self.assertEqual(key,
+                         Pi2LevKey.deserialize(key.serialize(), scheme.config))
+
+        encrypted_index = scheme.EDBSetup(key, db)
+        self.assertEqual(
+            encrypted_index,
+            Pi2LevEncryptedDatabase.deserialize(encrypted_index.serialize(),
+                                                scheme.config))
+
+        for keyword in db:
+            token = scheme.TokenGen(key, keyword)
+            self.assertEqual(
+                token, Pi2LevToken.deserialize(token.serialize(),
+                                               scheme.config))
+            result = scheme.Search(encrypted_index, token)
+            self.assertEqual(
+                result,
+                Pi2LevResult.deserialize(result.serialize(), scheme.config))
+
+            self.assertEqual(db[keyword], result.result)

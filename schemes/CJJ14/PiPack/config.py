@@ -40,6 +40,8 @@ class PiPackConfig(SSEConfig):
         "param_identifier_size", "prf_f", "ske"
     ]
 
+    DEFAULT_CONFIG = DEFAULT_CONFIG
+
     def __init__(self, config_dict: dict):
         super(PiPackConfig, self).__init__(config_dict)
         self._parse_config(config_dict)
