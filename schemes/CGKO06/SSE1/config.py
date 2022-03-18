@@ -46,6 +46,8 @@ class SSE1Config(SSEConfig):
         "param_identifier_size", "prp_pi", "prp_psi", "prf_f", "ske1", "ske2"
     ]
 
+    DEFAULT_CONFIG = DEFAULT_CONFIG
+
     def __init__(self, config_dict: dict):
         super(SSE1Config, self).__init__(config_dict)
         self._parse_config(config_dict)

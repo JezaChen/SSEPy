@@ -50,6 +50,8 @@ class Pi2LevConfig(SSEConfig):
         "param_index_size_of_A", "prf_f", "ske"
     ]
 
+    DEFAULT_CONFIG = DEFAULT_CONFIG
+
     def __init__(self, config_dict: dict):
         super(Pi2LevConfig, self).__init__(config_dict)
         self._parse_config(config_dict)

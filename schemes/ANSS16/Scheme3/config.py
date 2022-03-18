@@ -42,6 +42,8 @@ class PiConfig(SSEConfig):
         "param_identifier_size", "prf", "ske"
     ]
 
+    DEFAULT_CONFIG = DEFAULT_CONFIG
+
     def __init__(self, config_dict: dict):
         super(PiConfig, self).__init__(config_dict)
         self._parse_config(config_dict)
