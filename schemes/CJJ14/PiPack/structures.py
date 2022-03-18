@@ -35,6 +35,11 @@ class PiPackKey(SSEKey):
 
         return cls(xbytes)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiPackKey):
+            return False
+        return self.K == other.K
+
 
 class PiPackEncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["D"]  # dict D
@@ -62,6 +67,11 @@ class PiPackEncryptedDatabase(SSEEncryptedDatabase):
         D = pickle.loads(data_bytes)
         return cls(D)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiPackEncryptedDatabase):
+            return False
+        return self.D == other.D
+
 
 class PiPackToken(SSEToken):
     __slots__ = ["K1", "K2"]  # K1, K2
@@ -76,14 +86,19 @@ class PiPackToken(SSEToken):
 
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiPackConfig = None):
-        if len(xbytes) != 2 * config.param_k:
+        if len(xbytes) != 2 * config.param_lambda:
             raise ValueError(
-                "The length of xbytes must be 2 times the length of the parameter param_k."
+                "The length of xbytes must be 2 times the length of the parameter param_lambda."
             )
 
-        K1, K2 = xbytes[:config.param_k], xbytes[config.param_k:]
+        K1, K2 = xbytes[:config.param_lambda], xbytes[config.param_lambda:]
 
         return cls(K1, K2, config)
+
+    def __eq__(self, other):
+        if not isinstance(other, PiPackToken):
+            return False
+        return self.K1 == other.K1 and self.K2 == other.K2
 
 
 class PiPackResult(SSEResult):
@@ -106,3 +121,8 @@ class PiPackResult(SSEResult):
 
     def __str__(self):
         return self.result.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, PiPackResult):
+            return False
+        return self.result == other.result

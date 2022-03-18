@@ -44,6 +44,11 @@ class SSE1Key(SSEKey):
         ]
         return cls(*key_list)
 
+    def __eq__(self, other):
+        if not isinstance(other, SSE1Key):
+            return False
+        return self.K1 == other.K1 and self.K2 == other.K2 and self.K3 == other.K3 and self.K4 == other.K4
+
 
 class SSE1EncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["A", "T"]  # array A and look-up table T
@@ -65,6 +70,11 @@ class SSE1EncryptedDatabase(SSEEncryptedDatabase):
         A, T = pickle.loads(data_bytes)
         return cls(A, T)
 
+    def __eq__(self, other):
+        if not isinstance(other, SSE1EncryptedDatabase):
+            return False
+        return self.A == other.A and self.T == other.T
+
 
 class SSE1Token(SSEToken):
     __slots__ = ["gamma", "eta"]  # array A and look-up table T
@@ -85,6 +95,11 @@ class SSE1Token(SSEToken):
 
         gamma, eta = xbytes[:config.param_l], xbytes[config.param_l:]
         return cls(gamma, eta)
+
+    def __eq__(self, other):
+        if not isinstance(other, SSE1Token):
+            return False
+        return self.gamma == other.gamma and self.eta == other.eta
 
 
 class SSE1Result(SSEResult):
@@ -108,3 +123,8 @@ class SSE1Result(SSEResult):
 
     def __str__(self):
         return self.result.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, SSE1Result):
+            return False
+        return self.result == other.result

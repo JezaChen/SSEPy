@@ -35,6 +35,11 @@ class PiBasKey(SSEKey):
 
         return cls(xbytes)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiBasKey):
+            return False
+        return self.K == other.K
+
 
 class PiBasEncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["D"]  # dict D
@@ -62,6 +67,11 @@ class PiBasEncryptedDatabase(SSEEncryptedDatabase):
         D = pickle.loads(data_bytes)
         return cls(D)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiBasEncryptedDatabase):
+            return False
+        return self.D == other.D
+
 
 class PiBasToken(SSEToken):
     __slots__ = ["K1", "K2"]  # K1, K2
@@ -85,6 +95,11 @@ class PiBasToken(SSEToken):
 
         return cls(K1, K2, config)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiBasToken):
+            return False
+        return self.K1 == other.K1 and self.K2 == other.K2
+
 
 class PiBasResult(SSEResult):
     __slots__ = ["result"]
@@ -106,3 +121,8 @@ class PiBasResult(SSEResult):
 
     def __str__(self):
         return self.result.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, PiBasResult):
+            return False
+        return self.result == other.result

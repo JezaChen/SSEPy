@@ -36,6 +36,11 @@ class PiKey(SSEKey):
 
         return cls(xbytes)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiKey):
+            return False
+        return self.K == other.K
+
 
 class PiEncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["HT_S", "HT_L_list"]  # dict D
@@ -63,6 +68,11 @@ class PiEncryptedDatabase(SSEEncryptedDatabase):
         data_bytes = xbytes[len(PI_HEADER):]
         HT_S, HT_list = pickle.loads(data_bytes)
         return cls(HT_S, HT_list, config)
+
+    def __eq__(self, other):
+        if not isinstance(other, PiEncryptedDatabase):
+            return False
+        return self.HT_S == other.HT_S and self.HT_L_list == other.HT_L_list
 
 
 class PiToken(SSEToken):
@@ -99,6 +109,14 @@ class PiToken(SSEToken):
 
         return cls(li, Ki, li_prime, Ki_prime, config)
 
+    def __eq__(self, other):
+        if not isinstance(other, PiToken):
+            return False
+        return self.li == other.li \
+               and self.Ki == other.Ki \
+               and self.li_prime == other.li_prime \
+               and self.Ki_prime == other.Ki_prime
+
 
 class PiResult(SSEResult):
     __slots__ = ["result"]
@@ -120,3 +138,8 @@ class PiResult(SSEResult):
 
     def __str__(self):
         return self.result.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, PiResult):
+            return False
+        return self.result == other.result

@@ -13,10 +13,10 @@ LIB-SSE CODE
 import unittest
 
 import schemes.ANSS16.Scheme3.config
+from schemes.ANSS16.Scheme3.config import PiConfig
 from schemes.ANSS16.Scheme3.construction import Pi
 from schemes.ANSS16.Scheme3.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
 from test.tools import fake_db_for_inverted_index_based_sse
-from schemes.ANSS16.Scheme3.config import PiConfig
 
 TEST_KEYWORD_SIZE = 16
 
@@ -27,7 +27,7 @@ class TestPi(unittest.TestCase):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine":
-            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+                [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.ANSS16.Scheme3.config.DEFAULT_CONFIG
@@ -87,3 +87,34 @@ class TestPi(unittest.TestCase):
         self.assertEqual(loader.SSEToken, PiToken)
         self.assertEqual(loader.SSEEncryptedDatabase, PiEncryptedDatabase)
         self.assertEqual(loader.SSEResult, PiResult)
+
+    def test_structure_serialization(self):
+        keyword_count = 10
+
+        config_dict = schemes.ANSS16.Scheme3.config.DEFAULT_CONFIG
+
+        db = fake_db_for_inverted_index_based_sse(
+            TEST_KEYWORD_SIZE,
+            config_dict.get("param_identifier_size"),
+            keyword_count,
+            db_w_size_range=(1, 200))
+
+        scheme = Pi(config_dict)
+        key = scheme.KeyGen()
+        self.assertEqual(key, PiKey.deserialize(key.serialize(), scheme.config))
+
+        encrypted_index = scheme.EDBSetup(key, db)
+        self.assertEqual(encrypted_index,
+                         PiEncryptedDatabase.deserialize(encrypted_index.serialize(), scheme.config))
+
+        for keyword in db:
+            token = scheme.TokenGen(key, keyword)
+            self.assertEqual(token,
+                             PiToken.deserialize(token.serialize(),
+                                                 scheme.config))
+            result = scheme.Search(encrypted_index, token)
+            self.assertEqual(result,
+                             PiResult.deserialize(result.serialize(),
+                                                  scheme.config))
+
+            self.assertEqual(db[keyword], result.result)

@@ -39,6 +39,11 @@ class SSE2Key(SSEKey):
         ]
         return cls(*key_list)
 
+    def __eq__(self, other):
+        if not isinstance(other, SSE2Key):
+            return False
+        return self.K1 == other.K1 and self.K2 == other.K2
+
 
 class SSE2EncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["I"]  # dict I
@@ -60,6 +65,11 @@ class SSE2EncryptedDatabase(SSEEncryptedDatabase):
         I = pickle.loads(data_bytes)
         return cls(I)
 
+    def __eq__(self, other):
+        if not isinstance(other, SSE2EncryptedDatabase):
+            return False
+        return self.I == other.I
+
 
 class SSE2Token(SSEToken):
     __slots__ = ["t"]  # array t
@@ -77,6 +87,11 @@ class SSE2Token(SSEToken):
         if not isinstance(t, list):
             return ValueError("The data contained in xbytes is not a list.")
         return cls(t, config)
+
+    def __eq__(self, other):
+        if not isinstance(other, SSE2Token):
+            return False
+        return self.t == other.t
 
 
 class SSE2Result(SSEResult):
@@ -99,3 +114,8 @@ class SSE2Result(SSEResult):
 
     def __str__(self):
         return self.result.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, SSE2Result):
+            return False
+        return self.result == other.result

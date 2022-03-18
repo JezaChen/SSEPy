@@ -14,8 +14,8 @@ import unittest
 
 import schemes
 import schemes.CJJ14.PiBas.config
-from schemes.CJJ14.PiBas.construction import PiBas
 from schemes.CJJ14.PiBas.config import PiBasConfig
+from schemes.CJJ14.PiBas.construction import PiBas
 from schemes.CJJ14.PiBas.structures import PiBasKey, PiBasToken, PiBasEncryptedDatabase, PiBasResult
 from test.tools import fake_db_for_inverted_index_based_sse
 
@@ -29,7 +29,7 @@ class TestPiBas(unittest.TestCase):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine":
-            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+                [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
@@ -87,3 +87,33 @@ class TestPiBas(unittest.TestCase):
         self.assertEqual(loader.SSEToken, PiBasToken)
         self.assertEqual(loader.SSEEncryptedDatabase, PiBasEncryptedDatabase)
         self.assertEqual(loader.SSEResult, PiBasResult)
+
+    def test_structure_serialization(self):
+        keyword_count = 10
+
+        config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
+
+        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
+                                                  TEST_FILE_ID_SIZE,
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
+
+        scheme = PiBas(config_dict)
+        key = scheme.KeyGen()
+        self.assertEqual(key, PiBasKey.deserialize(key.serialize(), scheme.config))
+
+        encrypted_index = scheme.EDBSetup(key, db)
+        self.assertEqual(encrypted_index,
+                         PiBasEncryptedDatabase.deserialize(encrypted_index.serialize(), scheme.config))
+
+        for keyword in db:
+            token = scheme.TokenGen(key, keyword)
+            self.assertEqual(token,
+                             PiBasToken.deserialize(token.serialize(),
+                                                    scheme.config))
+            result = scheme.Search(encrypted_index, token)
+            self.assertEqual(result,
+                             PiBasResult.deserialize(result.serialize(),
+                                                     scheme.config))
+
+            self.assertEqual(db[keyword], result.result)

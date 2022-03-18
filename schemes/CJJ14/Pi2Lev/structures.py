@@ -35,6 +35,11 @@ class Pi2LevKey(SSEKey):
 
         return cls(xbytes)
 
+    def __eq__(self, other):
+        if not isinstance(other, Pi2LevKey):
+            return False
+        return self.K == other.K
+
 
 class Pi2LevEncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["D", "A"]  # dict D, array A
@@ -63,6 +68,11 @@ class Pi2LevEncryptedDatabase(SSEEncryptedDatabase):
         D, A = pickle.loads(data_bytes)
         return cls(D, A)
 
+    def __eq__(self, other):
+        if not isinstance(other, Pi2LevEncryptedDatabase):
+            return False
+        return self.D == other.D and self.A == other.A
+
 
 class Pi2LevToken(SSEToken):
     __slots__ = ["K1", "K2"]  # K1, K2
@@ -77,14 +87,19 @@ class Pi2LevToken(SSEToken):
 
     @classmethod
     def deserialize(cls, xbytes: bytes, config: Pi2LevConfig = None):
-        if len(xbytes) != 2 * config.param_k:
+        if len(xbytes) != 2 * config.param_lambda:
             raise ValueError(
                 "The length of xbytes must be 2 times the length of the parameter param_k."
             )
 
-        K1, K2 = xbytes[:config.param_k], xbytes[config.param_k:]
+        K1, K2 = xbytes[:config.param_lambda], xbytes[config.param_lambda:]
 
         return cls(K1, K2, config)
+
+    def __eq__(self, other):
+        if not isinstance(other, Pi2LevToken):
+            return False
+        return self.K1 == other.K1 and self.K2 == other.K2
 
 
 class Pi2LevResult(SSEResult):
@@ -107,3 +122,8 @@ class Pi2LevResult(SSEResult):
 
     def __str__(self):
         return self.result.__str__()
+
+    def __eq__(self, other):
+        if not isinstance(other, Pi2LevResult):
+            return False
+        return self.result == other.result
