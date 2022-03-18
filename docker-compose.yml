@@ -4,4 +4,4 @@ services:
   web:
     build: .
     ports:
-      - "8001:5000"
+      - "8001:8001"
