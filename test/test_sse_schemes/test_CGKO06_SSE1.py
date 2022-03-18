@@ -100,27 +100,30 @@ class TestSSE1(unittest.TestCase):
 
         config_dict = schemes.CGKO06.SSE1.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
-                                                  config_dict["param_identifier_size"],
-                                                  keyword_count,
-                                                  db_w_size_range=(1, 200))
+        db = fake_db_for_inverted_index_based_sse(
+            config_dict["param_l"],
+            config_dict["param_identifier_size"],
+            keyword_count,
+            db_w_size_range=(1, 200))
 
         scheme = SSE1(config_dict)
         key = scheme.KeyGen()
-        self.assertEqual(key, SSE1Key.deserialize(key.serialize(), scheme.config))
+        self.assertEqual(key,
+                         SSE1Key.deserialize(key.serialize(), scheme.config))
 
         encrypted_index = scheme.EDBSetup(key, db)
-        self.assertEqual(encrypted_index,
-                         SSE1EncryptedDatabase.deserialize(encrypted_index.serialize(), scheme.config))
+        self.assertEqual(
+            encrypted_index,
+            SSE1EncryptedDatabase.deserialize(encrypted_index.serialize(),
+                                              scheme.config))
 
         for keyword in db:
             token = scheme.TokenGen(key, keyword)
-            self.assertEqual(token,
-                             SSE1Token.deserialize(token.serialize(),
-                                                   scheme.config))
+            self.assertEqual(
+                token, SSE1Token.deserialize(token.serialize(), scheme.config))
             result = scheme.Search(encrypted_index, token)
-            self.assertEqual(result,
-                             SSE1Result.deserialize(result.serialize(),
-                                                    scheme.config))
+            self.assertEqual(
+                result,
+                SSE1Result.deserialize(result.serialize(), scheme.config))
 
             self.assertEqual(db[keyword], result.result)

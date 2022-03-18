@@ -25,7 +25,7 @@ class TestSSE2(unittest.TestCase):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine":
-                [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
@@ -103,20 +103,22 @@ class TestSSE2(unittest.TestCase):
 
         scheme = SSE2(config_dict)
         key = scheme.KeyGen()
-        self.assertEqual(key, SSE2Key.deserialize(key.serialize(), scheme.config))
+        self.assertEqual(key,
+                         SSE2Key.deserialize(key.serialize(), scheme.config))
 
         encrypted_index = scheme.EDBSetup(key, db)
-        self.assertEqual(encrypted_index,
-                         SSE2EncryptedDatabase.deserialize(encrypted_index.serialize(), scheme.config))
+        self.assertEqual(
+            encrypted_index,
+            SSE2EncryptedDatabase.deserialize(encrypted_index.serialize(),
+                                              scheme.config))
 
         for keyword in db:
             token = scheme.TokenGen(key, keyword)
-            self.assertEqual(token,
-                             SSE2Token.deserialize(token.serialize(),
-                                                   scheme.config))
+            self.assertEqual(
+                token, SSE2Token.deserialize(token.serialize(), scheme.config))
             result = scheme.Search(encrypted_index, token)
-            self.assertEqual(result,
-                             SSE2Result.deserialize(result.serialize(),
-                                                    scheme.config))
+            self.assertEqual(
+                result,
+                SSE2Result.deserialize(result.serialize(), scheme.config))
 
             self.assertEqual(db[keyword], result.result)
