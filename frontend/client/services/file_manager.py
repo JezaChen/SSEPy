@@ -23,8 +23,8 @@ if not _PROGRAM_PATH.exists():
 
 def check_sid_local_file_valid(sid: str):
     return _PROGRAM_PATH.joinpath(sid).exists() \
-           and _PROGRAM_PATH.joinpath(sid).joinpath("config.json").exists() \
-           and _PROGRAM_PATH.joinpath(sid).joinpath("service_meta").exists()
+        and _PROGRAM_PATH.joinpath(sid).joinpath("config.json").exists() \
+        and _PROGRAM_PATH.joinpath(sid).joinpath("service_meta").exists()
 
 
 def create_sid_folder(sid: str):
@@ -36,7 +36,9 @@ def delete_sid_folder(sid: str):
 
 
 def read_service_config(sid: str) -> dict:
-    return json.loads(_PROGRAM_PATH.joinpath(sid).joinpath("config.json").read_text(encoding="utf8"))
+    return json.loads(
+        _PROGRAM_PATH.joinpath(sid).joinpath("config.json").read_text(
+            encoding="utf8"))
 
 
 def write_service_config(sid: str, config: dict):
@@ -45,7 +47,8 @@ def write_service_config(sid: str, config: dict):
 
 
 def read_service_meta(sid: str) -> dict:
-    return pickle.loads(_PROGRAM_PATH.joinpath(sid).joinpath("service_meta").read_bytes())
+    return pickle.loads(
+        _PROGRAM_PATH.joinpath(sid).joinpath("service_meta").read_bytes())
 
 
 def write_service_meta(sid: str, meta: dict):

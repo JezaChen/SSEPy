@@ -73,8 +73,8 @@ def __search_echo_handler(fut: asyncio.Future):
 
     if isinstance(__client_service, Service):
         content = fut.result()
-        result = __client_service.sse_module_loader.SSEResult.deserialize(content,
-                                                                          __client_service.config_object)
+        result = __client_service.sse_module_loader.SSEResult.deserialize(
+            content, __client_service.config_object)
         print(f">>> The result is {result}.")
 
 
@@ -83,8 +83,8 @@ async def upload_config(sid: str):
     __client_service = Service(sid)
 
     try:
-        await __client_service.handle_upload_config(wait=True,
-                                                    wait_callback_func=__upload_config_echo_handler)
+        await __client_service.handle_upload_config(
+            wait=True, wait_callback_func=__upload_config_echo_handler)
     except Exception as e:
         print(f">>> Upload config error, {e}")
     finally:
@@ -121,8 +121,9 @@ async def upload_encrypted_database(sid: str):
     __client_service = Service(sid)
 
     try:
-        await __client_service.handle_upload_encrypted_database(wait=True,
-                                                                wait_callback_func=__upload_encrypted_database_echo_handler)
+        await __client_service.handle_upload_encrypted_database(
+            wait=True,
+            wait_callback_func=__upload_encrypted_database_echo_handler)
     except Exception as e:
         print(f">>> Upload Encrypted Database error: {e}")
     finally:
@@ -135,9 +136,8 @@ async def search(sid: str, keyword: str):
 
     try:
         keyword_bytes = bytes(keyword, encoding="utf-8")
-        await __client_service.handle_keyword_search(keyword_bytes,
-                                                     wait=True,
-                                                     wait_callback_func=__search_echo_handler)
+        await __client_service.handle_keyword_search(
+            keyword_bytes, wait=True, wait_callback_func=__search_echo_handler)
     except Exception as e:
         print(f">>> Search error, {e}")
     finally:

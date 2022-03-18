@@ -29,7 +29,9 @@ class PiPackKey(SSEKey):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiPackConfig):
         if len(xbytes) != config.param_lambda:
-            raise ValueError("The length of xbytes must be the same as the length of the parameter param_k.")
+            raise ValueError(
+                "The length of xbytes must be the same as the length of the parameter param_k."
+            )
 
         return cls(xbytes)
 
@@ -75,7 +77,9 @@ class PiPackToken(SSEToken):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiPackConfig = None):
         if len(xbytes) != 2 * config.param_k:
-            raise ValueError("The length of xbytes must be 2 times the length of the parameter param_k.")
+            raise ValueError(
+                "The length of xbytes must be 2 times the length of the parameter param_k."
+            )
 
         K1, K2 = xbytes[:config.param_k], xbytes[config.param_k:]
 

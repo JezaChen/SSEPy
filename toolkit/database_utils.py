@@ -37,17 +37,19 @@ def partition_identifiers_to_blocks(identifier_list: list,
         block_size_bytes = entry_count_in_one_block * identifier_size
 
     if block_size_bytes < entry_count_in_one_block * identifier_size:
-        raise ValueError("parameter block_size_bytes should be greater than or equal to "
-                         "entry_count_in_one_block * identifier_size")
+        raise ValueError(
+            "parameter block_size_bytes should be greater than or equal to "
+            "entry_count_in_one_block * identifier_size")
 
     for i in range(0, len(identifier_list), entry_count_in_one_block):
-        block = b''.join(identifier_list[i: i + entry_count_in_one_block])
+        block = b''.join(identifier_list[i:i + entry_count_in_one_block])
         if len(block) < block_size_bytes:
             block += b'\x00' * (block_size_bytes - len(block))
         yield block
 
 
-def parse_identifiers_from_block_given_identifier_size(block: bytes, identifier_size: int):
+def parse_identifiers_from_block_given_identifier_size(block: bytes,
+                                                       identifier_size: int):
     result = []
     for i in range(0, len(block), identifier_size):
         identifier = block[i:i + identifier_size]
@@ -57,9 +59,11 @@ def parse_identifiers_from_block_given_identifier_size(block: bytes, identifier_
     return result
 
 
-def parse_identifiers_from_block_given_entry_count_in_one_block(block: bytes, entry_count_in_one_block: int):
+def parse_identifiers_from_block_given_entry_count_in_one_block(
+        block: bytes, entry_count_in_one_block: int):
     identifier_size = len(block) // entry_count_in_one_block
-    return parse_identifiers_from_block_given_identifier_size(block, identifier_size)
+    return parse_identifiers_from_block_given_identifier_size(
+        block, identifier_size)
 
 
 def convert_database_keyword_to_bytes(db: dict, encoding="utf-8"):
