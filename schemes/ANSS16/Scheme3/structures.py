@@ -30,7 +30,9 @@ class PiKey(SSEKey):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiConfig):
         if len(xbytes) != config.param_k:
-            raise ValueError("The length of xbytes must be the same as the length of the parameter param_lambda.")
+            raise ValueError(
+                "The length of xbytes must be the same as the length of the parameter param_lambda."
+            )
 
         return cls(xbytes)
 
@@ -66,7 +68,12 @@ class PiEncryptedDatabase(SSEEncryptedDatabase):
 class PiToken(SSEToken):
     __slots__ = ["li", "Ki", "li_prime", "Ki_prime"]  # τ
 
-    def __init__(self, li: bytes, Ki: bytes, li_prime: bytes, Ki_prime: bytes, config: PiConfig = None):
+    def __init__(self,
+                 li: bytes,
+                 Ki: bytes,
+                 li_prime: bytes,
+                 Ki_prime: bytes,
+                 config: PiConfig = None):
         super(PiToken, self).__init__(config)
         self.li = li
         self.Ki = Ki
@@ -78,13 +85,17 @@ class PiToken(SSEToken):
 
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiConfig = None):
-        if len(xbytes) != config.param_k + config.param_k_prime + config.param_l + config.param_l_prime:
-            raise ValueError("The length of xbytes must be matched with config.")
+        if len(
+                xbytes
+        ) != config.param_k + config.param_k_prime + config.param_l + config.param_l_prime:
+            raise ValueError(
+                "The length of xbytes must be matched with config.")
 
-        li, Ki, li_prime, Ki_prime = split_bytes_given_slice_len(xbytes, [config.param_l,
-                                                                          config.param_k,
-                                                                          config.param_l_prime,
-                                                                          config.param_k_prime])
+        li, Ki, li_prime, Ki_prime = split_bytes_given_slice_len(
+            xbytes, [
+                config.param_l, config.param_k, config.param_l_prime,
+                config.param_k_prime
+            ])
 
         return cls(li, Ki, li_prime, Ki_prime, config)
 
@@ -106,3 +117,6 @@ class PiResult(SSEResult):
             return ValueError("The data contained in xbytes is not a list.")
 
         return cls(result, config)
+
+    def __str__(self):
+        return self.result.__str__()

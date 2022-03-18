@@ -20,14 +20,17 @@ from test.tools import fake_db_for_inverted_index_based_sse
 
 
 class TestSSE2(unittest.TestCase):
+
     def test_method_correctness_simple_version(self):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
-            b"Ukraine": [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+            b"Ukraine":
+            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
-        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(config_dict, database=db)
+        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(
+            config_dict, database=db)
 
         scheme = SSE2(config_dict)
         key = scheme._Gen()
@@ -42,11 +45,12 @@ class TestSSE2(unittest.TestCase):
 
         config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
-                                                  config_dict["param_identifier_size"],
-                                                  keyword_count)
+        db = fake_db_for_inverted_index_based_sse(
+            config_dict["param_l"], config_dict["param_identifier_size"],
+            keyword_count)
 
-        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(config_dict, database=db)
+        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(
+            config_dict, database=db)
 
         scheme = SSE2(config_dict)
         key = scheme._Gen()
@@ -62,11 +66,12 @@ class TestSSE2(unittest.TestCase):
 
         config_dict = schemes.CGKO06.SSE2.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(config_dict["param_l"],
-                                                  config_dict["param_identifier_size"],
-                                                  keyword_count)
+        db = fake_db_for_inverted_index_based_sse(
+            config_dict["param_l"], config_dict["param_identifier_size"],
+            keyword_count)
 
-        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(config_dict, database=db)
+        schemes.CGKO06.SSE2.config.scan_database_and_update_config_dict(
+            config_dict, database=db)
 
         scheme = SSE2(config_dict)
         key = scheme.KeyGen()
@@ -77,7 +82,7 @@ class TestSSE2(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CGKO06.SSE2")
+        loader = schemes.load_sse_module("CGKO06.SSE2")
         self.assertEqual(loader.SSEScheme, SSE2)
         self.assertEqual(loader.SSEConfig, SSE2Config)
         self.assertEqual(loader.SSEKey, SSE2Key)

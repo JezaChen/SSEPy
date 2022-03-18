@@ -1,2 +1,5 @@
 cryptography~=36.0.0
 websockets~=10.2
+pathlib~=1.0.1
+asyncclick~=8.0.3.2
+anyio

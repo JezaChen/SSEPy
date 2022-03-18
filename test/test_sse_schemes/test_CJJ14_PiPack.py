@@ -22,10 +22,12 @@ TEST_KEYWORD_SIZE = 16
 
 
 class TestPiPack(unittest.TestCase):
+
     def test_method_correctness_simple_version(self):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
-            b"Ukraine": [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+            b"Ukraine":
+            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.CJJ14.PiPack.config.DEFAULT_CONFIG
@@ -43,10 +45,11 @@ class TestPiPack(unittest.TestCase):
 
         config_dict = schemes.CJJ14.PiPack.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
-                                                  config_dict.get("param_identifier_size"),
-                                                  keyword_count,
-                                                  db_w_size_range=(1, 200))
+        db = fake_db_for_inverted_index_based_sse(
+            TEST_KEYWORD_SIZE,
+            config_dict.get("param_identifier_size"),
+            keyword_count,
+            db_w_size_range=(1, 200))
 
         scheme = PiPack(config_dict)
         key = scheme._Gen()
@@ -62,10 +65,11 @@ class TestPiPack(unittest.TestCase):
 
         config_dict = schemes.CJJ14.PiPack.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
-                                                  config_dict.get("param_identifier_size"),
-                                                  keyword_count,
-                                                  db_w_size_range=(1, 200))
+        db = fake_db_for_inverted_index_based_sse(
+            TEST_KEYWORD_SIZE,
+            config_dict.get("param_identifier_size"),
+            keyword_count,
+            db_w_size_range=(1, 200))
 
         scheme = PiPack(config_dict)
         key = scheme.KeyGen()
@@ -76,7 +80,7 @@ class TestPiPack(unittest.TestCase):
             self.assertEqual(db[keyword], result.result)
 
     def test_module_loader(self):
-        loader = schemes._load_sse_module("CJJ14.PiPack")
+        loader = schemes.load_sse_module("CJJ14.PiPack")
         self.assertEqual(loader.SSEScheme, PiPack)
         self.assertEqual(loader.SSEConfig, PiPackConfig)
         self.assertEqual(loader.SSEKey, PiPackKey)

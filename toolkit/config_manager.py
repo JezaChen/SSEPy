@@ -19,5 +19,5 @@ def read_config(config_file_path: str) -> dict:
 
 
 def write_config(config: dict, config_file_path: str):
-    with open(config_file_path, "r") as f:
+    with open(config_file_path, "w") as f:
         return json.dump(config, f)

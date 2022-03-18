@@ -26,14 +26,18 @@ LEVEL_POINTER_OF_ARRAY = b"\x01"  # current level is storing pointers of array A
 # The length parameter of the bit suffix is the length in bits
 
 DEFAULT_CONFIG = {
+    "scheme": "CJJ14.Pi2Lev",
     "param_lambda": 32,  # key size (bytes)
-    "param_B": 64,  # store identifiers in the array (in the medium and large cases), it packs up to B of them together
-    "param_b": 64,  # store identifiers in the dictionary (in the small case), it packs up to b of them together
+    "param_B":
+    # store identifiers in the array (in the medium and large cases), it packs up to B of them together
+    64,
+    "param_b":
+    # store identifiers in the dictionary (in the small case), it packs up to b of them together
+    64,
     "param_B_prime": 64,  # storing pointers
     "param_b_prime": 64,  # storing pointers
     "param_identifier_size": 8,
     "prf_f_output_length": 32,
-
     "prf_f": "HmacPRF",
     "ske": "AES-CBC"
 }
@@ -41,16 +45,9 @@ DEFAULT_CONFIG = {
 
 class Pi2LevConfig(SSEConfig):
     __slots__ = [
-        "param_lambda",
-        "param_B",
-        "param_B_prime",
-        "param_b",
-        "param_b_prime",
-        "prf_f_output_length",
-        "param_identifier_size",
-        "param_index_size_of_A",
-        "prf_f",
-        "ske"
+        "param_lambda", "param_B", "param_B_prime", "param_b", "param_b_prime",
+        "prf_f_output_length", "param_identifier_size",
+        "param_index_size_of_A", "prf_f", "ske"
     ]
 
     def __init__(self, config_dict: dict):
@@ -58,16 +55,11 @@ class Pi2LevConfig(SSEConfig):
         self._parse_config(config_dict)
 
     def _parse_config(self, config_dict: dict):
-        SSEConfig.check_param_exist(["param_lambda",
-                                     "param_B",
-                                     "param_b",
-                                     "param_B_prime",
-                                     "param_b_prime",
-                                     "prf_f_output_length",
-                                     "param_identifier_size",
-                                     "prf_f",
-                                     "ske"],
-                                    config_dict)
+        SSEConfig.check_param_exist([
+            "param_lambda", "param_B", "param_b", "param_B_prime",
+            "param_b_prime", "prf_f_output_length", "param_identifier_size",
+            "prf_f", "ske"
+        ], config_dict)
 
         self.param_lambda = config_dict.get("param_lambda")
 
@@ -80,15 +72,18 @@ class Pi2LevConfig(SSEConfig):
         self.prf_f_output_length = config_dict.get("prf_f_output_length")
         self.param_identifier_size = config_dict.get("param_identifier_size")
 
-        self.param_index_size_of_A = (self.param_B * self.param_identifier_size) // self.param_B_prime
-        if (self.param_b * self.param_identifier_size) // self.param_b_prime != self.param_index_size_of_A:
-            raise ValueError("guarantee (param_B * param_identifier_size) // param_B_prime == "
-                             "(param_b * param_identifier_size) // param_b_prime")
+        self.param_index_size_of_A = (
+            self.param_B * self.param_identifier_size) // self.param_B_prime
+        if (self.param_b * self.param_identifier_size
+            ) // self.param_b_prime != self.param_index_size_of_A:
+            raise ValueError(
+                "guarantee (param_B * param_identifier_size) // param_B_prime == "
+                "(param_b * param_identifier_size) // param_b_prime")
 
-        self.prf_f = toolkit.prf.get_prf_implementation(config_dict.get("prf_f", ""))(
-            key_length=self.param_lambda,
-            output_length=self.prf_f_output_length)
+        self.prf_f = toolkit.prf.get_prf_implementation(
+            config_dict.get("prf_f",
+                            ""))(key_length=self.param_lambda,
+                                 output_length=self.prf_f_output_length)
 
-        self.ske = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(config_dict.get("ske", ""))(
-            key_length=self.param_lambda
-        )
+        self.ske = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(
+            config_dict.get("ske", ""))(key_length=self.param_lambda)

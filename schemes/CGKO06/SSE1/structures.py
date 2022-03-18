@@ -19,7 +19,12 @@ from schemes.interface.structures import SSEKey, SSEEncryptedDatabase, SSEToken,
 class SSE1Key(SSEKey):
     __slots__ = ["K1", "K2", "K3", "K4"]
 
-    def __init__(self, K1: bytes, K2: bytes, K3: bytes, K4: bytes, config: SSE1Config = None):
+    def __init__(self,
+                 K1: bytes,
+                 K2: bytes,
+                 K3: bytes,
+                 K4: bytes,
+                 config: SSE1Config = None):
         super(SSE1Key, self).__init__(config)
         self.K1, self.K2, self.K3, self.K4 = K1, K2, K3, K4
 
@@ -29,9 +34,14 @@ class SSE1Key(SSEKey):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: SSE1Config):
         if len(xbytes) != 4 * config.param_k:
-            raise ValueError("The length of xbytes must be four times the length of the parameter param_k.")
+            raise ValueError(
+                "The length of xbytes must be four times the length of the parameter param_k."
+            )
 
-        key_list = [xbytes[i: i + config.param_k] for i in range(0, len(xbytes), config.param_k)]
+        key_list = [
+            xbytes[i:i + config.param_k]
+            for i in range(0, len(xbytes), config.param_k)
+        ]
         return cls(*key_list)
 
 
@@ -68,7 +78,9 @@ class SSE1Token(SSEToken):
 
     @classmethod
     def deserialize(cls, xbytes: bytes, config: SSE1Config = None):
-        if len(xbytes) != config.param_l + config.param_k + config.param_log2_s_bytes:
+        if len(
+                xbytes
+        ) != config.param_l + config.param_k + config.param_log2_s_bytes:
             raise ValueError("The length of xbytes is wrong.")
 
         gamma, eta = xbytes[:config.param_l], xbytes[config.param_l:]
@@ -93,3 +105,6 @@ class SSE1Result(SSEResult):
             return ValueError("The data contained in xbytes is not a list.")
 
         return cls(result)
+
+    def __str__(self):
+        return self.result.__str__()
