@@ -4,44 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce0e9a63-a4ec-4a9d-9448-cd1fd6dfa424" name="Changes" comment="add LICENSE">
-      <change afterPath="$PROJECT_DIR$/frontend/client/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/client/services/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/client/services/file_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/client/services/service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/constants.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/server/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/server/connector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/server/services/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/server/services/file_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/server/services/service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/server/services/services_manager.py" afterDir="false" />
+    <list default="true" id="ce0e9a63-a4ec-4a9d-9448-cd1fd6dfa424" name="Changes" comment="Preliminary completion of the front-end module">
+      <change afterPath="$PROJECT_DIR$/example_db.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/client/commands.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/global_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/run_client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/run_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolkit/logger/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolkit/logger/logger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/ANSS16/Scheme3/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/ANSS16/Scheme3/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/ANSS16/Scheme3/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/ANSS16/Scheme3/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CGKO06/SSE1/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CGKO06/SSE1/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CGKO06/SSE1/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CGKO06/SSE1/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CGKO06/SSE2/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CGKO06/SSE2/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CGKO06/SSE2/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CGKO06/SSE2/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/Pi2Lev/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/Pi2Lev/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/Pi2Lev/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/Pi2Lev/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/PiBas/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/PiBas/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/PiBas/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/PiBas/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/PiPack/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/PiPack/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/PiPack/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/PiPack/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/PiPtr/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/PiPtr/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CJJ14/PiPtr/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CJJ14/PiPtr/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CT14/Pi/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CT14/Pi/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/CT14/Pi/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/CT14/Pi/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemes/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_ANSS16_Scheme3.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_ANSS16_Scheme3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CGKO06_SSE1.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CGKO06_SSE1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CGKO06_SSE2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CGKO06_SSE2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_Pi2Lev.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_Pi2Lev.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_PiBas.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_PiBas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_PiPack.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_PiPack.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_PiPtr.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CJJ14_PiPtr.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_sse_schemes/test_CT14_Pi.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_sse_schemes/test_CT14_Pi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/client/services/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/client/services/service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/server/connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/connector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/server/services/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/file_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/server/services/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/server/services/services_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/services_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolkit/config_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolkit/config_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolkit/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolkit/database_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,8 +208,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.service" />
         <item itemvalue="Python.connector" />
+        <item itemvalue="Python.service" />
         <item itemvalue="Python.connector (1)" />
         <item itemvalue="Python tests.Python tests for test.TestSSE1.test_method_correctness" />
         <item itemvalue="Python tests.Python tests for test.TestSSE1.test_interface_correctness" />
@@ -247,7 +227,8 @@
       <workItem from="1646796861687" duration="29662000" />
       <workItem from="1646880152031" duration="7600000" />
       <workItem from="1647481826995" duration="2926000" />
-      <workItem from="1647486784775" duration="39937000" />
+      <workItem from="1647486784775" duration="41675000" />
+      <workItem from="1647568402483" duration="27423000" />
     </task>
     <task id="LOCAL-00001" summary="First Commit">
       <created>1646892340440</created>
@@ -263,7 +244,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646892364646</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Preliminary completion of the front-end module">
+      <created>1647530064197</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1647530064197</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -280,7 +268,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="dev-frontend" />
                       </list>
                     </value>
                   </entry>
@@ -295,7 +283,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
     <MESSAGE value="SSE-1 in [CGKO06] completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="SSE-1 in [CGKO06] completed" />
+    <MESSAGE value="Preliminary completion of the front-end module" />
+    <option name="LAST_COMMIT_MESSAGE" value="Preliminary completion of the front-end module" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -323,17 +312,13 @@
         <watch expression="ske1.Encrypt(K_i[-1], last_node)" language="Python" />
         <watch expression="db[keyword]" language="Python" />
       </configuration>
-      <configuration name="PythonConfigurationType">
-        <watch expression="db.keys()" language="Python" />
-        <watch expression="return_result.result == actual_result" language="Python" />
-      </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/libsse$symmetric_encryption.coverage" NAME="symmetric_encryption Coverage Results" MODIFIED="1646820004314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolkit" />
-    <SUITE FILE_PATH="coverage/libsse$service.coverage" NAME="service Coverage Results" MODIFIED="1647529924117" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/client/services" />
+    <SUITE FILE_PATH="coverage/libsse$service.coverage" NAME="service Coverage Results" MODIFIED="1647583733221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/client/services" />
     <SUITE FILE_PATH="coverage/libsse$connector__1_.coverage" NAME="connector (1) Coverage Results" MODIFIED="1647497797362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/client" />
     <SUITE FILE_PATH="coverage/libsse$.coverage" NAME=" Coverage Results" MODIFIED="1646891910845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/schemes/CGKO06/SSE1" />
-    <SUITE FILE_PATH="coverage/libsse$connector.coverage" NAME="connector Coverage Results" MODIFIED="1647529349394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/server" />
+    <SUITE FILE_PATH="coverage/libsse$connector.coverage" NAME="connector Coverage Results" MODIFIED="1647589505167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/server" />
   </component>
 </project>

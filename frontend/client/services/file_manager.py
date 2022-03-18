@@ -54,7 +54,6 @@ def write_service_meta(sid: str, meta: dict):
 
 
 def read_encrypted_database(sid: str) -> bytes:
-    config = read_service_config(sid)
     edb_bytes = _PROGRAM_PATH.joinpath(sid).joinpath("edb").read_bytes()
     return edb_bytes
 
@@ -62,6 +61,11 @@ def read_encrypted_database(sid: str) -> bytes:
 def write_encrypted_database(sid: str, edb_bytes: bytes):
     with open(_PROGRAM_PATH.joinpath(sid).joinpath("edb"), "wb") as f:
         f.write(edb_bytes)
+
+
+def delete_encrypted_database(sid: str):
+    edb_path = _PROGRAM_PATH.joinpath(sid).joinpath("edb")
+    edb_path.unlink(missing_ok=True)
 
 
 def write_key(sid: str, key_bytes: bytes):

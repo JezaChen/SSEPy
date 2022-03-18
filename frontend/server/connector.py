@@ -18,6 +18,7 @@ import websockets
 
 from frontend.constants import KEY_SID, KEY_TYPE, TYPE_INIT
 from frontend.server.services.services_manager import ServicesManager
+from global_config import ServerConfig
 
 _sse_service_manager = ServicesManager()
 
@@ -36,10 +37,10 @@ async def handler(websocket, path):
     await _sse_service_manager.create_service(sid, websocket)
 
 
-async def main():
-    async with websockets.serve(handler, "", 8001, max_size=None):
+async def run_server(host, port):
+    async with websockets.serve(handler, host, port, max_size=None):
         await asyncio.Future()  # run forever
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(run_server(ServerConfig.HOST, ServerConfig.PORT))

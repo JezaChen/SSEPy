@@ -62,6 +62,18 @@ def parse_identifiers_from_block_given_entry_count_in_one_block(block: bytes, en
     return parse_identifiers_from_block_given_identifier_size(block, identifier_size)
 
 
+def convert_database_keyword_to_bytes(db: dict, encoding="utf-8"):
+    """Make sure that all keywords in db are strings and all values are hex-strings. """
+    result = {}
+    for keyword in db:
+        keyword_bytes = bytes(keyword, encoding=encoding)
+        identifier_bytes_list = []
+        for identifier in db[keyword]:
+            identifier_bytes_list.append(bytes.fromhex(identifier))
+        result[keyword_bytes] = identifier_bytes_list
+    return result
+
+
 if __name__ == '__main__':
     test_db = {
         b"a": [1, 2, 3, 4, 6],

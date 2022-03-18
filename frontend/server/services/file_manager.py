@@ -38,7 +38,11 @@ def read_service_config(sid: str) -> dict:
 
 
 def write_service_config(sid: str, config: dict):
-    with open(_PROGRAM_PATH.joinpath(sid).joinpath("config.json"), "w") as f:
+    service_dir_path = _PROGRAM_PATH.joinpath(sid)
+    if not service_dir_path.exists():
+        return
+
+    with open(service_dir_path.joinpath("config.json"), "w") as f:
         json.dump(config, f)
 
 
@@ -47,7 +51,11 @@ def read_service_meta(sid: str) -> dict:
 
 
 def write_service_meta(sid: str, meta: dict):
-    with open(_PROGRAM_PATH.joinpath(sid).joinpath("service_meta"), "wb") as f:
+    service_dir_path = _PROGRAM_PATH.joinpath(sid)
+    if not service_dir_path.exists():
+        return
+
+    with open(service_dir_path.joinpath("service_meta"), "wb") as f:
         pickle.dump(meta, f)
 
 
@@ -57,5 +65,9 @@ def read_encrypted_database(sid: str) -> bytes:
 
 
 def write_encrypted_database(sid: str, edb_bytes: bytes):
-    with open(_PROGRAM_PATH.joinpath(sid).joinpath("edb"), "wb") as f:
+    service_dir_path = _PROGRAM_PATH.joinpath(sid)
+    if not service_dir_path.exists():
+        return
+
+    with open(service_dir_path.joinpath("edb"), "wb") as f:
         f.write(edb_bytes)
