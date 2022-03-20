@@ -127,3 +127,6 @@ class PiPtrResult(SSEResult):
         if not isinstance(other, PiPtrResult):
             return False
         return self.result == other.result
+
+    def get_result_list(self) -> list:
+        return self.result

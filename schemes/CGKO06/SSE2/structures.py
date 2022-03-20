@@ -119,3 +119,6 @@ class SSE2Result(SSEResult):
         if not isinstance(other, SSE2Result):
             return False
         return self.result == other.result
+
+    def get_result_list(self) -> list:
+        return self.result

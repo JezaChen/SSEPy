@@ -128,3 +128,6 @@ class SSE1Result(SSEResult):
         if not isinstance(other, SSE1Result):
             return False
         return self.result == other.result
+
+    def get_result_list(self) -> list:
+        return self.result

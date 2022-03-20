@@ -127,3 +127,6 @@ class Pi2LevResult(SSEResult):
         if not isinstance(other, Pi2LevResult):
             return False
         return self.result == other.result
+
+    def get_result_list(self) -> list:
+        return self.result

@@ -36,13 +36,41 @@ def add_leading_zeros(xbytes: bytes, output_len: int):
 
 def split_bytes_given_slice_len(xbytes: bytes, slice_len_list: list) -> list:
     if len(xbytes) != sum(slice_len for slice_len in slice_len_list):
-        raise ValueError("Length mismatch, please ensure that the length of xbytes is equal to "
-                         "the sum of the individual values of slice_len_list")
+        raise ValueError(
+            "Length mismatch, please ensure that the length of xbytes is equal to "
+            "the sum of the individual values of slice_len_list")
     result = []
     c = 0
     slice_len_accumulation = itertools.accumulate(slice_len_list)
     while c != len(xbytes):
         next_c = next(slice_len_accumulation)
-        result.append(xbytes[c: next_c])
+        result.append(xbytes[c:next_c])
         c = next_c
     return result
+
+
+class BytesConverter:
+    """Convert bytes to given format"""
+    supported_format = ["int", "hex", "raw", "utf8"]
+
+    @staticmethod
+    def bytes_to_int(xbytes: bytes):
+        return int_from_bytes(xbytes)
+
+    @staticmethod
+    def bytes_to_hex(xbytes: bytes):
+        return xbytes.hex()
+
+    @staticmethod
+    def bytes_to_raw(xbytes: bytes):
+        return xbytes
+
+    @staticmethod
+    def bytes_to_utf8(xbytes: bytes):
+        return xbytes.decode(encoding="utf-8")
+
+    @staticmethod
+    def convert_bytes(xbytes: bytes, output_format: str):
+        if not hasattr(BytesConverter, "bytes_to_" + output_format):
+            raise ValueError(f"Unsupported format {output_format}")
+        return getattr(BytesConverter, "bytes_to_" + output_format)(xbytes)

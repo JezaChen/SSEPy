@@ -15,11 +15,13 @@ and converting data structures into structures that the service can understand
 @todo handle exceptions
 """
 import asyncio
+import functools
 import json
 import pickle
 
 import schemes
 from frontend.client.services.service import Service
+from toolkit.bytes_utils import BytesConverter
 from toolkit.config_manager import write_config, read_config
 from toolkit.database_utils import convert_database_keyword_to_bytes
 
@@ -68,14 +70,20 @@ def __upload_encrypted_database_echo_handler(fut: asyncio.Future):
     print(f">>> Upload encrypted database successfully")
 
 
-def __search_echo_handler(fut: asyncio.Future):
+def __search_echo_handler(fut: asyncio.Future, output_format="raw"):
     global __client_service
 
     if isinstance(__client_service, Service):
         content = fut.result()
         result = __client_service.sse_module_loader.SSEResult.deserialize(
             content, __client_service.config_object)
-        print(f">>> The result is {result}.")
+        result_list = result.get_result_list()
+        output_result_list = [
+            BytesConverter.convert_bytes(identifier_bytes, output_format)
+            for identifier_bytes in result_list
+        ]
+
+        print(f">>> The result is {output_result_list}.")
 
 
 async def upload_config(sid: str):
@@ -130,14 +138,21 @@ async def upload_encrypted_database(sid: str):
         await __client_service.close_service()
 
 
-async def search(sid: str, keyword: str):
+async def search(sid: str, keyword: str, output_format="raw"):
+    if output_format not in BytesConverter.supported_format:
+        print(f">>> Unsupported output format {output_format}")
+        return
+
     global __client_service
     __client_service = Service(sid)
 
     try:
         keyword_bytes = bytes(keyword, encoding="utf-8")
         await __client_service.handle_keyword_search(
-            keyword_bytes, wait=True, wait_callback_func=__search_echo_handler)
+            keyword_bytes,
+            wait=True,
+            wait_callback_func=functools.partial(__search_echo_handler,
+                                                 output_format=output_format))
     except Exception as e:
         print(f">>> Search error, {e}")
     finally:
