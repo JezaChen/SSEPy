@@ -83,11 +83,12 @@ async def upload_encrypted_database(sid):
 @cli.command()
 @click.option("--sid", help='service id')
 @click.option("--keyword", help='keyword to search')
-@click.option("--output-format",
-              help='Specify the output format, which currently supports '
-                   'int, hex, raw and utf8, where utf8 format output must require that'
-                   ' the byte string of the file identifier must be converted from a utf8 string',
-              default="raw")
+@click.option(
+    "--output-format",
+    help='Specify the output format, which currently supports '
+    'int, hex, raw and utf8, where utf8 format output must require that'
+    ' the byte string of the file identifier must be converted from a utf8 string',
+    default="raw")
 async def search(sid, keyword, output_format):
     if sid is None or keyword is None:
         click.echo(f'Incomplete options')

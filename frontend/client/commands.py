@@ -78,8 +78,10 @@ def __search_echo_handler(fut: asyncio.Future, output_format="raw"):
         result = __client_service.sse_module_loader.SSEResult.deserialize(
             content, __client_service.config_object)
         result_list = result.get_result_list()
-        output_result_list = [BytesConverter.convert_bytes(identifier_bytes, output_format)
-                              for identifier_bytes in result_list]
+        output_result_list = [
+            BytesConverter.convert_bytes(identifier_bytes, output_format)
+            for identifier_bytes in result_list
+        ]
 
         print(f">>> The result is {output_result_list}.")
 
@@ -147,8 +149,10 @@ async def search(sid: str, keyword: str, output_format="raw"):
     try:
         keyword_bytes = bytes(keyword, encoding="utf-8")
         await __client_service.handle_keyword_search(
-            keyword_bytes, wait=True, wait_callback_func=functools.partial(__search_echo_handler,
-                                                                           output_format=output_format))
+            keyword_bytes,
+            wait=True,
+            wait_callback_func=functools.partial(__search_echo_handler,
+                                                 output_format=output_format))
     except Exception as e:
         print(f">>> Search error, {e}")
     finally:
