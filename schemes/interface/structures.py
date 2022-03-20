@@ -27,4 +27,6 @@ class SSEToken(SSEObject, metaclass=abc.ABCMeta):
 
 
 class SSEResult(SSEObject, metaclass=abc.ABCMeta):
-    pass
+    @abc.abstractmethod
+    def get_result_list(self) -> list:
+        pass

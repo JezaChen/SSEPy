@@ -46,3 +46,32 @@ def split_bytes_given_slice_len(xbytes: bytes, slice_len_list: list) -> list:
         result.append(xbytes[c: next_c])
         c = next_c
     return result
+
+
+class BytesConverter:
+    """Convert bytes to given format"""
+    supported_format = [
+        "int", "hex", "raw", "utf8"
+    ]
+
+    @staticmethod
+    def bytes_to_int(xbytes: bytes):
+        return int_from_bytes(xbytes)
+
+    @staticmethod
+    def bytes_to_hex(xbytes: bytes):
+        return xbytes.hex()
+
+    @staticmethod
+    def bytes_to_raw(xbytes: bytes):
+        return xbytes
+
+    @staticmethod
+    def bytes_to_utf8(xbytes: bytes):
+        return xbytes.decode(encoding="utf-8")
+
+    @staticmethod
+    def convert_bytes(xbytes: bytes, output_format: str):
+        if not hasattr(BytesConverter, "bytes_to_" + output_format):
+            raise ValueError(f"Unsupported format {output_format}")
+        return getattr(BytesConverter, "bytes_to_" + output_format)(xbytes)
