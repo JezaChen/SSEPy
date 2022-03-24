@@ -125,10 +125,7 @@ def generate_key(*, sid: str = '', sname: str = ''):
         print(f">>> Generate key error: {e}")
 
 
-def encrypt_database(db_path: str,
-                     *,
-                     sid: str = '',
-                     sname: str = ''):
+def encrypt_database(db_path: str, *, sid: str = '', sname: str = ''):
     global __client_service
 
     if not sid:
@@ -166,7 +163,11 @@ async def upload_encrypted_database(*, sid: str = '', sname: str = ''):
         await __client_service.close_service()
 
 
-async def search(keyword: str, output_format="raw", *, sid: str = '', sname: str = ''):
+async def search(keyword: str,
+                 output_format="raw",
+                 *,
+                 sid: str = '',
+                 sname: str = ''):
     if output_format not in BytesConverter.supported_format:
         print(f">>> Unsupported output format {output_format}")
         return

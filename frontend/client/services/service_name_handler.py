@@ -21,7 +21,8 @@ import pathlib
 from typing import Optional, Dict, Any
 
 _PROGRAM_DIR_PATH = pathlib.Path.home().joinpath(".sse/client/")
-SERVICE_MAPPING_PATH = pathlib.Path(_PROGRAM_DIR_PATH).joinpath("service_mapping.json")
+SERVICE_MAPPING_PATH = pathlib.Path(_PROGRAM_DIR_PATH).joinpath(
+    "service_mapping.json")
 
 
 def _get_service_mapping_read_and_write_function():
@@ -51,7 +52,8 @@ def _get_service_mapping_read_and_write_function():
     return _read_service_mapping, _write_service_mapping
 
 
-read_service_mapping, write_service_mapping = _get_service_mapping_read_and_write_function()
+read_service_mapping, write_service_mapping = _get_service_mapping_read_and_write_function(
+)
 
 
 def get_service_id_by_sname(sname: str) -> str:
@@ -59,7 +61,8 @@ def get_service_id_by_sname(sname: str) -> str:
     try:
         return mapping[sname]
     except KeyError:
-        raise KeyError(f"The service id corresponding to sname {sname} not found.")
+        raise KeyError(
+            f"The service id corresponding to sname {sname} not found.")
 
 
 def record_sname_id_pair(sname: str, sid: str):
