@@ -35,6 +35,7 @@ def _get_service_mapping_read_and_write_function():
         try:
             with open(SERVICE_MAPPING_PATH) as f:
                 __service_name_mapping = json.load(f)
+                return __service_name_mapping
         except (FileNotFoundError, json.decoder.JSONDecodeError):
             return {}
 

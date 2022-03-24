@@ -35,7 +35,7 @@ async def generate_config(scheme, save_path):
 @click.option("--config", help='file path of config')
 @click.option("--sname", help='service name')
 async def create_service(config, sname):
-    if config is None:
+    if config is None or sname is None:
         click.echo(f'Incomplete options')
         return
 
@@ -44,7 +44,7 @@ async def create_service(config, sname):
 
 @cli.command()
 @click.option("--sid", help='service id', default='')
-@click.option("--sname", help='service name', dafault='')
+@click.option("--sname", help='service name', default='')
 async def upload_config(sid, sname):
     if not sid and not sname:
         click.echo(f'One of the two options --sid or --sname must be assigned')
@@ -55,7 +55,7 @@ async def upload_config(sid, sname):
 
 @cli.command()
 @click.option("--sid", help='service id', default='')
-@click.option("--sname", help='service name', dafault='')
+@click.option("--sname", help='service name', default='')
 async def generate_key(sid, sname):
     if not sid and not sname:
         click.echo(f'One of the two options --sid or --sname must be assigned')
@@ -66,7 +66,7 @@ async def generate_key(sid, sname):
 
 @cli.command()
 @click.option("--sid", help='service id', default='')
-@click.option("--sname", help='service name', dafault='')
+@click.option("--sname", help='service name', default='')
 @click.option("--db-path", help='database path')
 async def encrypt_database(sid, sname, db_path):
     if db_path is None:
@@ -82,7 +82,7 @@ async def encrypt_database(sid, sname, db_path):
 
 @cli.command()
 @click.option("--sid", help='service id', default='')
-@click.option("--sname", help='service name', dafault='')
+@click.option("--sname", help='service name', default='')
 async def upload_encrypted_database(sid, sname):
     if not sid and not sname:
         click.echo(f'One of the two options --sid or --sname must be assigned')
@@ -92,7 +92,7 @@ async def upload_encrypted_database(sid, sname):
 
 @cli.command()
 @click.option("--sid", help='service id', default='')
-@click.option("--sname", help='service name', dafault='')
+@click.option("--sname", help='service name', default='')
 @click.option("--keyword", help='keyword to search')
 @click.option("--output-format",
               help='Specify the output format, which currently supports '
