@@ -54,25 +54,25 @@ def create_service(config_path: str, sname: str):
         print(f">>> sname: {sname}")
 
     except ValueError as e:
-        print(f">>> Create service error: {e}")
+        print(f">>> Create service error: {e}.")
 
 
 def __upload_config_echo_handler(fut: asyncio.Future):
     content = pickle.loads(fut.result())
     if not content.get("ok", False):
         reason = content.get("reason", "")
-        print(f">>> Upload config error, reason: {reason}")
+        print(f">>> Upload config error, reason: {reason}.")
         return
-    print(f">>> Upload config successfully")
+    print(f">>> Upload config successfully.")
 
 
 def __upload_encrypted_database_echo_handler(fut: asyncio.Future):
     content = pickle.loads(fut.result())
     if not content.get("ok", False):
         reason = content.get("reason", "")
-        print(f">>> Upload encrypted database error, reason: {reason}")
+        print(f">>> Upload encrypted database error, reason: {reason}.")
         return
-    print(f">>> Upload encrypted database successfully")
+    print(f">>> Upload encrypted database successfully.")
 
 
 def __search_echo_handler(fut: asyncio.Future, output_format="raw"):
@@ -104,7 +104,7 @@ async def upload_config(*, sid: str = '', sname: str = ''):
         await __client_service.handle_upload_config(
             wait=True, wait_callback_func=__upload_config_echo_handler)
     except Exception as e:
-        print(f">>> Upload config error, {e}")
+        print(f">>> Upload config error, {e}.")
     finally:
         await __client_service.close_service()
 
@@ -122,7 +122,7 @@ def generate_key(*, sid: str = '', sname: str = ''):
         __client_service.handle_create_key()
         print(f">>> Generate key successfully.")
     except ValueError as e:
-        print(f">>> Generate key error: {e}")
+        print(f">>> Generate key error: {e}.")
 
 
 def encrypt_database(db_path: str, *, sid: str = '', sname: str = ''):
@@ -141,7 +141,7 @@ def encrypt_database(db_path: str, *, sid: str = '', sname: str = ''):
             __client_service.handle_encrypt_database(db)
             print(f">>> Encrypted Database successfully.")
         except ValueError as e:
-            print(f">>> Create service error: {e}")
+            print(f">>> Create service error: {e}.")
 
 
 async def upload_encrypted_database(*, sid: str = '', sname: str = ''):
@@ -158,7 +158,7 @@ async def upload_encrypted_database(*, sid: str = '', sname: str = ''):
             wait=True,
             wait_callback_func=__upload_encrypted_database_echo_handler)
     except Exception as e:
-        print(f">>> Upload Encrypted Database error: {e}")
+        print(f">>> Upload Encrypted Database error: {e}.")
     finally:
         await __client_service.close_service()
 
@@ -169,7 +169,7 @@ async def search(keyword: str,
                  sid: str = '',
                  sname: str = ''):
     if output_format not in BytesConverter.supported_format:
-        print(f">>> Unsupported output format {output_format}")
+        print(f">>> Unsupported output format {output_format}.")
         return
 
     global __client_service
@@ -188,6 +188,6 @@ async def search(keyword: str,
             wait_callback_func=functools.partial(__search_echo_handler,
                                                  output_format=output_format))
     except Exception as e:
-        print(f">>> Search error, {e}")
+        print(f">>> Search error, {e}.")
     finally:
         await __client_service.close_service()

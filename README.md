@@ -62,7 +62,7 @@ The server just needs to run `run_server.py`
 
 ### Client
 
-#### Generate Config File
+#### 1. Generate Config File
 
 The CLI command `generate-config` generates a default configuration file 
 by giving the SSE scheme name and 
@@ -91,69 +91,73 @@ The default configuration of the PiBas scheme is as follows:
 }
 ```
 
-#### According to the configuration, create an SSE service
+#### 2. According to the configuration, create an SSE service
 
 Given a configuration file path, 
 the client CLI command `create-service` creates a service 
 and returns the service id (sid).
 
-```shell
-python3 run_client.py create-service --config cjj14_config 
-```
+- command: `create-service`
+- options:
+  - `--config`: the file path of configuration
+  - `--sname`: service name, an alias of service id
+- returns: the sid of the created service
+- example:
+    ```
+    python3 run_client.py create-service --config cjj14_config --sname pibas_s0
 
-It returns:
-
-```
->>> Create service bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe successfully.
-```
-
-, where `bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe` is the service id.
+    >>> Create service e9cbf76d6578ba967f5a1d80250096f59a0524cea9c8a4d47f0bf92c157f1959 successfully.
+    >>> sid: e9cbf76d6578ba967f5a1d80250096f59a0524cea9c8a4d47f0bf92c157f1959
+    >>> sname: pibas_s0
+    ```
+    where `e9cbf76d6578ba967f5a1d80250096f59a0524cea9c8a4d47f0bf92c157f1959` is the service id
 
 
-#### Upload configuration file
+#### 3. Upload configuration file
 
 After the configuration file is created, the user can use the `upload-config` command, 
-enter the sid, and the CLI uploads the configuration file of the service to the server.
+enter the sid (service id) or sname (service name), and the CLI uploads the configuration file of the service to the server.
 
-```shell
-python3 run_client.py upload-config --sid bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe
-```
+- command: `upload-config`
+- options:
+  - `--sid` or `--sname`: (choose one of two) the service id or service name
+- example:
+  ```
+  python3 run_client.py upload-config --sname pibas_s0
 
-The CLI returns 
+  >>> Upload config successfully
+  ```
 
-```
->>> Upload config successfully
-```
-
-#### Create SSE Key
+#### 4. Create SSE Key
 
 After the configuration file is created, the user can use the command `generate-key`, 
-enter the sid, and the CLI will generate the SSE key.
+enter the sid or sname, and the CLI will generate the SSE key.
 
-```shell
-python3 run_client.py generate-key --sid bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe
-```
+- command: `generate-key`
+- options:
+  - `--sid` or `--sname`: (choose one of two) the service id or service name
+- example:
+  ```
+  python3 run_client.py generate-key --sname pibas_s0
+  
+  >>> Generate key successfully.
+  ```
 
-The CLI returns
+#### 5. Generate Encrypted Database
 
-```
->>> Generate key successfully.
-```
+After creating the configuration file and key, the user can use the command `encrypt-database`, 
+enter the sid (or sname) and database path, and the CLI will generate an encrypted database.
 
-#### Generate Encrypted Database
-
-After creating the configuration file and key, the user can use the command encrypt-database, 
-enter the sid and database path, and the CLI will generate an encrypted database.
-
-```shell
-python3 run_client.py encrypt-database --sid bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe --db-path example_db.json
-```
-
-The CLI returns
-
-```
->>> Encrypted Database successfully.
-```
+- command: `encrypt-database`
+- options:
+  - `--sid` or `--sname`: (choose one of two) the service id or service name
+  - `--db-path`: the file path of database
+- example:
+  ```
+  python3 run_client.py encrypt-database --sname pibas_s0 --db-path example_db.json
+  
+  >>> Encrypted Database successfully.
+  ```
 
 Currently, the database is a json file. 
 Our project provides an example database example_db.json, the content is as follows.
@@ -180,36 +184,37 @@ Our project provides an example database example_db.json, the content is as foll
 The database consists of a dictionary where the keys are utf-8 strings 
 and the values are an array whose elements are hex strings (don't start with `0x`).
 
-#### Upload Encrypted Database
+#### 6. Upload Encrypted Database
 
 After the database is created, the user can use the command `upload-encrypted-database`, 
 enter the sid, and the CLI will upload the encrypted database to the server.
 
-```shell
-python3 run_client.py upload-encrypted-database --sid bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe
-```
+- command: `upload-encrypted-database`
+- options:
+  - `--sid` or `--sname`: (choose one of two) the service id or service name
+- example:
+  ```
+  python3 run_client.py upload-encrypted-database --sname pibas_s0
+  
+  >>> Upload encrypted database successfully
+  ```
 
-The CLI returns
+#### 7. Keyword Search
 
-```
->>> Upload encrypted database successfully
-```
-
-#### Keyword Search
-
-After the encrypted database is uploaded, the user can use the search command, 
+After the encrypted database is uploaded, the user can use the `search` command, 
 enter a keyword (currently only single-keyword search is supported) 
 and the sid, encrypt it into a token and upload it to the server for searching.
 
-```shell
-python3 run_client.py search --keyword Chen --sid bd1f9ce64409b6c4ba0d5ac4550ed948716e18dc2ea2318ab486877192fc93fe
-```
-
-The CLI returns
-
-```
->>> The result is [b'\x1b\xb2\xbb+', b'#2xx', b'\x88w\x1a\xbb'].
-```
+- command: `search`
+- options:
+  - `--sid` or `--sname`: (choose one of two) the service id or service name
+  - `--keyword`: the query keyword
+- example:
+  ```
+  python3 run_client.py search --keyword Chen --sname pibas_s0
+  
+  >>> The result is [b'\x1b\xb2\xbb+', b'#2xx', b'\x88w\x1a\xbb'].
+  ```
 
 ## Implemented schemes
 
