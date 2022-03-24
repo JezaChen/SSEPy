@@ -20,6 +20,7 @@ import json
 import pickle
 
 import schemes
+from frontend.client.services import service_name_handler
 from frontend.client.services.service import Service
 from toolkit.bytes_utils import BytesConverter
 from toolkit.config_manager import write_config, read_config
@@ -40,14 +41,18 @@ def generate_default_config(scheme_name: str, config_save_path: str):
     print(f">>> Create default config of {scheme_name} successfully.")
 
 
-def create_service(config_path: str):
+def create_service(config_path: str, sname: str):
     global __client_service
 
     config = read_config(config_path)
     __client_service = Service()
     try:
         sid = __client_service.handle_create_config(config)
+        service_name_handler.record_sname_id_pair(sname, sid)
         print(f">>> Create service {sid} successfully.")
+        print(f">>> sid: {sid}")
+        print(f">>> sname: {sname}")
+
     except ValueError as e:
         print(f">>> Create service error: {e}")
 
@@ -86,8 +91,13 @@ def __search_echo_handler(fut: asyncio.Future, output_format="raw"):
         print(f">>> The result is {output_result_list}.")
 
 
-async def upload_config(sid: str):
+async def upload_config(*, sid: str = '', sname: str = ''):
     global __client_service
+
+    if not sid:
+        # get sid from sname
+        sid = service_name_handler.get_service_id_by_sname(sname)
+
     __client_service = Service(sid)
 
     try:
@@ -99,8 +109,13 @@ async def upload_config(sid: str):
         await __client_service.close_service()
 
 
-def generate_key(sid: str):
+def generate_key(*, sid: str = '', sname: str = ''):
     global __client_service
+
+    if not sid:
+        # get sid from sname
+        sid = service_name_handler.get_service_id_by_sname(sname)
+
     __client_service = Service(sid)
 
     try:
@@ -110,8 +125,13 @@ def generate_key(sid: str):
         print(f">>> Generate key error: {e}")
 
 
-def encrypt_database(sid: str, db_path: str):
+def encrypt_database(db_path: str, *, sid: str = '', sname: str = ''):
     global __client_service
+
+    if not sid:
+        # get sid from sname
+        sid = service_name_handler.get_service_id_by_sname(sname)
+
     __client_service = Service(sid)
 
     with open(db_path, "r") as f:
@@ -124,8 +144,13 @@ def encrypt_database(sid: str, db_path: str):
             print(f">>> Create service error: {e}")
 
 
-async def upload_encrypted_database(sid: str):
+async def upload_encrypted_database(*, sid: str = '', sname: str = ''):
     global __client_service
+
+    if not sid:
+        # get sid from sname
+        sid = service_name_handler.get_service_id_by_sname(sname)
+
     __client_service = Service(sid)
 
     try:
@@ -138,12 +163,21 @@ async def upload_encrypted_database(sid: str):
         await __client_service.close_service()
 
 
-async def search(sid: str, keyword: str, output_format="raw"):
+async def search(keyword: str,
+                 output_format="raw",
+                 *,
+                 sid: str = '',
+                 sname: str = ''):
     if output_format not in BytesConverter.supported_format:
         print(f">>> Unsupported output format {output_format}")
         return
 
     global __client_service
+
+    if not sid:
+        # get sid from sname
+        sid = service_name_handler.get_service_id_by_sname(sname)
+
     __client_service = Service(sid)
 
     try:
