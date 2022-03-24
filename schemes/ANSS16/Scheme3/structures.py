@@ -113,9 +113,9 @@ class PiToken(SSEToken):
         if not isinstance(other, PiToken):
             return False
         return self.li == other.li \
-               and self.Ki == other.Ki \
-               and self.li_prime == other.li_prime \
-               and self.Ki_prime == other.Ki_prime
+            and self.Ki == other.Ki \
+            and self.li_prime == other.li_prime \
+            and self.Ki_prime == other.Ki_prime
 
 
 class PiResult(SSEResult):
