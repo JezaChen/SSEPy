@@ -69,27 +69,28 @@ by giving the SSE scheme name and
 configuration file output path. 
 The user can then open the configuration file and modify it as needed.
 
-```shell
-python3 run_client.py generate-config --scheme CJJ14.PiBas --save-path cjj14_config
-```
+- command: `generate-config`
+- options:
+  - `--scheme`: the name of the SSE scheme
+  - `--save-path`: the path where the configuration file is saved
+- example:
+    ```
+    python3 run_client.py generate-config --scheme CJJ14.PiBas --save-path cjj14_config
 
-It returns:
-
-```
->>> Create default config of CJJ14.PiBas successfully.
-```
-
-The default configuration of the PiBas scheme is as follows:
-
-```json
-{
-  "scheme": "CJJ14.PiBas", 
-  "param_lambda": 32, 
-  "prf_f_output_length": 32,
-  "prf_f": "HmacPRF",
-  "ske": "AES-CBC"
-}
-```
+    >>> Create default config of CJJ14.PiBas successfully.
+    ```
+  
+  The default configuration of the PiBas scheme is as follows:
+  
+  ```json
+  {
+    "scheme": "CJJ14.PiBas", 
+    "param_lambda": 32, 
+    "prf_f_output_length": 32,
+    "prf_f": "HmacPRF",
+    "ske": "AES-CBC"
+  }
+  ```
 
 #### 2. According to the configuration, create an SSE service
 
