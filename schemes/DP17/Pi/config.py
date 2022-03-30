@@ -32,10 +32,8 @@ DEFAULT_CONFIG = {
     "param_actual_storage_level_ratio": 0.2,
 
     # "param_s": 7,  # level count
-
     "param_L": 1,  # tunable locality
     "param_identifier_size": 8,
-
     "rnd": "AES-CBC",
     "prf_f": "HmacPRF",
     "hash_h": "SHA1"
@@ -44,9 +42,9 @@ DEFAULT_CONFIG = {
 
 class PiConfig(SSEConfig):
     __slots__ = [
-        "param_lambda", "param_s", "param_L", "param_identifier_size",
-        "rnd", "prf_f", "hash_h",
-        "param_identifier_cipher_len", "param_hash_h_digest_size"
+        "param_lambda", "param_s", "param_L", "param_identifier_size", "rnd",
+        "prf_f", "hash_h", "param_identifier_cipher_len",
+        "param_hash_h_digest_size"
     ]
 
     DEFAULT_CONFIG = DEFAULT_CONFIG
@@ -57,12 +55,13 @@ class PiConfig(SSEConfig):
 
     def _parse_config(self, config_dict: dict):
         SSEConfig.check_param_exist([
-            "param_lambda", "param_actual_storage_level_ratio", "param_L", "param_identifier_size",
-            "rnd", "prf_f", "hash_h"
+            "param_lambda", "param_actual_storage_level_ratio", "param_L",
+            "param_identifier_size", "rnd", "prf_f", "hash_h"
         ], config_dict)
 
         self.param_lambda = config_dict.get("param_lambda")
-        self.param_actual_storage_level_ratio = config_dict.get("param_actual_storage_level_ratio")
+        self.param_actual_storage_level_ratio = config_dict.get(
+            "param_actual_storage_level_ratio")
         self.param_L = config_dict.get("param_L")
         self.param_identifier_size = config_dict.get("param_identifier_size")
 
@@ -76,8 +75,8 @@ class PiConfig(SSEConfig):
         self.hash_h = toolkit.hash.get_hash_implementation(
             config_dict.get("hash_h", ""))()
 
-        self.param_identifier_cipher_len = len(self.rnd.Encrypt(
-            b"\x00" * self.param_lambda,
-            b"\x00" * (self.param_identifier_size + self.param_lambda))
-        )
+        self.param_identifier_cipher_len = len(
+            self.rnd.Encrypt(
+                b"\x00" * self.param_lambda,
+                b"\x00" * (self.param_identifier_size + self.param_lambda)))
         self.param_hash_h_digest_size = self.hash_h.output_length

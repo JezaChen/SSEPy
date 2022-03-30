@@ -19,6 +19,7 @@ from toolkit.constants import LENGTH_NOT_GIVEN
 
 
 class AbstractHash(metaclass=abc.ABCMeta):
+
     def __init__(self, *, output_length: int):
         self.output_length = output_length
 
@@ -30,10 +31,15 @@ class HashlibHashVariableOutputLengthWrapper(AbstractHash):
     """Wrap hash functions of hashlib to support variable length output
     """
 
-    def __init__(self, *, output_length: int = LENGTH_NOT_GIVEN, hash_func_name: str):
-        super(HashlibHashVariableOutputLengthWrapper, self).__init__(output_length=output_length)
+    def __init__(self,
+                 *,
+                 output_length: int = LENGTH_NOT_GIVEN,
+                 hash_func_name: str):
+        super(HashlibHashVariableOutputLengthWrapper,
+              self).__init__(output_length=output_length)
         if hash_func_name.lower() not in hashlib.algorithms_available:
-            raise ValueError("Hash type {} is not supported".format(hash_func_name))
+            raise ValueError(
+                "Hash type {} is not supported".format(hash_func_name))
 
         hash_func = functools.partial(hashlib.new, hash_func_name)
         if output_length == LENGTH_NOT_GIVEN:
@@ -67,8 +73,9 @@ def get_hash_implementation(hash_function_name: str):
         return hash_function
 
     if hash_function_name.lower() in hashlib.algorithms_available:
-        cache[hash_function_name.lower()] = functools.partial(HashlibHashVariableOutputLengthWrapper,
-                                                              hash_func_name=hash_function_name)
+        cache[hash_function_name.lower()] = functools.partial(
+            HashlibHashVariableOutputLengthWrapper,
+            hash_func_name=hash_function_name)
 
     hash_function = cache.get(hash_function_name.lower())
     if hash_function is not None:

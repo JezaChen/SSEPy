@@ -27,7 +27,7 @@ class TestPi(unittest.TestCase):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine":
-                [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.DP17.Pi.config.DEFAULT_CONFIG

@@ -21,7 +21,11 @@ from toolkit.bytes_utils import split_bytes_given_slice_len
 class PiKey(SSEKey):
     __slots__ = ["k1", "k2", "k3"]
 
-    def __init__(self, k1: bytes, k2: bytes, k3: bytes, config: PiConfig = None):
+    def __init__(self,
+                 k1: bytes,
+                 k2: bytes,
+                 k3: bytes,
+                 config: PiConfig = None):
         super(PiKey, self).__init__(config)
         self.k1, self.k2, self.k3 = k1, k2, k3
 
@@ -34,7 +38,8 @@ class PiKey(SSEKey):
             raise ValueError(
                 "The length of xbytes must be three times the length of the parameter param_lambda."
             )
-        k1, k2, k3 = split_bytes_given_slice_len(xbytes, [config.param_lambda] * 3)
+        k1, k2, k3 = split_bytes_given_slice_len(xbytes,
+                                                 [config.param_lambda] * 3)
 
         return cls(k1, k2, k3, config)
 
@@ -47,7 +52,10 @@ class PiKey(SSEKey):
 class PiEncryptedDatabase(SSEEncryptedDatabase):
     __slots__ = ["HT", "A_dict"]
 
-    def __init__(self, HT: dict, A_dict: typing.Dict[int, typing.List[bytes]], config: PiConfig = None):
+    def __init__(self,
+                 HT: dict,
+                 A_dict: typing.Dict[int, typing.List[bytes]],
+                 config: PiConfig = None):
         super(PiEncryptedDatabase, self).__init__(config)
         self.HT = HT
         self.A_dict = A_dict
@@ -73,7 +81,11 @@ class PiEncryptedDatabase(SSEEncryptedDatabase):
 class PiToken(SSEToken):
     __slots__ = ["tag", "vtag", "etag"]
 
-    def __init__(self, tag: bytes, vtag: bytes, etag: bytes, config: PiConfig = None):
+    def __init__(self,
+                 tag: bytes,
+                 vtag: bytes,
+                 etag: bytes,
+                 config: PiConfig = None):
         super(PiToken, self).__init__(config)
         self.tag, self.vtag, self.etag = tag, vtag, etag
 
