@@ -15,14 +15,17 @@ such as getting the number of individual keywords, database size, etc.
 
 
 def get_total_size(db: dict):
+    """Get the total size of the database N"""
     return sum(len(identifier_list) for identifier_list in db.values())
 
 
 def get_distinct_keyword_count(db: dict):
+    """Get the number of distinct keywords in the database"""
     return len(db)
 
 
 def get_distinct_file_count(db: dict):
+    """Get the number of distinct file identifiers in the database"""
     file_set = set()
     for identifier_list in db.values():
         file_set.update(identifier_list)
@@ -33,6 +36,15 @@ def partition_identifiers_to_blocks(identifier_list: list,
                                     entry_count_in_one_block: int,
                                     identifier_size: int,
                                     block_size_bytes: int = 0):
+    """
+    Store multiple file identifiers in blocks, where each block is a byte string.
+    :param identifier_list: A list of file identifiers
+    :param entry_count_in_one_block: Number of file identifiers contained on a block
+    :param identifier_size: Size of the file identifier, in bytes
+    :param block_size_bytes: Size of the block, in bytes
+    :return:
+    todo use toolkit.list_utils.chunks method
+    """
     if block_size_bytes == 0:
         block_size_bytes = entry_count_in_one_block * identifier_size
 
@@ -50,6 +62,7 @@ def partition_identifiers_to_blocks(identifier_list: list,
 
 def parse_identifiers_from_block_given_identifier_size(block: bytes,
                                                        identifier_size: int):
+    """Parses a list of file identifiers from a block, given the file identifier size."""
     result = []
     for i in range(0, len(block), identifier_size):
         identifier = block[i:i + identifier_size]
@@ -61,6 +74,7 @@ def parse_identifiers_from_block_given_identifier_size(block: bytes,
 
 def parse_identifiers_from_block_given_entry_count_in_one_block(
         block: bytes, entry_count_in_one_block: int):
+    """Parses a list of file identifiers from a block, given the number of file identifiers in the block."""
     identifier_size = len(block) // entry_count_in_one_block
     return parse_identifiers_from_block_given_identifier_size(
         block, identifier_size)

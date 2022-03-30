@@ -14,7 +14,7 @@ import os
 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
-from toolkit.constants import LENGTH_NOT_LIMIT
+from toolkit.constants import LENGTH_UNLIMITED
 from toolkit.symmetric_encryption.abstraction import AbstractSymmetricEncryption
 from toolkit.symmetric_padding import pkcs7_pad, pkcs7_unpad
 
@@ -22,18 +22,18 @@ from toolkit.symmetric_padding import pkcs7_pad, pkcs7_unpad
 class AESxCBC(AbstractSymmetricEncryption):
     """AES-CBC Schemes, using PKCS7 Padding"""
 
-    def __init__(self, *, key_length=16, cipher_length=LENGTH_NOT_LIMIT, message_length=LENGTH_NOT_LIMIT):
+    def __init__(self, *, key_length=16, cipher_length=LENGTH_UNLIMITED, message_length=LENGTH_UNLIMITED):
         super(AESxCBC, self).__init__(cipher_length=cipher_length, key_length=key_length, message_length=message_length)
         if key_length not in [16, 24, 32]:
             raise ValueError("The AES key length needs to be 16, 24 or 32 bytes.")
-        if cipher_length != LENGTH_NOT_LIMIT and cipher_length % 16:
+        if cipher_length != LENGTH_UNLIMITED and cipher_length % 16:
             raise ValueError("The AES-CBC cipher length needs to be an integer multiple of 16 bytes.")
 
     def KeyGen(self) -> bytes:
         return os.urandom(self.key_length)
 
     def Encrypt(self, key: bytes, message: bytes) -> bytes:
-        if self.message_length != LENGTH_NOT_LIMIT and len(message) != self.message_length:
+        if self.message_length != LENGTH_UNLIMITED and len(message) != self.message_length:
             raise ValueError("Message(Input) length mismatch for AES-CBC.")
         if len(key) != self.key_length:
             raise ValueError("Key length mismatch for AES-CBC.")
@@ -47,7 +47,7 @@ class AESxCBC(AbstractSymmetricEncryption):
         return iv + encryptor.update(padded_message) + encryptor.finalize()
 
     def Decrypt(self, key: bytes, cipher_text: bytes) -> bytes:
-        if self.cipher_length != LENGTH_NOT_LIMIT and len(cipher_text) != self.cipher_length:
+        if self.cipher_length != LENGTH_UNLIMITED and len(cipher_text) != self.cipher_length:
             raise ValueError("Ciphertext length mismatch for AES-CBC.")
         if len(key) != self.key_length:
             raise ValueError("Key length mismatch for AES-CBC.")

@@ -32,7 +32,7 @@ class HashlibHashVariableOutputLengthWrapper(AbstractHash):
 
     def __init__(self, *, output_length: int = LENGTH_NOT_GIVEN, hash_func_name: str):
         super(HashlibHashVariableOutputLengthWrapper, self).__init__(output_length=output_length)
-        if hash_func_name not in hashlib.algorithms_available:
+        if hash_func_name.lower() not in hashlib.algorithms_available:
             raise ValueError("Hash type {} is not supported".format(hash_func_name))
 
         hash_func = functools.partial(hashlib.new, hash_func_name)
@@ -62,15 +62,15 @@ __builtin_hash_functions_cache = {}
 
 def get_hash_implementation(hash_function_name: str):
     cache = __builtin_hash_functions_cache
-    hash_function = cache.get(hash_function_name)
+    hash_function = cache.get(hash_function_name.lower())
     if hash_function is not None:
         return hash_function
 
-    if hash_function_name in hashlib.algorithms_available:
-        cache[hash_function_name] = functools.partial(HashlibHashVariableOutputLengthWrapper,
-                                                      hash_func_name=hash_function_name)
+    if hash_function_name.lower() in hashlib.algorithms_available:
+        cache[hash_function_name.lower()] = functools.partial(HashlibHashVariableOutputLengthWrapper,
+                                                              hash_func_name=hash_function_name)
 
-    hash_function = cache.get(hash_function_name)
+    hash_function = cache.get(hash_function_name.lower())
     if hash_function is not None:
         return hash_function
 
