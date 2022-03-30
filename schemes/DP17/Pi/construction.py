@@ -119,14 +119,19 @@ class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
             Ai = []
             for bucket_index, w_id_pair_list in enumerate(level_to_w_id_pair_list_map[i]):
                 for _ in range(level_to_remaining_count_list_map[i][bucket_index]):
-                    w_id_pair_list.append((os.urandom(32), os.urandom(self.config.param_identifier_size)))
+                    w_id_pair_list.append((None, None))
 
                 # Randomly permute all entries (w, id) within b
                 random.shuffle(w_id_pair_list)
+                cipher_list = []
                 # Replace each entry (w, id) of b with RND.Enckey(id||0λ) where key = Fk3 (w).
-                chunk_bytes = b"".join((self.config.rnd.Encrypt(self.config.prf_f(k3, keyword),
-                                                                identifier + b"\x00" * self.config.param_lambda)
-                                        for keyword, identifier in w_id_pair_list))
+                for keyword, identifier in w_id_pair_list:
+                    if keyword is None and identifier is None:
+                        cipher_list.append(os.urandom(self.config.param_identifier_cipher_len))
+                    else:
+                        cipher_list.append(self.config.rnd.Encrypt(self.config.prf_f(k3, keyword),
+                                                                   identifier + b"\x00" * self.config.param_lambda))
+                chunk_bytes = b"".join(cipher_list)
                 Ai.append(chunk_bytes)
             A_dict[i] = Ai
 
