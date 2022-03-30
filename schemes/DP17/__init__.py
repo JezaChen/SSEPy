@@ -2,13 +2,11 @@
 """ 
 LIB-SSE CODE
 @author: Jeza Chen
-@license: GPL-3.0 License 
-@file: constants.py 
-@time: 2022/03/09
+@license: GPL-3.0 License
+@file: __init__.py.py 
+@time: 2022/03/25
 @contact: jeza@vip.qq.com
+@site:  
 @software: PyCharm 
 @description: 
 """
-
-LENGTH_UNLIMITED = -1
-LENGTH_NOT_GIVEN = 0
