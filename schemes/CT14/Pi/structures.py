@@ -29,9 +29,7 @@ class PiKey(SSEKey):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiConfig):
         if len(xbytes) != config.param_k:
-            raise ValueError(
-                "The length of xbytes must be the same as the length of the parameter param_lambda."
-            )
+            raise ValueError("The length of xbytes must be the same as the length of the parameter param_lambda.")
 
         return cls(xbytes)
 
@@ -87,8 +85,7 @@ class PiToken(SSEToken):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiConfig = None):
         if len(xbytes) != config.param_k + config.param_k_prime:
-            raise ValueError(
-                "The length of xbytes must be param_k + param_k_prime.")
+            raise ValueError("The length of xbytes must be param_k + param_k_prime.")
 
         K1, K2 = xbytes[:config.param_k], xbytes[config.param_k:]
 

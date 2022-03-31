@@ -63,7 +63,6 @@ class ServiceState(metaclass=abc.ABCMeta):
 
 
 class Service:
-
     def __init__(self, sid, websocket: WebSocketServerProtocol):
         self.sid = sid
         self.websocket = websocket
@@ -93,8 +92,7 @@ class Service:
             # load SSE
             self._load_sse_module()
 
-        self.send_init_echo(
-        )  # Finally, send the echo for initialization message
+        self.send_init_echo()  # Finally, send the echo for initialization message
         logger.info(f"Serve Service {self.sid}")
 
     async def start(self):
@@ -104,7 +102,11 @@ class Service:
         FileManager.write_service_meta(self.sid, self.service_meta)
 
     def _send_message(self, msg_type: str, content: bytes, **additional_field):
-        msg_dict = {"type": msg_type, "sid": self.sid, "content": content}
+        msg_dict = {
+            "type": msg_type,
+            "sid": self.sid,
+            "content": content
+        }
         msg_dict.update(additional_field)
         asyncio.create_task(self.websocket.send(pickle.dumps(msg_dict)))
 
@@ -126,12 +128,9 @@ class Service:
             return
 
         if self.config is None:
-            raise AttributeError(
-                f"The config of this service {self.sid} is None.")
+            raise AttributeError(f"The config of this service {self.sid} is None.")
         if "scheme" not in self.config:
-            raise AttributeError(
-                f"The config of this service {self.sid} does not have 'scheme' attribute."
-            )
+            raise AttributeError(f"The config of this service {self.sid} does not have 'scheme' attribute.")
         scheme_name = self.config["scheme"]
         self.sse_module_loader = schemes.load_sse_module(scheme_name)
         logger.info(f"Load SSE module for service {self.sid} successfully.")
@@ -141,8 +140,7 @@ class Service:
             return
 
         self._load_sse_module()
-        self.config_object = self.sse_module_loader.SSEConfig(
-            self.config)  # load scheme config ...
+        self.config_object = self.sse_module_loader.SSEConfig(self.config)  # load scheme config ...
         logger.info(f"Load SSE config for service {self.sid} successfully.")
 
     def _load_sse_scheme(self):
@@ -153,8 +151,7 @@ class Service:
             return
 
         self._load_sse_module()
-        self.sse_scheme = self.sse_module_loader.SSEScheme(
-            self.config)  # load scheme construction ...
+        self.sse_scheme = self.sse_module_loader.SSEScheme(self.config)  # load scheme construction ...
         logger.info(f"Load SSE scheme for service {self.sid} successfully.")
 
     def _load_sse_encrypted_database(self):
@@ -170,20 +167,13 @@ class Service:
         edb_bytes = FileManager.read_encrypted_database(self.sid)
         EDBClass = self.sse_module_loader.SSEEncryptedDatabase
         self.edb = EDBClass.deserialize(edb_bytes, self.config_object)
-        logger.info(
-            f"Load SSE encrypted database for service {self.sid} successfully."
-        )
+        logger.info(f"Load SSE encrypted database for service {self.sid} successfully.")
 
     def get_current_service_state(self):
         return self.service_meta["state"]
 
     def send_init_echo(self):
-        self._send_message(
-            "init",
-            pickle.dumps({
-                "ok": True,
-                "state": self.get_current_service_state()
-            }))
+        self._send_message("init", pickle.dumps({"ok": True, "state": self.get_current_service_state()}))
         logger.info(f"Send initialization echo of service {self.sid}.")
 
     def handle_upload_config(self, config_bytes: bytes, raw_msg_dict: dict):
@@ -191,11 +181,7 @@ class Service:
 
         if self.get_current_service_state() != SERVICE_STATE.NOT_EXISTS:
             reason = f"The config of service {self.sid} has been already uploaded."
-            self._send_message("config",
-                               pickle.dumps({
-                                   "ok": False,
-                                   "reason": reason
-                               }))
+            self._send_message("config", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
@@ -204,33 +190,23 @@ class Service:
         FileManager.create_sid_folder(self.sid)
         FileManager.write_service_config(self.sid, config)
         self.config = config
-        self.service_meta[
-            "state"] = SERVICE_STATE.CONFIG_UPLOADED_BUT_EDB_NOT_UPLOADED
+        self.service_meta["state"] = SERVICE_STATE.CONFIG_UPLOADED_BUT_EDB_NOT_UPLOADED
         FileManager.write_service_meta(self.sid, self.service_meta)
         self._send_message("config", pickle.dumps({"ok": True}))
         logger.info(f"Store config for service {self.sid} successfully.")
 
-    def handle_upload_encrypted_database(self, edb_bytes: bytes,
-                                         raw_msg_dict: dict):
+    def handle_upload_encrypted_database(self, edb_bytes: bytes, raw_msg_dict: dict):
         logger.info(f"Receive encrypted database from service {self.sid}.")
 
         if self.get_current_service_state() == SERVICE_STATE.NOT_EXISTS:
             reason = f"The config of service {self.sid} has not been uploaded."
-            self._send_message("upload_edb",
-                               pickle.dumps({
-                                   "ok": False,
-                                   "reason": reason
-                               }))
+            self._send_message("upload_edb", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
         if self.get_current_service_state() == SERVICE_STATE.ALL_READY:
             reason = f"The database of service {self.sid} has been already uploaded."
-            self._send_message("upload_edb",
-                               pickle.dumps({
-                                   "ok": False,
-                                   "reason": reason
-                               }))
+            self._send_message("upload_edb", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
@@ -238,30 +214,20 @@ class Service:
         self.service_meta["state"] = SERVICE_STATE.ALL_READY
         FileManager.write_service_meta(self.sid, self.service_meta)
         self._send_message("upload_edb", pickle.dumps({"ok": True}))
-        logger.info(
-            f"Store encrypted database for service {self.sid} successfully.")
+        logger.info(f"Store encrypted database for service {self.sid} successfully.")
 
     def handle_search_token(self, token_bytes: bytes, raw_msg_dict: dict):
         logger.info(f"Receive search token from service {self.sid}.")
 
         if self.get_current_service_state() == SERVICE_STATE.NOT_EXISTS:
             reason = f"The config of service {self.sid} has not been uploaded."
-            self._send_message("result",
-                               pickle.dumps({
-                                   "ok": False,
-                                   "reason": reason
-                               }))
+            self._send_message("result", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
-        if self.get_current_service_state(
-        ) == SERVICE_STATE.CONFIG_UPLOADED_BUT_EDB_NOT_UPLOADED:
+        if self.get_current_service_state() == SERVICE_STATE.CONFIG_UPLOADED_BUT_EDB_NOT_UPLOADED:
             reason = f"The encrypted database of service {self.sid} has not been uploaded."
-            self._send_message("result",
-                               pickle.dumps({
-                                   "ok": False,
-                                   "reason": reason
-                               }))
+            self._send_message("result", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
@@ -270,12 +236,9 @@ class Service:
         self._load_sse_encrypted_database()
 
         tk_digest = raw_msg_dict.get("token_digest")
-        tk_object = self.sse_module_loader.SSEToken.deserialize(
-            token_bytes, self.config_object)
+        tk_object = self.sse_module_loader.SSEToken.deserialize(token_bytes, self.config_object)
         result = self.sse_scheme.Search(self.edb, tk_object)
-        self._send_message("result",
-                           content=result.serialize(),
-                           token_digest=tk_digest)
+        self._send_message("result", content=result.serialize(), token_digest=tk_digest)
         logger.info(f"Search for service {self.sid} successfully.")
 
     def close_service(self):

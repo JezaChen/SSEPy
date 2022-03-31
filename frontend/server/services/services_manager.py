@@ -21,12 +21,10 @@ logger = getSSELogger("sse_server")
 
 
 class ServicesManager:
-
     def __init__(self):
         self.service_dict = {}
 
-    async def create_service(self, sid: str,
-                             websocket: WebSocketServerProtocol):
+    async def create_service(self, sid: str, websocket: WebSocketServerProtocol):
         logger.info(f"A new request for service {sid} found, creating...")
         if sid in self.service_dict:
             await websocket.close()
@@ -35,12 +33,10 @@ class ServicesManager:
             raise ValueError(reason)
         service = Service(sid, websocket)
         self.service_dict[sid] = service
-        asyncio.create_task(
-            self.clean_service_when_close_connection(sid, websocket))
+        asyncio.create_task(self.clean_service_when_close_connection(sid, websocket))
         await service.start()  # run forever! do not use asyncio.create_task
 
-    async def clean_service_when_close_connection(
-            self, sid: str, websocket: WebSocketServerProtocol):
+    async def clean_service_when_close_connection(self, sid: str, websocket: WebSocketServerProtocol):
         await websocket.wait_closed()
         await asyncio.sleep(5)
         self.service_dict[sid].close_service()

@@ -27,7 +27,7 @@ class TestPiPtr(unittest.TestCase):
         db = {
             b"China": [b"12345678", b"23221233", b"23421232"],
             b"Ukraine":
-            [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
+                [b"\x00\x00az\x02\x03sc", b"\x00\x00\x00\x00\x01\x00\x02\x01"]
         }
 
         config_dict = schemes.CJJ14.PiPtr.config.DEFAULT_CONFIG
@@ -93,31 +93,27 @@ class TestPiPtr(unittest.TestCase):
 
         config_dict = schemes.CJJ14.PiPtr.config.DEFAULT_CONFIG
 
-        db = fake_db_for_inverted_index_based_sse(
-            TEST_KEYWORD_SIZE,
-            config_dict.get("param_identifier_size"),
-            keyword_count,
-            db_w_size_range=(1, 200))
+        db = fake_db_for_inverted_index_based_sse(TEST_KEYWORD_SIZE,
+                                                  config_dict.get("param_identifier_size"),
+                                                  keyword_count,
+                                                  db_w_size_range=(1, 200))
 
         scheme = PiPtr(config_dict)
         key = scheme.KeyGen()
-        self.assertEqual(key,
-                         PiPtrKey.deserialize(key.serialize(), scheme.config))
+        self.assertEqual(key, PiPtrKey.deserialize(key.serialize(), scheme.config))
 
         encrypted_index = scheme.EDBSetup(key, db)
-        self.assertEqual(
-            encrypted_index,
-            PiPtrEncryptedDatabase.deserialize(encrypted_index.serialize(),
-                                               scheme.config))
+        self.assertEqual(encrypted_index,
+                         PiPtrEncryptedDatabase.deserialize(encrypted_index.serialize(), scheme.config))
 
         for keyword in db:
             token = scheme.TokenGen(key, keyword)
-            self.assertEqual(
-                token, PiPtrToken.deserialize(token.serialize(),
-                                              scheme.config))
+            self.assertEqual(token,
+                             PiPtrToken.deserialize(token.serialize(),
+                                                    scheme.config))
             result = scheme.Search(encrypted_index, token)
-            self.assertEqual(
-                result,
-                PiPtrResult.deserialize(result.serialize(), scheme.config))
+            self.assertEqual(result,
+                             PiPtrResult.deserialize(result.serialize(),
+                                                     scheme.config))
 
             self.assertEqual(db[keyword], result.result)

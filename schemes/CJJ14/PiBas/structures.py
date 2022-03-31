@@ -29,9 +29,7 @@ class PiBasKey(SSEKey):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiBasConfig):
         if len(xbytes) != config.param_lambda:
-            raise ValueError(
-                "The length of xbytes must be the same as the length of the parameter param_lambda."
-            )
+            raise ValueError("The length of xbytes must be the same as the length of the parameter param_lambda.")
 
         return cls(xbytes)
 
@@ -87,9 +85,7 @@ class PiBasToken(SSEToken):
     @classmethod
     def deserialize(cls, xbytes: bytes, config: PiBasConfig = None):
         if len(xbytes) != 2 * config.param_lambda:
-            raise ValueError(
-                "The length of xbytes must be 2 times the length of the parameter param_lambda."
-            )
+            raise ValueError("The length of xbytes must be 2 times the length of the parameter param_lambda.")
 
         K1, K2 = xbytes[:config.param_lambda], xbytes[config.param_lambda:]
 

@@ -4,25 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce0e9a63-a4ec-4a9d-9448-cd1fd6dfa424" name="Changes" comment="[feature] Toyed Frontend Module Completed">
-      <change afterPath="$PROJECT_DIR$/example_db.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/client/commands.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/global_config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run_client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run_server.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/toolkit/logger/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/toolkit/logger/logger.py" afterDir="false" />
+    <list default="true" id="ce0e9a63-a4ec-4a9d-9448-cd1fd6dfa424" name="Changes" comment="revert code format of construction of DP17">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/client/services/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/client/services/file_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/client/services/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/client/services/service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/server/connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/connector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/server/services/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/file_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/server/services/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/server/services/services_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/server/services/services_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolkit/config_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolkit/config_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolkit/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolkit/database_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_db.json" beforeDir="false" afterPath="$PROJECT_DIR$/example_db.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/client/commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/client/commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemes/ANSS16/Scheme3/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/ANSS16/Scheme3/structures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemes/interface/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemes/interface/structures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolkit/bytes_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolkit/bytes_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +38,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="dev-db-scanner" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -76,20 +64,22 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/frontend/client/services" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/test_sse_schemes" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/test_sse_schemes" />
+      <recent name="$PROJECT_DIR$/schemes/DP17/Pi" />
       <recent name="$PROJECT_DIR$/frontend/client/services" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.service">
-    <configuration name="connector (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Python tests for test_DP17_Pi.TestPi">
+    <configuration name="hash" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="libsse" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -97,34 +87,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/frontend/client" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolkit" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/frontend/client/connector.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="connector" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="libsse" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/frontend/server" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/frontend/server/connector.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolkit/hash.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -155,65 +123,73 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="service" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="libsse" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/frontend/client/services" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/frontend/client/services/service.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test.TestSSE1.test_interface_correctness" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_DP17_Pi.TestPi" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="libsse" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/schemes/CGKO06/SSE1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/test_sse_schemes" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test.TestSSE1.test_interface_correctness&quot;" />
+      <option name="_new_target" value="&quot;test_DP17_Pi.TestPi&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test.TestSSE1.test_method_correctness" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_DP17_Pi.TestPi.test_method_correctness" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="libsse" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/schemes/CGKO06/SSE1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/test_sse_schemes" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test.TestSSE1.test_method_correctness&quot;" />
+      <option name="_new_target" value="&quot;test_DP17_Pi.TestPi.test_method_correctness&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_DP17_Pi.TestPi.test_method_correctness_simple_version" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="libsse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/test_sse_schemes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_DP17_Pi.TestPi.test_method_correctness_simple_version&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_DP17_Pi.TestPi.test_structure_serialization" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="libsse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/test_sse_schemes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_DP17_Pi.TestPi.test_structure_serialization&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.connector" />
-        <item itemvalue="Python.service" />
-        <item itemvalue="Python.connector (1)" />
-        <item itemvalue="Python tests.Python tests for test.TestSSE1.test_method_correctness" />
-        <item itemvalue="Python tests.Python tests for test.TestSSE1.test_interface_correctness" />
+        <item itemvalue="Python tests.Python tests for test_DP17_Pi.TestPi.test_structure_serialization" />
+        <item itemvalue="Python tests.Python tests for test_DP17_Pi.TestPi.test_method_correctness_simple_version" />
+        <item itemvalue="Python tests.Python tests for test_DP17_Pi.TestPi.test_method_correctness" />
+        <item itemvalue="Python tests.Python tests for test_DP17_Pi.TestPi" />
+        <item itemvalue="Python.hash" />
       </list>
     </recent_temporary>
   </component>
@@ -230,6 +206,11 @@
       <workItem from="1647481826995" duration="2926000" />
       <workItem from="1647486784775" duration="41675000" />
       <workItem from="1647568402483" duration="27770000" />
+      <workItem from="1647764510086" duration="6777000" />
+      <workItem from="1648026917339" duration="99381000" />
+      <workItem from="1648617988912" duration="182000" />
+      <workItem from="1648618187566" duration="14100000" />
+      <workItem from="1648651841249" duration="2605000" />
     </task>
     <task id="LOCAL-00001" summary="First Commit">
       <created>1646892340440</created>
@@ -259,11 +240,92 @@
       <option name="project" value="LOCAL" />
       <updated>1647597071491</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="[feature] Add specified format output for the client's search function">
+      <created>1647767068925</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1647767068925</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[feature] Add service name">
+      <created>1648049710307</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1648049710307</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[feature] Add service name">
+      <created>1648118597487</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1648118597487</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Update README.md">
+      <created>1648129592738</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1648129592738</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Update README.md">
+      <created>1648129854392</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1648129854392</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add hash">
+      <created>1648309394342</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1648309394342</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Add DP17 scheme">
+      <created>1648614673830</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1648614673830</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Optimized DP17 scheme: use random numbers directly instead of encrypted random numbers">
+      <created>1648621261516</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1648621261516</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Refinement of notes for DP17 program implementation">
+      <created>1648622613981</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1648622613981</updated>
+    </task>
+    <task id="LOCAL-00014" summary="revert code format of construction of DP17">
+      <created>1648739135198</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1648739135198</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -276,7 +338,14 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev-frontend" />
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="text">
+                    <value>
+                      <list>
+                        <option value="format" />
                       </list>
                     </value>
                   </entry>
@@ -293,7 +362,15 @@
     <MESSAGE value="SSE-1 in [CGKO06] completed" />
     <MESSAGE value="Preliminary completion of the front-end module" />
     <MESSAGE value="[feature] Toyed Frontend Module Completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="[feature] Toyed Frontend Module Completed" />
+    <MESSAGE value="[feature] Add specified format output for the client's search function" />
+    <MESSAGE value="[feature] Add service name" />
+    <MESSAGE value="Update README.md" />
+    <MESSAGE value="add hash" />
+    <MESSAGE value="Add DP17 scheme" />
+    <MESSAGE value="Optimized DP17 scheme: use random numbers directly instead of encrypted random numbers" />
+    <MESSAGE value="Refinement of notes for DP17 program implementation" />
+    <MESSAGE value="revert code format of construction of DP17" />
+    <option name="LAST_COMMIT_MESSAGE" value="revert code format of construction of DP17" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -309,9 +386,14 @@
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$USER_HOME$/.local/lib/python3.8/site-packages/cryptography/hazmat/primitives/padding.py</url>
-          <line>100</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/toolkit/symmetric_encryption/aes.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file:///usr/lib/python3.8/random.py</url>
+          <line>289</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -320,6 +402,7 @@
         <watch expression="int_from_bytes(addr_in_A)" language="Python" />
         <watch expression="ske1.Encrypt(K_i[-1], last_node)" language="Python" />
         <watch expression="db[keyword]" language="Python" />
+        <watch expression="self.config.param_identifier_cipher_len" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -327,7 +410,7 @@
     <SUITE FILE_PATH="coverage/libsse$symmetric_encryption.coverage" NAME="symmetric_encryption Coverage Results" MODIFIED="1646820004314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolkit" />
     <SUITE FILE_PATH="coverage/libsse$service.coverage" NAME="service Coverage Results" MODIFIED="1647583733221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/client/services" />
     <SUITE FILE_PATH="coverage/libsse$connector__1_.coverage" NAME="connector (1) Coverage Results" MODIFIED="1647497797362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/client" />
-    <SUITE FILE_PATH="coverage/libsse$.coverage" NAME=" Coverage Results" MODIFIED="1646891910845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/schemes/CGKO06/SSE1" />
     <SUITE FILE_PATH="coverage/libsse$connector.coverage" NAME="connector Coverage Results" MODIFIED="1647589505167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/frontend/server" />
+    <SUITE FILE_PATH="coverage/libsse$.coverage" NAME=" Coverage Results" MODIFIED="1648621003438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test/test_sse_schemes" />
   </component>
 </project>
