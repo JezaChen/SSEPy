@@ -23,10 +23,7 @@ async def cli():
 
 @cli.command()
 @click.option("--host", default=ServerConfig.HOST, help='server host')
-@click.option("--port",
-              default=ServerConfig.PORT,
-              help='port to bind',
-              type=int)
+@click.option("--port", default=ServerConfig.PORT, help='port to bind', type=int)
 async def start(host, port):
     if host is None or port is None:
         click.echo(f'Incomplete options')

@@ -21,9 +21,7 @@ if not _LOG_DIR_PATH.exists():
     _LOG_DIR_PATH.mkdir(parents=True)
 
 
-def getSSELogger(logger_name="sse",
-                 console_log_level=logging.INFO,
-                 file_log_level=logging.INFO):
+def getSSELogger(logger_name="sse", console_log_level=logging.INFO, file_log_level=logging.INFO):
     if logger_name in __logger_cache:
         return __logger_cache[logger_name]
 
@@ -41,9 +39,7 @@ def getSSELogger(logger_name="sse",
     fh.setLevel(file_log_level)
 
     # Format
-    formatter = logging.Formatter(
-        "[%(asctime)s][%(filename)s-->line:%(lineno)d][%(levelname)s] %(message)s"
-    )
+    formatter = logging.Formatter("[%(asctime)s][%(filename)s-->line:%(lineno)d][%(levelname)s] %(message)s")
     sh.setFormatter(formatter)
     fh.setFormatter(formatter)
 

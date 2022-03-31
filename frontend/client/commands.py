@@ -83,10 +83,8 @@ def __search_echo_handler(fut: asyncio.Future, output_format="raw"):
         result = __client_service.sse_module_loader.SSEResult.deserialize(
             content, __client_service.config_object)
         result_list = result.get_result_list()
-        output_result_list = [
-            BytesConverter.convert_bytes(identifier_bytes, output_format)
-            for identifier_bytes in result_list
-        ]
+        output_result_list = [BytesConverter.convert_bytes(identifier_bytes, output_format)
+                              for identifier_bytes in result_list]
 
         print(f">>> The result is {output_result_list}.")
 
@@ -125,7 +123,10 @@ def generate_key(*, sid: str = '', sname: str = ''):
         print(f">>> Generate key error: {e}.")
 
 
-def encrypt_database(db_path: str, *, sid: str = '', sname: str = ''):
+def encrypt_database(db_path: str,
+                     *,
+                     sid: str = '',
+                     sname: str = ''):
     global __client_service
 
     if not sid:
@@ -163,11 +164,7 @@ async def upload_encrypted_database(*, sid: str = '', sname: str = ''):
         await __client_service.close_service()
 
 
-async def search(keyword: str,
-                 output_format="raw",
-                 *,
-                 sid: str = '',
-                 sname: str = ''):
+async def search(keyword: str, output_format="raw", *, sid: str = '', sname: str = ''):
     if output_format not in BytesConverter.supported_format:
         print(f">>> Unsupported output format {output_format}.")
         return
@@ -183,10 +180,8 @@ async def search(keyword: str,
     try:
         keyword_bytes = bytes(keyword, encoding="utf-8")
         await __client_service.handle_keyword_search(
-            keyword_bytes,
-            wait=True,
-            wait_callback_func=functools.partial(__search_echo_handler,
-                                                 output_format=output_format))
+            keyword_bytes, wait=True, wait_callback_func=functools.partial(__search_echo_handler,
+                                                                           output_format=output_format))
     except Exception as e:
         print(f">>> Search error, {e}.")
     finally:

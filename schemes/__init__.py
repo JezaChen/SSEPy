@@ -13,8 +13,7 @@ def load_sse_module(sse_module_name: str) -> SSEModuleClassLoader:
         return __builtin_module_class_loader_cache[sse_module_name]
 
     try:
-        module = importlib.import_module(__schemes_module_path + "." +
-                                         sse_module_name)
+        module = importlib.import_module(__schemes_module_path + "." + sse_module_name)
         if not hasattr(module, __loader_name):
             raise ImportError()
         loader = getattr(module, __loader_name)
