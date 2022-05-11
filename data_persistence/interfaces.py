@@ -14,13 +14,21 @@ import typing
 from abc import ABCMeta, abstractmethod
 
 
-class PersistentDict(metaclass=ABCMeta):
-    """ Persistent Dictionary Static Protocol
+class PersistentBytesDict(metaclass=ABCMeta):
+    """ Persistent Bytes Dictionary,
+    where the type of keys and values is `byte`.
     """
 
     @classmethod
     @abstractmethod
-    def open(cls, file_path: str) -> 'PersistentDict': ...
+    def open(cls, dict_path: str, create_only: bool = False) -> 'PersistentBytesDict':
+        """
+        Open a persistent dictionary based on the local path
+        :param dict_path: The local path of dictionary storage,
+        according to which a persistent dictionary can be instantiated.
+        :param create_only: Whether only a new persistent dictionary can be created,
+        in other words, the path cannot correspond to an existing persistent dictionary.
+        """
 
     @abstractmethod
     def sync(self) -> None: ...
@@ -38,16 +46,16 @@ class PersistentDict(metaclass=ABCMeta):
     def get(self, key, default=None): ...
 
     @abstractmethod
-    def __contains__(self, item): ...
+    def __contains__(self, key: bytes): ...
 
     @abstractmethod
-    def __getitem__(self, item): ...
+    def __getitem__(self, key: bytes): ...
 
     @abstractmethod
-    def __setitem__(self, key, value): ...
+    def __setitem__(self, key: bytes, value: bytes): ...
 
     @abstractmethod
-    def __delitem__(self, key): ...
+    def __delitem__(self, key: bytes): ...
 
     @abstractmethod
     def __enter__(self): ...
@@ -57,3 +65,14 @@ class PersistentDict(metaclass=ABCMeta):
 
     @abstractmethod
     def __del__(self): ...
+
+    @abstractmethod
+    def clear(self): ...
+
+    @property
+    @abstractmethod
+    def dict_local_path(self): ...
+
+    @classmethod
+    @abstractmethod
+    def from_dict(cls, dict_: dict, dict_path: str) -> 'PersistentBytesDict': ...
