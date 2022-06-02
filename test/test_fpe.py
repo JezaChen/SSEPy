@@ -12,7 +12,7 @@ LIB-SSE CODE
 """
 import unittest
 
-from test.tools import generate_random_bitset
+from test.tools.faker import generate_random_bitset
 from toolkit.symmetric_encryption.fpe import BitwiseFFX
 
 

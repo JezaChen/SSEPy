@@ -16,7 +16,7 @@ import schemes.ANSS16.Scheme3.config
 from schemes.ANSS16.Scheme3.config import PiConfig
 from schemes.ANSS16.Scheme3.construction import Pi
 from schemes.ANSS16.Scheme3.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
 

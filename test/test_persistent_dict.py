@@ -44,7 +44,7 @@ def _compare_inmemory_dict_with_persistent_dict(inmemory_dict: dict,
     """
     :param inmemory_dict:
     :param persistent_dict:
-    :param need_randomly_reload: if set to True, DO RELOAD THE PARAM persistent_dict!!!
+    :param need_randomly_reload: if set to True, DO RELOAD THE PARAM persistent_array!!!
     The original dict may be released at a high probability.
     :return:
     """
@@ -201,7 +201,7 @@ class TestPickledDict(unittest.TestCase):
         self.persistent_dict = _reload_persistent_dict(self.persistent_dict)
 
     def _test_closed_persistent_dict(self):
-        """ Internal test function, MAKE SURE that self.persistent_dict is closed at this time
+        """ Internal test function, MAKE SURE that self.persistent_array is closed at this time
         """
         with self.assertRaisesRegex(ValueError, "closed"):
             self.persistent_dict[os.urandom(self.test_dict_key_len)] = b"3"
@@ -210,13 +210,13 @@ class TestPickledDict(unittest.TestCase):
             _ = self.persistent_dict[self.current_keys[0]]
 
         with self.assertRaisesRegex(ValueError, "closed"):
-            _ = len(self.persistent_dict[self.current_keys[0]])
+            _ = len(self.persistent_dict)
 
         with self.assertRaisesRegex(ValueError, "closed"):
             del self.persistent_dict[self.current_keys[0]]
 
         with self.assertRaisesRegex(ValueError, "closed"):
-            _ = iter(self.persistent_dict[self.current_keys[0]])
+            _ = iter(self.persistent_dict)
 
     def test_close(self):
         self.persistent_dict.close()

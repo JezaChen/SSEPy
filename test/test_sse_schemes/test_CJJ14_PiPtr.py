@@ -16,7 +16,7 @@ import schemes.CJJ14.PiPtr.config
 from schemes.CJJ14.PiPtr.config import PiPtrConfig
 from schemes.CJJ14.PiPtr.construction import PiPtr
 from schemes.CJJ14.PiPtr.structures import PiPtrKey, PiPtrToken, PiPtrEncryptedDatabase, PiPtrResult
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
 

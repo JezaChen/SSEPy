@@ -16,7 +16,7 @@ import schemes.CJJ14.PiPack.config
 from schemes.CJJ14.PiPack.config import PiPackConfig
 from schemes.CJJ14.PiPack.construction import PiPack
 from schemes.CJJ14.PiPack.structures import PiPackKey, PiPackToken, PiPackEncryptedDatabase, PiPackResult
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
 

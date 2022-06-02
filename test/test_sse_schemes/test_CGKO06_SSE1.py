@@ -16,7 +16,7 @@ import schemes.CGKO06.SSE1.config
 from schemes.CGKO06.SSE1.config import SSE1Config
 from schemes.CGKO06.SSE1.construction import SSE1
 from schemes.CGKO06.SSE1.structures import SSE1Key, SSE1Token, SSE1EncryptedDatabase, SSE1Result
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 
 class TestSSE1(unittest.TestCase):

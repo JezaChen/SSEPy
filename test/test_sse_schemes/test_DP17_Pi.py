@@ -16,7 +16,7 @@ import schemes.DP17.Pi.config
 from schemes.DP17.Pi.config import PiConfig
 from schemes.DP17.Pi.construction import Pi
 from schemes.DP17.Pi.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
 

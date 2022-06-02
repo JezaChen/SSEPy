@@ -3,7 +3,7 @@
 LIB-SSE CODE
 @author: Jeza Chen
 @license: GPL-3.0 License
-@file: persistent_dict.py
+@file: persistent_array.py
 @time: 2022/05/08
 @contact: jeza@vip.qq.com
 @site:  
@@ -120,9 +120,6 @@ class PickledDict(PersistentBytesDict):
         pickled_dict.__data = dict(dict_)  # Be Careful, Copy!
         pickled_dict.sync()
         return pickled_dict
-
-
-_DBM_THREADING_LOCK = threading.Lock()
 
 
 class DBMDict(PersistentBytesDict):

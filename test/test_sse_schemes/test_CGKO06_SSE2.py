@@ -16,7 +16,7 @@ import schemes.CGKO06.SSE2.config
 from schemes.CGKO06.SSE2.config import SSE2Config
 from schemes.CGKO06.SSE2.construction import SSE2
 from schemes.CGKO06.SSE2.structures import SSE2Token, SSE2EncryptedDatabase, SSE2Result, SSE2Key
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 
 class TestSSE2(unittest.TestCase):
