@@ -512,31 +512,83 @@ class TestSPFLBArray(unittest.TestCase):
                                                  item_num_in_one_file=100)
         import pickle
         # meta param is not a tuple
-        not_valid_params = "not_valid"  # may be a string...
-        not_valid_path = "not_valid"
-        not_valid_meta_filepath = not_valid_path + "_meta"
-        with open(not_valid_meta_filepath, "wb") as f:
-            pickle.dump(not_valid_params, f)
+        invalid_params = "invalid"  # may be a string...
+        invalid_path = "invalid"
+        invalid_meta_filepath = invalid_path + "_meta"
+        with open(invalid_meta_filepath, "wb") as f:
+            pickle.dump(invalid_params, f)
 
         with self.assertRaisesRegex(ValueError, r"The meta file (.*?) is broken"):
-            _ = self.PersistentArrayClass.open(not_valid_path)
+            _ = self.PersistentArrayClass.open(invalid_path)
 
-        not_valid_params = [16, 1000, 100]  # may be a list...
-        with open(not_valid_meta_filepath, "wb") as f:
-            pickle.dump(not_valid_params, f)
+        invalid_params = [16, 1000, 100]  # may be a list...
+        with open(invalid_meta_filepath, "wb") as f:
+            pickle.dump(invalid_params, f)
 
         with self.assertRaisesRegex(ValueError, r"The meta file (.*?) is broken"):
-            _ = self.PersistentArrayClass.open(not_valid_path)
+            _ = self.PersistentArrayClass.open(invalid_path)
 
         # some meta param is not a integer
-        not_valid_params = (16, '1000', 100)
-        with open(not_valid_meta_filepath, "wb") as f:
-            pickle.dump(not_valid_params, f)
+        invalid_params = (16, '1000', 100)
+        with open(invalid_meta_filepath, "wb") as f:
+            pickle.dump(invalid_params, f)
 
         with self.assertRaisesRegex(ValueError, r"The meta file (.*?) is broken"):
-            _ = self.PersistentArrayClass.open(not_valid_path)
+            _ = self.PersistentArrayClass.open(invalid_path)
 
         # `TypeError` when create an array but some argument is missing
-        with self.assertRaisesRegex(TypeError, r"(.*?) is missing"):
+        # todo use permutations
+        with self.assertRaisesRegex(TypeError, r"Missing parameters: array_len, item_num_in_one_file"):
             _ = self.PersistentArrayClass.create("valid_path",
                                                  item_size=100)
+
+        with self.assertRaisesRegex(TypeError, r"Missing parameters: item_num_in_one_file"):
+            _ = self.PersistentArrayClass.create("valid_path",
+                                                 array_len=100,
+                                                 item_size=100)
+
+        # `TypeError` when create an array but mode code is not valid (not 'r' or 'c')
+        invalid_mode_code = "w"
+        with self.assertRaisesRegex(TypeError, f"Unexpected Mode: {invalid_mode_code}"):
+            _ = self.PersistentArrayClass("valid_path", invalid_mode_code, param1='param1')
+
+        # `TypeError` when write a not byte-like object to the array
+        # # Writing string is invalid
+        with self.assertRaisesRegex(TypeError, "The content should be a byte string."):
+            self.persistent_array[0] = "writing string is invalid"
+
+        # # Writing Integer is valid
+        with self.assertRaisesRegex(TypeError, "The content should be a byte string."):
+            self.persistent_array[0] = 11111
+
+        # Index out of range
+        with self.PersistentArrayClass.create("temp_array", item_size=16, item_num_in_one_file=100,
+                                              array_len=1000) as tmp_arr:
+            tmp_arr[1] = b"valid_pos"
+            with self.assertRaisesRegex(IndexError, "out of range"):
+                tmp_arr[1001] = b"invalid_pos"
+            tmp_arr[-1] = b"valid_pos"
+            tmp_arr[-1000] = b"valid_pos"
+            with self.assertRaisesRegex(IndexError, "out of range"):
+                tmp_arr[-1001] = b"invalid_pos"
+            tmp_arr.release()
+
+        # `ValueError` when the length of the bytes to write is greater than the item length of the array
+        item_size = 16
+        test_num = 10
+        array_len = 1000
+
+        with self.PersistentArrayClass.create("temp_array", item_size=16, item_num_in_one_file=100,
+                                              array_len=1000) as tmp_arr:
+            for _ in range(test_num):
+                test_item = os.urandom(random.randint(item_size - 5, item_size + 5))
+                random_index = random.randint(0, array_len - 1)
+                if len(test_item) > item_size:
+                    with self.assertRaisesRegex(ValueError, "greater than"):
+                        tmp_arr[random_index] = test_item
+                else:
+                    tmp_arr[random_index] = test_item
+
+        # clear up
+        if os.path.exists(invalid_meta_filepath):
+            os.unlink(invalid_meta_filepath)
