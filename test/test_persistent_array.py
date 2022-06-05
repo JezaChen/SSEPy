@@ -12,6 +12,8 @@ LIB-SSE CODE
 @note:
 1. In tests, if the persistent list is closed on the way, it MUST RELOAD it at the end.
 2. If an item is deleted midway, it MUST SET the corresponding value in the self.current_keys array TO ALL-ZERO BYTES.
+@todo:
+1. use with statement for each sub-test! (所有测试不要共用一个测试数组了)
 """
 import operator
 import os
@@ -592,3 +594,38 @@ class TestSPFLBArray(unittest.TestCase):
         # clear up
         if os.path.exists(invalid_meta_filepath):
             os.unlink(invalid_meta_filepath)
+
+    def test_negative_index(self):
+        """  Tests if negative indexes work as expected.
+        Exceptions are not tested here (already in test_exceptions).
+        """
+        test_num = 100
+        for _ in range(test_num):
+            random_neg_index = random.randint(-self.test_array_size, -1)
+            actual_pos_index = random_neg_index + self.test_array_size
+
+            # cross-check
+            self.assertEqual(self.persistent_array[random_neg_index],
+                             self.persistent_array[actual_pos_index])
+
+            self.assertEqual(self.persistent_array[random_neg_index],
+                             self.inmemory_array[random_neg_index])
+
+            del self.persistent_array[random_neg_index]
+            self.inmemory_array[random_neg_index] = b"\x00" * self.test_array_item_size
+
+            self.assertEqual(self.persistent_array[random_neg_index],
+                             self.persistent_array[actual_pos_index])
+
+            self.assertEqual(self.persistent_array[random_neg_index],
+                             self.inmemory_array[random_neg_index])
+
+            new_item = os.urandom(self.test_array_item_size)
+            self.persistent_array[random_neg_index] = new_item
+            self.inmemory_array[random_neg_index] = new_item
+
+            self.assertEqual(self.persistent_array[random_neg_index],
+                             self.persistent_array[actual_pos_index])
+
+            self.assertEqual(self.persistent_array[random_neg_index],
+                             self.inmemory_array[random_neg_index])
