@@ -208,14 +208,19 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
         """
         if isinstance(key, slice):
             # todo revert if writing error
+            old_items = []
             value_iter = iter(value)  # value should be iterable
 
             start, stop, stride = key.indices(len(self))
             try:
                 for index in range(start, stop, stride):
+                    old_items.append(self[index])
                     self._write_bytes_to_file(index, next(value_iter))
             except StopIteration:
                 pass
+            except:  # Other exceptions, roll back the array state to before it was written
+                self[key] = old_items
+                raise
             return
         index = operator.index(key)
         if index >= len(self) or index < -len(self):

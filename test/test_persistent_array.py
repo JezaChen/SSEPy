@@ -629,3 +629,13 @@ class TestSPFLBArray(unittest.TestCase):
 
             self.assertEqual(self.persistent_array[random_neg_index],
                              self.inmemory_array[random_neg_index])
+
+    def test_rollback(self):
+        test_slice = slice(0, 100, None)
+        test_items = list(_yield_random_bytes((self.test_array_item_size - 5, self.test_array_item_size),
+                                              (101, 101)))
+        test_items[88] = os.urandom(self.test_array_item_size + 3)  # invalid
+        with self.assertRaisesRegex(ValueError, "greater than"):
+            self.persistent_array[test_slice] = test_items
+
+        self.assertTrue(_compare_inmemory_array_with_persistent_array(self.inmemory_array, self.persistent_array))
