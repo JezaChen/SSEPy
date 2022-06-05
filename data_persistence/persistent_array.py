@@ -162,10 +162,6 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
         return ret
 
     def _write_bytes_to_file(self, index: int, content: bytes):
-        if not isinstance(content, typing.ByteString):
-            raise TypeError(
-                "The content should be a byte string."
-            )
         if len(content) > self.__item_size:
             raise ValueError(
                 "The length of the data to be written is greater than the item length of the persistent array"
@@ -211,6 +207,7 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
         * If the key is an integer, the parameter value should be a byte-like object.
         """
         if isinstance(key, slice):
+            # todo revert if writing error
             value_iter = iter(value)  # value should be iterable
 
             start, stop, stride = key.indices(len(self))
@@ -224,7 +221,12 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
         if index >= len(self) or index < -len(self):
             raise IndexError("Array index out of range")
 
-        self._write_bytes_to_file(index, bytes(value))
+        # check if the value is a byte-string
+        if not isinstance(value, typing.ByteString):
+            raise TypeError(
+                "The content should be a byte string."
+            )
+        self._write_bytes_to_file(index, value)
 
     def __len__(self):
         return self.__array_len
@@ -283,8 +285,13 @@ class SPFLBArray(PersistentFixedLengthBytesArray):
             item_size: int = kwargs["item_size"]
             array_len: int = kwargs["array_len"]
             item_num_in_one_file: int = kwargs["item_num_in_one_file"]
-        except KeyError as exc:
-            raise TypeError(f"Missing parameters: f{', '.join(param for param in exc.args)}")
+        except KeyError:
+            missing_params = []
+            for param in ("item_size", "array_len", "item_num_in_one_file"):
+                if param not in kwargs:
+                    missing_params.append(param)
+
+            raise TypeError(f"Missing parameters: {', '.join(param for param in missing_params)}")
 
         return cls(local_path,
                    mode="c",
