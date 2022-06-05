@@ -226,7 +226,8 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
             raise TypeError(
                 "The content should be a byte string."
             )
-        self._write_bytes_to_file(index, value)
+        actual_index = index % len(self)
+        self._write_bytes_to_file(actual_index, bytes(value))
 
     def __len__(self):
         return self.__array_len
