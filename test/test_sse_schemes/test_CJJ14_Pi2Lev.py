@@ -16,7 +16,7 @@ import schemes.CJJ14.Pi2Lev.config
 from schemes.CJJ14.Pi2Lev.config import Pi2LevConfig
 from schemes.CJJ14.Pi2Lev.construction import Pi2Lev
 from schemes.CJJ14.Pi2Lev.structures import Pi2LevKey, Pi2LevToken, Pi2LevEncryptedDatabase, Pi2LevResult
-from test.tools import fake_db_for_inverted_index_based_sse
+from test.tools.faker import fake_db_for_inverted_index_based_sse
 
 TEST_KEYWORD_SIZE = 16
 

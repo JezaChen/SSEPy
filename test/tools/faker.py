@@ -15,6 +15,8 @@ import random
 
 from toolkit.bits import Bitset
 
+__all__ = ["fake_db_for_inverted_index_based_sse", "generate_random_bitset"]
+
 
 def fake_db_for_inverted_index_based_sse(fixed_keyword_size: int,
                                          fixed_file_id_size: int,

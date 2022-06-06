@@ -590,7 +590,7 @@ async def main():
 
     service = Service()
 
-    from test.tools import fake_db_for_inverted_index_based_sse
+    from test.tools.faker import fake_db_for_inverted_index_based_sse
     from test.test_sse_schemes.test_CJJ14_PiBas import TEST_KEYWORD_SIZE
     from test.test_sse_schemes.test_CJJ14_PiBas import TEST_FILE_ID_SIZE
 
@@ -637,7 +637,7 @@ async def main2():
 
     service = Service()
 
-    from test.tools import fake_db_for_inverted_index_based_sse
+    from test.tools.faker import fake_db_for_inverted_index_based_sse
     from test.test_sse_schemes.test_CJJ14_PiBas import TEST_KEYWORD_SIZE
     from test.test_sse_schemes.test_CJJ14_PiBas import TEST_FILE_ID_SIZE
 
