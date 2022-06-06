@@ -28,13 +28,27 @@ class PersistentBytesDict(metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def open(cls, dict_path: str, create_only: bool = False) -> 'PersistentBytesDict':
+    def open(cls, local_path: str, create_only: bool = False) -> 'PersistentBytesDict':
         """
-        Open a persistent dictionary based on the local path
-        :param dict_path: The local path of dictionary storage,
+        Open a persistent dictionary based on the local path.
+        If the file corresponding to `local_path` does not exist, a `FileNotFoundError` exception is thrown
+        :param local_path: The local path of dictionary storage,
         according to which a persistent dictionary can be instantiated.
         :param create_only: Whether only a new persistent dictionary can be created,
         in other words, the path cannot correspond to an existing persistent dictionary.
+        """
+
+    @classmethod
+    @abstractmethod
+    def create(cls, local_path: str, *args, **config) -> 'PersistentBytesDict':
+        """ Given the config parameters,
+        create a blank persistent bytes dict and save it to the file corresponding to local_path.
+        If the file corresponding to local_path already exists, a `FileExistsError` exception is thrown
+        :param local_path: The path to save the persistent byte array.
+        Note that the concrete implementation does not necessarily save only
+        on the single file represented by that path; in other words, local_path is just a token,
+        and the concrete implementation may create multiple related files for saving based on it
+        :param config for file creating
         """
 
     @abstractmethod
@@ -43,6 +57,10 @@ class PersistentBytesDict(metaclass=ABCMeta):
 
     @abstractmethod
     def close(self) -> None:
+        ...
+
+    @abstractmethod
+    def release(self) -> None:
         ...
 
     @abstractmethod
@@ -125,7 +143,7 @@ class PersistentFixedLengthBytesArray(collections.abc.Sequence, metaclass=ABCMet
     def create(cls,
                local_path: str,
                **config) -> 'PersistentFixedLengthBytesArray':
-        """ Given the element size and array length,
+        """ Given the config parameters,
         create a blank byte array and save it to the file corresponding to local_path.
         If the file corresponding to local_path already exists, a FileExistsError exception is thrown
         :param local_path: The path to save the persistent byte array.
@@ -133,8 +151,6 @@ class PersistentFixedLengthBytesArray(collections.abc.Sequence, metaclass=ABCMet
         on the single file represented by that path; in other words, local_path is just a token,
         and the concrete implementation may create multiple related files for saving based on it
         :param config for file creating
-        item_size: the fixed size of bytes stored in the array
-        array_len: the fixed length of the array to create
         """
 
     @abstractmethod

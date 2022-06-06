@@ -590,6 +590,7 @@ class TestSPFLBArray(unittest.TestCase):
                         tmp_arr[random_index] = test_item
                 else:
                     tmp_arr[random_index] = test_item
+            tmp_arr.release()
 
         # clear up
         if os.path.exists(invalid_meta_filepath):

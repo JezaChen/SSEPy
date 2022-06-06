@@ -106,7 +106,7 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
 
         elif mode == "c":  # create
             if os.path.exists(self.__local_path + "_meta"):
-                raise FileExistsError(f"The file {local_path} exists, and you set the parameter create_only to True.")
+                raise FileExistsError(f"The file {local_path} exists.")
             meta_file = open(local_path + "_meta", "wb+")
 
             # Parse Argument
@@ -207,7 +207,6 @@ class SimpleMultiFilePersistentFixedLengthBytesArray(collections.abc.Sequence):
         * If the key is an integer, the parameter value should be a byte-like object.
         """
         if isinstance(key, slice):
-            # todo revert if writing error
             old_items = []
             value_iter = iter(value)  # value should be iterable
 

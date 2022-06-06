@@ -39,26 +39,36 @@ class PickledDict(PersistentBytesDict):
     """
 
     @classmethod
-    def open(cls, file_path: str, create_only: bool = False) -> 'PickledDict':
-        return cls(file_path, create_only)
+    def open(cls, local_path: str, create_only: bool = False) -> 'PickledDict':
+        return cls(local_path, "r")
 
-    def __init__(self, file_path: str, create_only: bool = False):
+    @classmethod
+    def create(cls, local_path: str, **_) -> 'PickledDict':
+        return cls(local_path, "c")
+
+    def __init__(self, file_path: str, mode: str = "r"):
         self.__file_path = file_path
         self.__data = {}
-        try:
-            self.__file = open(file_path, "rb+")
-            if create_only:
-                raise FileExistsError(f"The file {file_path} exists, and you set the parameter create_only to True.")
+        self.__file = None
+        if mode == "r":  # read
+            try:
+                self.__file = open(file_path, "rb+")
+                self.__data = pickle.load(self.__file)
+                if not isinstance(self.__data, typing.Dict):
+                    raise TypeError(f"The data of argument file_path {file_path} is not an instance of dict")
+            except FileNotFoundError:
+                raise FileNotFoundError(f"The dict corresponding to the local path {file_path} not exists.")
+            except (TypeError, pickle.UnpicklingError):
+                self.__file.close()
+                raise
 
-            self.__data = pickle.load(self.__file)
-
-            if not isinstance(self.__data, typing.Dict):
-                raise TypeError(f"The data of argument file_path {file_path} is not an instance of dict")
-        except FileNotFoundError:  # create a new file for pickling
+        elif mode == "c":  # create
+            if os.path.exists(file_path):
+                raise FileExistsError(f"The file {file_path} exists.")
             self.__file = open(file_path, "wb+")
-        except (TypeError, pickle.UnpicklingError):
-            self.__file.close()
-            raise
+
+        else:  # Unexpected mode
+            raise TypeError(f"Unexpected Mode: {mode}")
 
     def sync(self) -> None:
         self.__file.truncate(0)
@@ -71,11 +81,18 @@ class PickledDict(PersistentBytesDict):
             if not self.__file.closed:
                 self.sync()
                 self.__file.close()
+        except AttributeError:  # self.__file may be None
+            pass
         finally:
             try:
                 self.__data = _ClosedDict()
             except:
                 self.__data = None
+
+    def release(self) -> None:
+        self.close()
+        if os.path.exists(self.__file_path):  # may be released multiple times
+            os.unlink(self.__file_path)
 
     def __iter__(self):
         return iter(self.__data)
@@ -84,7 +101,7 @@ class PickledDict(PersistentBytesDict):
         return len(self.__data)
 
     def get(self, key: bytes, default=None):
-        return self.__data.get(key, default=default)
+        return self.__data.get(key, default)
 
     def __contains__(self, key: bytes):
         return key in self.__data
@@ -93,6 +110,12 @@ class PickledDict(PersistentBytesDict):
         return self.__data[key]
 
     def __setitem__(self, key: bytes, value: bytes):
+        # check if the value is a byte-string
+        if not isinstance(value, typing.ByteString):
+            raise TypeError(
+                "The content should be a byte string."
+            )
+
         self.__data[key] = value
 
     def __delitem__(self, key: bytes):
@@ -116,7 +139,7 @@ class PickledDict(PersistentBytesDict):
 
     @classmethod
     def from_dict(cls, dict_: dict, dict_path: str) -> 'PickledDict':
-        pickled_dict = cls(dict_path, create_only=True)
+        pickled_dict = cls(dict_path, mode="c")
         pickled_dict.__data = dict(dict_)  # Be Careful, Copy!
         pickled_dict.sync()
         return pickled_dict
@@ -132,18 +155,29 @@ class DBMDict(PersistentBytesDict):
     __thread_lock_map = collections.defaultdict(lambda: threading.Lock())
 
     @classmethod
-    def open(cls, file_path: str, create_only: bool = False) -> 'DBMDict':
-        return cls(file_path, create_only)
+    def open(cls, local_path: str, create_only: bool = False) -> 'DBMDict':
+        return cls(local_path, "r")
 
-    def __init__(self, file_path: str, create_only: bool = False):
-        self.__thread_lock_map[file_path].acquire()
+    @classmethod
+    def create(cls, local_path: str, *, wait=False, **config) -> 'DBMDict':
+        return cls(local_path, "c")
 
-        if create_only and os.path.exists(file_path):
-            raise FileExistsError(f"The file {file_path} exists, and you set the parameter create_only to True.")
-
+    def __init__(self, file_path: str, mode: str = "r"):
         self.__file_path = file_path
-        self.__shelf = data_persistence.bytes_shelf.open(file_path, writeback=True)
         self.__closed = False
+        self.__shelf = None
+        # check validity only
+        if mode == "r":  # read
+            if not os.path.exists(file_path):
+                raise FileNotFoundError(f"The dict corresponding to the local path {file_path} not exists.")
+        elif mode == "c":  # create
+            if os.path.exists(file_path):
+                raise FileExistsError(f"The file {file_path} exists.")
+        else:  # unexpected mode
+            raise TypeError(f"Unexpected Mode: {mode}")
+
+        self.__thread_lock_map[file_path].acquire()
+        self.__shelf = data_persistence.bytes_shelf.open(file_path, writeback=True)
 
     def sync(self) -> None:
         self.__shelf.sync()
@@ -151,13 +185,25 @@ class DBMDict(PersistentBytesDict):
     def close(self) -> None:
         if self.__closed:  # Already Closed
             return
-
         try:
             self.__shelf.close()
-            self.__shelf = _ClosedDict()
-            self.__closed = True
+        except AttributeError:  # __shelf may be None, because it may be released when __init__ method is not completed
+            pass
         finally:
-            self.__thread_lock_map[self.__file_path].release()
+            try:
+                self.__closed = True
+                self.__thread_lock_map[self.__file_path].release()
+                self.__shelf = _ClosedDict()
+            except RuntimeError as e:
+                if len(e.args) != 1 or e.args[0] != "release unlocked lock":
+                    raise
+            except:
+                self.__shelf = None
+
+    def release(self) -> None:
+        self.close()
+        if os.path.exists(self.__file_path):  # may be released multiple times
+            os.unlink(self.__file_path)
 
     def __iter__(self):
         return iter(self.__shelf)
@@ -175,6 +221,12 @@ class DBMDict(PersistentBytesDict):
         return self.__shelf[key]
 
     def __setitem__(self, key: bytes, value):
+        # check if the value is a byte-string
+        if not isinstance(value, typing.ByteString):
+            raise TypeError(
+                "The content should be a byte string."
+            )
+
         self.__shelf[key] = value
 
     def __delitem__(self, key: bytes):
@@ -198,7 +250,7 @@ class DBMDict(PersistentBytesDict):
 
     @classmethod
     def from_dict(cls, dict_: dict, dict_path: str) -> 'DBMDict':
-        pickled_dict = cls(dict_path, create_only=True)
+        pickled_dict = cls(dict_path, mode="c")
         pickled_dict.__shelf.update(dict_)
         pickled_dict.sync()
         return pickled_dict

@@ -77,7 +77,7 @@ class TestPickledDict(unittest.TestCase):
         self.current_keys = list(self.inmemory_dict)
 
     def tearDown(self) -> None:
-        self.persistent_dict.close()
+        self.persistent_dict.release()
 
     def test_from_dict_firstly(self):
         self.assertTrue(_compare_inmemory_dict_with_persistent_dict(self.inmemory_dict, self.persistent_dict))
@@ -247,6 +247,45 @@ class TestPickledDict(unittest.TestCase):
 
         # test closed persistent dict
         self._test_closed_persistent_dict()
+
+    def test_exceptions(self):
+        """ Test if the array throws an exception as expected:
+        * `FileNotFoundError` when read a not-existent array
+        * `FileExistsError` when create an array of which the local file path is already occupied.
+        * `TypeError` when create an array but mode code is not valid (not 'r' or 'c')
+        * `TypeError` when write a not byte-like object to the array
+        * `ValueError` when the length of the bytes to write is greater than the item length of the array
+        * `ValueError` when the array is closed (not test here).
+        * `KeyError` when the key not exists
+        """
+        with self.assertRaises(FileNotFoundError):
+            _ = self.PersistentDictClass.open("path_not_exists")
+        with self.assertRaises(FileExistsError):
+            # already created
+            _ = self.PersistentDictClass.create(self.test_persistent_dict_path)
+
+        # `TypeError` when create an array but mode code is not valid (not 'r' or 'c')
+        invalid_mode_code = "w"
+        with self.assertRaisesRegex(TypeError, f"Unexpected Mode: {invalid_mode_code}"):
+            _ = self.PersistentDictClass("valid_path", invalid_mode_code)
+
+        # `TypeError` when write a not byte-like object to the array
+        # # Writing string is invalid
+        with self.assertRaisesRegex(TypeError, "The content should be a byte string."):
+            self.persistent_dict[self.current_keys[0]] = "writing string is invalid"
+
+        # # Writing Integer is valid
+        with self.assertRaisesRegex(TypeError, "The content should be a byte string."):
+            self.persistent_dict[self.current_keys[0]] = 11111
+
+        # KeyError
+        test_num = 10
+        for _ in range(test_num):
+            rand_key = os.urandom(self.test_dict_key_len)
+            if rand_key not in self.current_keys:
+                with self.assertRaises(KeyError):
+                    _ = self.persistent_dict[rand_key]
+                self.assertEqual(self.persistent_dict.get(rand_key, 1000), 1000)
 
 
 class TestDBMDict(TestPickledDict):
