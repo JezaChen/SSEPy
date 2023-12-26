@@ -10,7 +10,7 @@ This is a project that is moving forward...
 
 ### Environment
 
-- Python 3.8
+- Python 3.8+
 - OpenSSL
 - libffi
 - build-essential (for Debain), build-base (for Alpine)
