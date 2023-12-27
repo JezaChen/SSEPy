@@ -16,6 +16,7 @@ import abc
 import asyncio
 import pickle
 
+from frontend.server.services.comm import send_message
 from toolkit.logger.logger import getSSELogger
 from websockets.legacy.server import WebSocketServerProtocol
 
@@ -101,14 +102,8 @@ class Service:
     def _store_service_meta(self):
         FileManager.write_service_meta(self.sid, self.service_meta)
 
-    def _send_message(self, msg_type: str, content: bytes, **additional_field):
-        msg_dict = {
-            "type": msg_type,
-            "sid": self.sid,
-            "content": content
-        }
-        msg_dict.update(additional_field)
-        asyncio.create_task(self.websocket.send(pickle.dumps(msg_dict)))
+    def send_message(self, msg_type: str, content: bytes, **additional_field):
+        send_message(self.websocket, self.sid, msg_type, content, **additional_field)
 
     async def _recv_message(self):
         async for message_bytes in self.websocket:
@@ -173,7 +168,7 @@ class Service:
         return self.service_meta["state"]
 
     def send_init_echo(self):
-        self._send_message("init", pickle.dumps({"ok": True, "state": self.get_current_service_state()}))
+        self.send_message("init", pickle.dumps({"ok": True, "state": self.get_current_service_state()}))
         logger.info(f"Send initialization echo of service {self.sid}.")
 
     def handle_upload_config(self, config_bytes: bytes, raw_msg_dict: dict):
@@ -181,7 +176,7 @@ class Service:
 
         if self.get_current_service_state() != SERVICE_STATE.NOT_EXISTS:
             reason = f"The config of service {self.sid} has been already uploaded."
-            self._send_message("config", pickle.dumps({"ok": False, "reason": reason}))
+            self.send_message("config", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
@@ -192,7 +187,7 @@ class Service:
         self.config = config
         self.service_meta["state"] = SERVICE_STATE.CONFIG_UPLOADED_BUT_EDB_NOT_UPLOADED
         FileManager.write_service_meta(self.sid, self.service_meta)
-        self._send_message("config", pickle.dumps({"ok": True}))
+        self.send_message("config", pickle.dumps({"ok": True}))
         logger.info(f"Store config for service {self.sid} successfully.")
 
     def handle_upload_encrypted_database(self, edb_bytes: bytes, raw_msg_dict: dict):
@@ -200,20 +195,20 @@ class Service:
 
         if self.get_current_service_state() == SERVICE_STATE.NOT_EXISTS:
             reason = f"The config of service {self.sid} has not been uploaded."
-            self._send_message("upload_edb", pickle.dumps({"ok": False, "reason": reason}))
+            self.send_message("upload_edb", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
         if self.get_current_service_state() == SERVICE_STATE.ALL_READY:
             reason = f"The database of service {self.sid} has been already uploaded."
-            self._send_message("upload_edb", pickle.dumps({"ok": False, "reason": reason}))
+            self.send_message("upload_edb", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
         FileManager.write_encrypted_database(self.sid, edb_bytes)
         self.service_meta["state"] = SERVICE_STATE.ALL_READY
         FileManager.write_service_meta(self.sid, self.service_meta)
-        self._send_message("upload_edb", pickle.dumps({"ok": True}))
+        self.send_message("upload_edb", pickle.dumps({"ok": True}))
         logger.info(f"Store encrypted database for service {self.sid} successfully.")
 
     def handle_search_token(self, token_bytes: bytes, raw_msg_dict: dict):
@@ -221,13 +216,13 @@ class Service:
 
         if self.get_current_service_state() == SERVICE_STATE.NOT_EXISTS:
             reason = f"The config of service {self.sid} has not been uploaded."
-            self._send_message("result", pickle.dumps({"ok": False, "reason": reason}))
+            self.send_message("result", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
         if self.get_current_service_state() == SERVICE_STATE.CONFIG_UPLOADED_BUT_EDB_NOT_UPLOADED:
             reason = f"The encrypted database of service {self.sid} has not been uploaded."
-            self._send_message("result", pickle.dumps({"ok": False, "reason": reason}))
+            self.send_message("result", pickle.dumps({"ok": False, "reason": reason}))
             logger.error(reason)
             raise ValueError(reason)
 
@@ -238,8 +233,11 @@ class Service:
         tk_digest = raw_msg_dict.get("token_digest")
         tk_object = self.sse_module_loader.SSEToken.deserialize(token_bytes, self.config_object)
         result = self.sse_scheme.Search(self.edb, tk_object)
-        self._send_message("result", content=result.serialize(), token_digest=tk_digest)
+        self.send_message("result", content=result.serialize(), token_digest=tk_digest)
         logger.info(f"Search for service {self.sid} successfully.")
 
     def close_service(self):
         self._store_service_meta()
+
+    async def wait_closed(self):
+        await self.websocket.wait_closed()

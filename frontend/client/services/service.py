@@ -168,7 +168,8 @@ class Service:
         self.recv_msg_handler = {
             "config": self.handle_upload_config_echo,
             "upload_edb": self.handle_upload_encrypted_database_echo,
-            "result": self.handle_result
+            "result": self.handle_result,
+            "control": self.handle_control_message,
         }
 
         self.echo_handler = {
@@ -576,6 +577,10 @@ class Service:
         content = fut.result()
         result = self.sse_module_loader.SSEResult.deserialize(content, self.config_object)
         logger.info(f"[{self.sid}] The result is {result}.")
+
+    def handle_control_message(self, msg_bytes: bytes):
+        msg_str = msg_bytes.decode(encoding='utf8')
+        logger.warning(f"[{self.sid}] Receive control message: {msg_str}.")
 
     async def close_service(self):
         self._store_service_meta()
