@@ -14,6 +14,7 @@ import asyncio
 
 from websockets.legacy.server import WebSocketServerProtocol
 
+from frontend.common.constants import MsgType
 from frontend.server.services.comm import send_message
 from frontend.server.services.service import Service
 from toolkit.logger.logger import getSSELogger
@@ -35,7 +36,7 @@ class ServicesManager:
             prev_server = self._service_dict[sid]
             reason = f"Service {sid} is already running, we need to wait for the previous connection to close..."
             logger.warning(reason)
-            service.send_message("control", reason.encode('utf8'))
+            service.send_message(MsgType.CONTROL, reason.encode('utf8'))
             await prev_server.wait_closed()  # wait for the previous socket to close
 
         async with self._access_dict_lock:

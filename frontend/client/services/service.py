@@ -26,6 +26,7 @@ from websockets.exceptions import InvalidURI, InvalidHandshake
 
 import frontend.client.services.file_manager as FileManager
 import schemes
+from frontend.common.constants import MsgType
 # bits represents status
 from frontend.constants import KEY_TYPE, KEY_SID, TYPE_INIT
 from global_config import ClientConfig
@@ -166,15 +167,15 @@ class Service:
             self._load_config_object()
 
         self.recv_msg_handler = {
-            "config": self.handle_upload_config_echo,
-            "upload_edb": self.handle_upload_encrypted_database_echo,
-            "result": self.handle_result,
-            "control": self.handle_control_message,
+            MsgType.CONFIG: self.handle_upload_config_echo,
+            MsgType.UPLOAD_DB: self.handle_upload_encrypted_database_echo,
+            MsgType.RESULT: self.handle_result,
+            MsgType.CONTROL: self.handle_control_message,
         }
 
         self.echo_handler = {
-            "config": [],
-            "upload_edb": []
+            MsgType.CONFIG: [],
+            MsgType.UPLOAD_DB: []
         }
 
         self.echo_futures = {}
@@ -276,7 +277,7 @@ class Service:
                 self.echo_futures[msg_type] = []  # clear
 
             # result future handler
-            if msg_type == "result":
+            if msg_type == MsgType.RESULT:
                 token_digest = message_dict.get("token_digest")
                 for fut in self.result_futures.get(token_digest, []):
                     fut.set_result(content_byte)
@@ -424,9 +425,9 @@ class Service:
             # Create a new Future object.
             fut = loop.create_future()
             fut.add_done_callback(wait_callback_func)
-            self.register_upload_echo_future_once("config", fut)
+            self.register_upload_echo_future_once(MsgType.CONFIG, fut)
 
-        await self._send_message("config", pickle.dumps(self.config))
+        await self._send_message(MsgType.CONFIG, pickle.dumps(self.config))
         logger.info(f"[{self.sid}] Uploading config.")
 
         if wait:
@@ -524,9 +525,9 @@ class Service:
             # Create a new Future object.
             fut = loop.create_future()
             fut.add_done_callback(wait_callback_func)
-            self.register_upload_echo_future_once("upload_edb", fut)
+            self.register_upload_echo_future_once(MsgType.UPLOAD_DB, fut)
 
-        await self._send_message("upload_edb", self.edb.serialize())
+        await self._send_message(MsgType.UPLOAD_DB, self.edb.serialize())
         logger.info(f"[{self.sid}] Uploading encrypted database.")
 
         if wait:
@@ -554,13 +555,13 @@ class Service:
             # Create a new Future object.
             fut = loop.create_future()
             fut.add_done_callback(wait_callback_func)
-            self.register_upload_echo_future_once("result", fut)
+            self.register_upload_echo_future_once(MsgType.RESULT, fut)
 
         token = self.sse_scheme.TokenGen(self.key, keyword)
         token_bytes = token.serialize()
         token_digest = hashlib.sha256(token_bytes).digest()
 
-        await self._send_message("token",
+        await self._send_message(MsgType.TOKEN,
                                  token_bytes,
                                  token_digest=token_digest)
         logger.info(f"[{self.sid}] Uploading search token.")
@@ -627,7 +628,7 @@ async def main():
         assert return_result.result == actual_result
 
     for keyword in itertools.islice(db.keys(), 10):
-        # service.register_echo_handler_once("result", functools.partial(_compare_result, actual_result=db[keyword]))
+        # service.register_echo_handler_once(MsgType.RESULT, functools.partial(_compare_result, actual_result=db[keyword]))
         await service.handle_keyword_search(keyword,
                                             wait=True,
                                             wait_callback_func=functools.partial(_compare_result,
