@@ -55,7 +55,7 @@ class ServicesManager:
     async def clean_service_when_close_connection(self, sid: str, websocket: WebSocketServerProtocol):
         await websocket.wait_closed()
         async with self._access_dict_lock:
-            await asyncio.sleep(5)
+            await asyncio.sleep(1)
             self._service_dict[sid].close_service()
             del self._service_dict[sid]
         logger.info(f"Clean service {sid} successfully.")
