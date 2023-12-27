@@ -24,18 +24,25 @@ logger = getSSELogger("sse_server")
 
 class ServicesManager:
     def __init__(self):
+        # The access to the service dictionary may have competition,
+        # so we need to introduce a lock to ensure the access to the dictionary is concurrent safe.
         self._access_dict_lock = asyncio.Lock()
         self._service_dict = {}
 
     async def create_service(self, sid: str, websocket: WebSocketServerProtocol):
         logger.info(f"A new request for service {sid} found, creating...")
-        # initialize a service first
+        # initialize a service first to send control message when the previous connection is not closed
+        # a new service created with the same sid just to send init or control messages will not affect the database.
         service = Service(sid, websocket)
 
         if sid in self._service_dict:
             prev_server = self._service_dict[sid]
             reason = f"Service {sid} is already running, we need to wait for the previous connection to close..."
             logger.warning(reason)
+            # In the previous practice, if the previous connection was not closed,
+            # the later connection was closed, which resulted in a anomalous behavior of the client.
+            # So we need to send a control message to the client to tell it
+            # to wait for the previous connection to close.
             service.send_message(MsgType.CONTROL, reason.encode('utf8'))
             await prev_server.wait_closed()  # wait for the previous socket to close
 
