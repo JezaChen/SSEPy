@@ -13,9 +13,9 @@ LIB-SSE CODE
 import math
 
 import toolkit.config_manager
-import toolkit.prf
-import toolkit.prp
-import toolkit.symmetric_encryption
+import toolkit.prf as prf
+import toolkit.prp as prp
+import toolkit.symmetric_encryption as se
 from schemes.interface.config import SSEConfig
 
 SSE1_HEADER = b"\x93\x94Curtomola2006SSE1"
@@ -84,21 +84,21 @@ class SSE1Config(SSEConfig):
         self.param_log2_s = math.ceil(math.log2(self.param_s))
         self.param_log2_s_bytes = math.ceil(self.param_log2_s / 8)
 
-        self.prp_pi = toolkit.prp.get_prp_implementation(config_dict.get("prp_pi", ""))(
+        self.prp_pi = prp.get_prp_implementation(config_dict.get("prp_pi", ""))(
             key_bit_length=self.param_k_bits,
             message_bit_length=self.param_l_bits
         )
-        self.prp_psi = toolkit.prp.get_prp_implementation(config_dict.get("prp_psi", ""))(
+        self.prp_psi = prp.get_prp_implementation(config_dict.get("prp_psi", ""))(
             key_bit_length=self.param_k_bits,
             message_bit_length=self.param_log2_s
         )
-        self.prf_f = toolkit.prf.get_prf_implementation(config_dict.get("prf_f", ""))(
+        self.prf_f = prf.get_prf_implementation(config_dict.get("prf_f", ""))(
             key_length=self.param_k,
             message_length=self.param_l,
             output_length=self.param_k + self.param_log2_s_bytes)
-        self.ske1 = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(config_dict.get("ske1", ""))(
+        self.ske1 = se.get_symmetric_encryption_implementation(config_dict.get("ske1", ""))(
             key_length=self.param_k
         )
-        self.ske2 = toolkit.symmetric_encryption.get_symmetric_encryption_implementation(config_dict.get("ske2", ""))(
+        self.ske2 = se.get_symmetric_encryption_implementation(config_dict.get("ske2", ""))(
             key_length=self.param_k
         )
