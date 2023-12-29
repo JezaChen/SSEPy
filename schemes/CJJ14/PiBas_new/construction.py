@@ -20,6 +20,8 @@ from toolkit.bytes_utils import int_to_bytes
 
 
 class ConfigDescriptor:
+    _config_dict_name = '_sse_config_dict'
+
     def __init__(self, name: typing.Optional[str] = None):
         self.name = name
         self._value = None
@@ -28,16 +30,33 @@ class ConfigDescriptor:
     def __set_name__(self, owner, name):
         if self.name is None:
             self.name = name
-        self._private_name = '_' + name
+        self._private_name = '_sse_private_' + name
 
-    def __get__(self, instance, owner):
+    def __get__(self, instance, obj_type):
         return NotImplemented
 
     def __set__(self, instance, value):
         return NotImplemented
 
 
-class Param
+_NOT_USE_DEFAULT_VALUE = object()
+
+
+class OrdinaryParam(ConfigDescriptor):
+    def __init__(self, name: typing.Optional[str] = None, default_value=_NOT_USE_DEFAULT_VALUE):
+        super(OrdinaryParam, self).__init__(name)
+        self._default_value = default_value
+
+    def __get__(self, instance, obj_type):
+        if instance is None:
+            return self
+        val = getattr(instance, self._config_dict_name).get(self.name, self._default_value)
+        if val is _NOT_USE_DEFAULT_VALUE:
+            raise AttributeError("Attribute not set")
+        return val
+
+    def __set__(self, instance, value):
+        raise AttributeError("can't set attribute")
 
 
 class PiBas(schemes.interface.inverted_index_sse.InvertedIndexSSE):
