@@ -16,14 +16,14 @@ to eliminate the misunderstanding of the de-padding algorithm due to the misunde
 """
 import os
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.CJJ14.PiPack.config import DEFAULT_CONFIG, PiPackConfig
 from schemes.CJJ14.PiPack.structures import PiPackKey, PiPackToken, PiPackEncryptedDatabase, PiPackResult
 from toolkit.bytes_utils import int_to_bytes
 from toolkit.database_utils import partition_identifiers_to_blocks, parse_identifiers_from_block_given_identifier_size
 
 
-class PiPack(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class PiPack(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """PiPack Construction described by Cash et al. [CJJ+14]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

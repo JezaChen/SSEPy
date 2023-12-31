@@ -13,14 +13,14 @@ LIB-SSE CODE
 """
 import os
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.CGKO06.SSE2.config import DEFAULT_CONFIG, SSE2Config
 from schemes.CGKO06.SSE2.structures import SSE2Key, SSE2Token, SSE2EncryptedDatabase, SSE2Result
 from toolkit.bits import Bitset
 from toolkit.bytes_utils import int_to_bytes
 
 
-class SSE2(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class SSE2(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """SSE-2 Construction described by Curtomola et al. [CGKO06]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

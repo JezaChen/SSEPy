@@ -15,14 +15,14 @@ import math
 import os
 import random
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.ANSS16.Scheme3.config import DEFAULT_CONFIG, PiConfig
 from schemes.ANSS16.Scheme3.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
 from toolkit.bytes_utils import int_to_bytes, split_bytes_given_slice_len, int_from_bytes
 from toolkit.database_utils import get_total_size, parse_identifiers_from_block_given_entry_count_in_one_block
 
 
-class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class Pi(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """Scheme3 Construction described by Asharov et al. [ANSS16]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

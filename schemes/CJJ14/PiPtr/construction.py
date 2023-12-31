@@ -18,7 +18,7 @@ import math
 import os
 import random
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.CJJ14.PiPtr.config import DEFAULT_CONFIG, PiPtrConfig
 from schemes.CJJ14.PiPtr.structures import PiPtrKey, PiPtrToken, PiPtrEncryptedDatabase, PiPtrResult
 from toolkit.bytes_utils import int_to_bytes, int_from_bytes
@@ -26,7 +26,7 @@ from toolkit.database_utils import partition_identifiers_to_blocks, parse_identi
     parse_identifiers_from_block_given_identifier_size
 
 
-class PiPtr(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class PiPtr(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """PiPtr Construction described by Cash et al. [CJJ+14]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

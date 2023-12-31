@@ -18,7 +18,7 @@ import math
 import os
 import random
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.CJJ14.Pi2Lev.config import DEFAULT_CONFIG, Pi2LevConfig, LEVEL_POINTER_OF_ARRAY, LEVEL_FILE_IDENTIFIER
 from schemes.CJJ14.Pi2Lev.structures import Pi2LevKey, Pi2LevToken, Pi2LevEncryptedDatabase, Pi2LevResult
 from toolkit.bytes_utils import int_to_bytes, int_from_bytes
@@ -26,7 +26,7 @@ from toolkit.database_utils import partition_identifiers_to_blocks, \
     parse_identifiers_from_block_given_entry_count_in_one_block
 
 
-class Pi2Lev(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class Pi2Lev(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """Pi2Lev Construction described by Cash et al. [CJJ+14]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

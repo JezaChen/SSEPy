@@ -96,6 +96,9 @@ class PiBasToken(SSEToken):
             return False
         return self.K1 == other.K1 and self.K2 == other.K2
 
+    def __iter__(self):
+        return iter([self.K1, self.K2])
+
 
 class PiBasResult(SSEResult):
     __slots__ = ["result"]

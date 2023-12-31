@@ -35,11 +35,11 @@ class TestPiBas(unittest.TestCase):
         config_dict = schemes.CJJ14.PiBas.config.DEFAULT_CONFIG
 
         scheme = PiBas(config_dict)
-        key = scheme._Gen()
+        key = scheme.KeyGen()
 
-        encrypted_index = scheme._Enc(key, db)
-        token = scheme._Trap(key, b"China")
-        result = scheme._Search(encrypted_index, token)
+        encrypted_index = scheme.EDBSetup(key, db)
+        token = scheme.TokenGen(key, b"China")
+        result = scheme.Search(encrypted_index, token)
         self.assertEqual(db[b"China"], result.result)
 
     def test_method_correctness(self):
@@ -53,12 +53,12 @@ class TestPiBas(unittest.TestCase):
                                                   db_w_size_range=(1, 200))
 
         scheme = PiBas(config_dict)
-        key = scheme._Gen()
+        key = scheme.KeyGen()
 
-        encrypted_index = scheme._Enc(key, db)
+        encrypted_index = scheme.EDBSetup(key, db)
         for keyword in db:
-            token = scheme._Trap(key, keyword)
-            result = scheme._Search(encrypted_index, token)
+            token = scheme.TokenGen(key, keyword)
+            result = scheme.Search(encrypted_index, token)
             self.assertEqual(db[keyword], result.result)
 
     def test_interface_correctness(self):

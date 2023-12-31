@@ -15,14 +15,14 @@ import math
 import os
 import random
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.CT14.Pi.config import DEFAULT_CONFIG, PiConfig
 from schemes.CT14.Pi.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
 from toolkit.bytes_utils import int_to_bytes
 from toolkit.database_utils import get_total_size, parse_identifiers_from_block_given_entry_count_in_one_block
 
 
-class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class Pi(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """Pi Construction described by Cash et al. [CT14]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

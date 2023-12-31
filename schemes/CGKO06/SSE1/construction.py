@@ -15,14 +15,14 @@ LIB-SSE CODE
 """
 import os
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 from schemes.CGKO06.SSE1.config import DEFAULT_CONFIG, SSE1Config
 from schemes.CGKO06.SSE1.structures import SSE1Key, SSE1EncryptedDatabase, SSE1Token, SSE1Result
 from toolkit.bits import Bitset
 from toolkit.bytes_utils import int_from_bytes, bytes_xor, add_leading_zeros, split_bytes_given_slice_len
 
 
-class SSE1(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class SSE1(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """SSE-1 Construction described by Curtomola et al. [CGKO06]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):

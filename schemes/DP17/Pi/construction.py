@@ -15,7 +15,7 @@ import os
 import random
 import typing
 
-import schemes.interface.inverted_index_sse
+import schemes.interface.oop.inverted_index_sse
 import toolkit.list_utils
 from schemes.DP17.Pi.config import DEFAULT_CONFIG, PiConfig
 from schemes.DP17.Pi.structures import PiKey, PiToken, PiEncryptedDatabase, PiResult
@@ -36,7 +36,7 @@ def _divide_to_buckets(array_size: int, bucket_size: int) -> (typing.List[int],
     return remaining_count_list, w_id_pair_list
 
 
-class Pi(schemes.interface.inverted_index_sse.InvertedIndexSSE):
+class Pi(schemes.interface.oop.inverted_index_sse.InvertedIndexSSE):
     """Pi Construction described by Demertzis et al. [DP17]"""
 
     def __init__(self, config: dict = DEFAULT_CONFIG):
