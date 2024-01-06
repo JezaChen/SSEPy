@@ -17,6 +17,7 @@ import asyncio
 import pickle
 
 from frontend.common.constants import MsgType
+from frontend.common.utils import shorten_sid
 from frontend.server.services.comm import send_message
 from toolkit.logger.logger import getSSELogger
 from websockets.legacy.server import WebSocketServerProtocol
@@ -99,7 +100,7 @@ class Service:
 
     @property
     def short_sid(self) -> str:
-        return self.sid[:8]
+        return shorten_sid(self.sid)
 
     async def start(self):
         await self._recv_message()

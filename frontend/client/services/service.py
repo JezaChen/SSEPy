@@ -27,6 +27,7 @@ from websockets.exceptions import InvalidURI, InvalidHandshake
 import frontend.client.services.file_manager as FileManager
 import schemes
 from frontend.common.constants import MsgType
+from frontend.common.utils import shorten_sid
 # bits represents status
 from frontend.constants import KEY_TYPE, KEY_SID, TYPE_INIT
 from global_config import ClientConfig
@@ -184,7 +185,7 @@ class Service:
 
     @property
     def short_sid(self) -> str:
-        return self.sid[:8]
+        return shorten_sid(self.sid)
 
     def register_echo_handler_once(self, msg_type: str, handler):
         if msg_type not in self.echo_handler:
