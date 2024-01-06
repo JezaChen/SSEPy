@@ -27,6 +27,7 @@ from websockets.exceptions import InvalidURI, InvalidHandshake
 import frontend.client.services.file_manager as FileManager
 import schemes
 from frontend.common.constants import MsgType
+from frontend.common.utils import shorten_sid
 # bits represents status
 from frontend.constants import KEY_TYPE, KEY_SID, TYPE_INIT
 from global_config import ClientConfig
@@ -180,34 +181,38 @@ class Service:
 
         self.echo_futures = {}
         self.result_futures = {}
-        logger.info(f"Create a service {sid} successfully.")
+        logger.info(f"Create a service {self.short_sid} successfully.")
+
+    @property
+    def short_sid(self) -> str:
+        return shorten_sid(self.sid)
 
     def register_echo_handler_once(self, msg_type: str, handler):
         if msg_type not in self.echo_handler:
             self.echo_handler[msg_type] = []
 
         self.echo_handler[msg_type].append(handler)
-        logger.info(f"[{self.sid}] Register an echo handler for {msg_type}.")
+        logger.info(f"[{self.short_sid}] Register an echo handler for {msg_type}.")
 
     def register_upload_echo_future_once(self, msg_type: str, fut: asyncio.Future):
         if msg_type not in self.echo_futures:
             self.echo_futures[msg_type] = []
 
         self.echo_futures[msg_type].append(fut)
-        logger.info(f"[{self.sid}] Register an echo future handler for {msg_type}.")
+        logger.info(f"[{self.short_sid}] Register an echo future handler for {msg_type}.")
 
     def register_result_future_once(self, tk_digest: str, fut: asyncio.Future):
         if tk_digest not in self.result_futures:
             self.result_futures[tk_digest] = []
         self.result_futures[tk_digest].append(fut)
-        logger.info(f"[{self.sid}] Register an result future handler for token {tk_digest}.")
+        logger.info(f"[{self.short_sid}] Register an result future handler for token {tk_digest}.")
 
     async def load_websocket(self):
         if self.websocket is not None:
             return
 
         uri = ClientConfig.SERVER_URI
-        logger.info(f"[{self.sid}] Connecting to server {uri}.")
+        logger.info(f"[{self.short_sid}] Connecting to server {uri}.")
         # config =
         try:
             websocket = await websockets.client.connect(uri, max_size=None)
@@ -221,28 +226,28 @@ class Service:
             init_echo = await websocket.recv()
             echo_dict = pickle.loads(init_echo)
             if "content" not in echo_dict:
-                logger.error(f"[{self.sid}] Init echo error.")
+                logger.error(f"[{self.short_sid}] Init echo error.")
                 raise ValueError("Init echo error.")
             echo_content = pickle.loads(echo_dict.get("content"))
             if echo_content.get("ok"):
-                logger.info(f"[{self.sid}] Connect to server {uri} successfully.")
+                logger.info(f"[{self.short_sid}] Connect to server {uri} successfully.")
                 self.websocket = websocket
                 asyncio.create_task(self._recv_message())
 
                 server_state = echo_content.get("state", 0)
-                logger.info(f"[{self.sid}] The service status on the server side is {server_state}")
+                logger.info(f"[{self.short_sid}] The service status on the server side is {server_state}")
                 self.update_current_client_service_state_by_server_service_state(server_state)
             else:
-                logger.error(f"[{self.sid}] Init echo error.")
+                logger.error(f"[{self.short_sid}] Init echo error.")
                 raise ValueError("Init echo error.")
         except (InvalidURI, InvalidHandshake, TimeoutError, websockets.ConnectionClosed) as e:
-            reason = f"[{self.sid}] Init echo error: {e}"
+            reason = f"[{self.short_sid}] Init echo error: {e}"
             logger.error(reason)
             raise ValueError(reason)
 
     def _store_service_meta(self):
         FileManager.write_service_meta(self.sid, self.service_meta)
-        logger.info(f"[{self.sid}] Store meta successfully.")
+        logger.info(f"[{self.short_sid}] Store meta successfully.")
 
     async def _send_message(self, msg_type: str, content: bytes, **additional_field):
         await self.load_websocket()  # check if websocket is initialized
@@ -291,12 +296,12 @@ class Service:
             return
 
         if self.config is None:
-            raise AttributeError(f"The config of this service {self.sid} is None.")
+            raise AttributeError(f"The config of this service {self.short_sid} is None.")
         if "scheme" not in self.config:
-            raise AttributeError(f"The config of this service {self.sid} does not have 'scheme' attribute.")
+            raise AttributeError(f"The config of this service {self.short_sid} does not have 'scheme' attribute.")
         scheme_name = self.config["scheme"]
         self.sse_module_loader = schemes.load_sse_module(scheme_name)
-        logger.info(f"[{self.sid}] Load SSE Module successfully.")
+        logger.info(f"[{self.short_sid}] Load SSE Module successfully.")
 
     def _load_config_object(self):
         if self.config_object is not None:
@@ -304,7 +309,7 @@ class Service:
 
         self._load_sse_module()
         self.config_object = self.sse_module_loader.SSEConfig(self.config)  # load scheme config ...
-        logger.info(f"[{self.sid}] Load SSE config object successfully.")
+        logger.info(f"[{self.short_sid}] Load SSE config object successfully.")
 
     def _load_sse_scheme(self):
         """load SSE scheme
@@ -315,7 +320,7 @@ class Service:
 
         self._load_sse_module()
         self.sse_scheme = self.sse_module_loader.SSEScheme(self.config)  # load scheme construction ...
-        logger.info(f"[{self.sid}] Load SSE scheme successfully.")
+        logger.info(f"[{self.short_sid}] Load SSE scheme successfully.")
 
     def _load_sse_encrypted_database(self):
         """load SSE Encrypted Database
@@ -330,7 +335,7 @@ class Service:
         edb_bytes = FileManager.read_encrypted_database(self.sid)
         EDBClass = self.sse_module_loader.SSEEncryptedDatabase
         self.edb = EDBClass.deserialize(edb_bytes, self.config_object)
-        logger.info(f"[{self.sid}] Load SSE encrypted database successfully.")
+        logger.info(f"[{self.short_sid}] Load SSE encrypted database successfully.")
 
     def _load_sse_key(self):
         self._load_sse_module()
@@ -339,7 +344,7 @@ class Service:
         key_bytes = FileManager.read_key(self.sid)
         KeyClass = self.sse_module_loader.SSEKey
         self.key = KeyClass.deserialize(key_bytes, self.config_object)
-        logger.info(f"[{self.sid}] Load SSE Key successfully.")
+        logger.info(f"[{self.short_sid}] Load SSE Key successfully.")
 
     def get_current_service_state(self):
         if self.service_meta is None:
@@ -369,7 +374,7 @@ class Service:
 
     def handle_create_config(self, config: dict):
         if ClientServiceState.is_config_created(self.get_current_service_state()):
-            raise ValueError(f"The config of service {self.sid} has been already created.")
+            raise ValueError(f"The config of service {self.short_sid} has been already created.")
 
         _check_config_valid(config)
         _add_salt_to_config(config)  # add salt
@@ -381,24 +386,24 @@ class Service:
         self.config = config
         self.set_current_service_state(ClientServiceState.set_config_created(self.get_current_service_state(), True))
         self._store_service_meta()
-        logger.info(f"[{self.sid}] Create service {self.sid} successfully!")
+        logger.info(f"[{self.short_sid}] Create service {self.short_sid} successfully!")
         return self.sid
 
     def _default_upload_config_echo_future_handler(self, fut: asyncio.Future):
         content = fut.result()
         if not content.get("ok", False):
             reason = content.get("reason", "")
-            logger.error(f"[{self.sid}] Upload config error, reason: {reason}")
+            logger.error(f"[{self.short_sid}] Upload config error, reason: {reason}")
             return
-        logger.info(f"[{self.sid}] Upload config successfully")
+        logger.info(f"[{self.short_sid}] Upload config successfully")
 
     def _default_upload_encrypted_database_echo_future_handler(self, fut: asyncio.Future):
         content = fut.result()
         if not content.get("ok", False):
             reason = content.get("reason", "")
-            logger.error(f"[{self.sid}] Upload encrypted database error, reason: {reason}")
+            logger.error(f"[{self.short_sid}] Upload encrypted database error, reason: {reason}")
             return
-        logger.info(f"[{self.sid}] Upload encrypted database successfully")
+        logger.info(f"[{self.short_sid}] Upload encrypted database successfully")
 
     async def handle_upload_config(self,
                                    wait=False,
@@ -407,11 +412,11 @@ class Service:
         await self.load_websocket()
 
         if ClientServiceState.is_config_uploaded(self.get_current_service_state()):
-            reason = f"The config of service {self.sid} has been already uploaded."
+            reason = f"The config of service {self.short_sid} has been already uploaded."
             logger.error(reason)
             raise ValueError(reason)
         if not ClientServiceState.is_config_created(self.get_current_service_state()):
-            reason = f"The config of service {self.sid} is not found."
+            reason = f"The config of service {self.short_sid} is not found."
             logger.error(reason)
             raise ValueError(reason)
 
@@ -428,7 +433,7 @@ class Service:
             self.register_upload_echo_future_once(MsgType.CONFIG, fut)
 
         await self._send_message(MsgType.CONFIG, pickle.dumps(self.config))
-        logger.info(f"[{self.sid}] Uploading config.")
+        logger.info(f"[{self.short_sid}] Uploading config.")
 
         if wait:
             await asyncio.wait_for(fut, 60)
@@ -437,33 +442,33 @@ class Service:
         content = pickle.loads(content_bytes)
         if not content.get("ok", False):
             reason = content.get("reason", "")
-            logger.error(f"[{self.sid}] Upload config error, reason: {reason}")
+            logger.error(f"[{self.short_sid}] Upload config error, reason: {reason}")
             return
 
         self.set_current_service_state(ClientServiceState.set_config_uploaded(self.get_current_service_state(), True))
         self._store_service_meta()
-        logger.info(f"[{self.sid}] Upload config successfully")
+        logger.info(f"[{self.short_sid}] Upload config successfully")
 
     def handle_upload_encrypted_database_echo(self, content_bytes: bytes):
         content = pickle.loads(content_bytes)
         if not content.get("ok", False):
             reason = content.get("reason", "")
-            logger.error(f"[{self.sid}] Upload encrypted database error, reason: {reason}")
+            logger.error(f"[{self.short_sid}] Upload encrypted database error, reason: {reason}")
             return
 
         self.set_current_service_state(ClientServiceState.set_db_uploaded(self.get_current_service_state(), True))
         self._store_service_meta()
-        logger.info(f"[{self.sid}] Upload encrypted database successfully")
+        logger.info(f"[{self.short_sid}] Upload encrypted database successfully")
         FileManager.delete_encrypted_database(self.sid)
-        logger.info(f"[{self.sid}] Delete the local encrypted database successfully")
+        logger.info(f"[{self.short_sid}] Delete the local encrypted database successfully")
 
     def handle_create_key(self):
         if ClientServiceState.is_key_created(self.get_current_service_state()):  # todo should allow re-create
-            reason = f"The SSE key of service {self.sid} has been already created."
+            reason = f"The SSE key of service {self.short_sid} has been already created."
             logger.error(reason)
             raise ValueError(reason)
         if not ClientServiceState.is_config_created(self.get_current_service_state()):
-            reason = f"The config of service {self.sid} is not found."
+            reason = f"The config of service {self.short_sid} is not found."
             logger.error(reason)
             raise ValueError(reason)
 
@@ -476,15 +481,15 @@ class Service:
 
     def handle_encrypt_database(self, database: dict):
         if ClientServiceState.is_db_encrypted(self.get_current_service_state()):  # todo should allow re-create
-            reason = f"The database of service {self.sid} has been already created."
+            reason = f"The database of service {self.short_sid} has been already created."
             logger.error(reason)
             raise ValueError(reason)
         if not ClientServiceState.is_config_created(self.get_current_service_state()):
-            reason = f"The config of service {self.sid} is not found."
+            reason = f"The config of service {self.short_sid} is not found."
             logger.error(reason)
             raise ValueError(reason)
         if not ClientServiceState.is_key_created(self.get_current_service_state()):
-            reason = f"The key of service {self.sid} is not found."
+            reason = f"The key of service {self.short_sid} is not found."
             logger.error(reason)
             raise ValueError(reason)
 
@@ -502,15 +507,15 @@ class Service:
         await self.load_websocket()
 
         if ClientServiceState.is_db_uploaded(self.get_current_service_state()):
-            reason = f"The database of service {self.sid} has been already uploaded."
+            reason = f"The database of service {self.short_sid} has been already uploaded."
             logger.error(reason)
             raise ValueError(reason)
         if not ClientServiceState.is_config_uploaded(self.get_current_service_state()):
-            reason = f"The config of service {self.sid} has not been uploaded."
+            reason = f"The config of service {self.short_sid} has not been uploaded."
             logger.error(reason)
             raise ValueError(reason)
         if not ClientServiceState.is_key_created(self.get_current_service_state()):
-            reason = f"The key of service {self.sid} is not found."
+            reason = f"The key of service {self.short_sid} is not found."
             logger.error(reason)
             raise ValueError(reason)
 
@@ -528,7 +533,7 @@ class Service:
             self.register_upload_echo_future_once(MsgType.UPLOAD_DB, fut)
 
         await self._send_message(MsgType.UPLOAD_DB, self.edb.serialize())
-        logger.info(f"[{self.sid}] Uploading encrypted database.")
+        logger.info(f"[{self.short_sid}] Uploading encrypted database.")
 
         if wait:
             await asyncio.wait_for(fut, 60)
@@ -539,7 +544,7 @@ class Service:
         await self.load_websocket()
 
         if not ClientServiceState.is_db_uploaded(self.get_current_service_state()):
-            reason = f"The database of service {self.sid} has not been uploaded."
+            reason = f"The database of service {self.short_sid} has not been uploaded."
             logger.error(reason)
             raise ValueError(reason)
 
@@ -564,30 +569,30 @@ class Service:
         await self._send_message(MsgType.TOKEN,
                                  token_bytes,
                                  token_digest=token_digest)
-        logger.info(f"[{self.sid}] Uploading search token.")
+        logger.info(f"[{self.short_sid}] Uploading search token.")
 
         if wait:
             await asyncio.wait_for(fut, 60)
 
     def handle_result(self, result_bytes: bytes):
         result = self.sse_module_loader.SSEResult.deserialize(result_bytes, self.config_object)
-        logger.info(f"[{self.sid}] The result is {result}.")
+        logger.info(f"[{self.short_sid}] The result is {result}.")
         return result
 
     def handle_result_future(self, fut: asyncio.Future):
         content = fut.result()
         result = self.sse_module_loader.SSEResult.deserialize(content, self.config_object)
-        logger.info(f"[{self.sid}] The result is {result}.")
+        logger.info(f"[{self.short_sid}] The result is {result}.")
 
     def handle_control_message(self, msg_bytes: bytes):
         msg_str = msg_bytes.decode(encoding='utf8')
-        logger.warning(f"[{self.sid}] Receive control message: {msg_str}.")
+        logger.warning(f"[{self.short_sid}] Receive control message: {msg_str}.")
 
     async def close_service(self):
         self._store_service_meta()
         if self.websocket is not None:
             await self.websocket.close()
-        logger.info(f"[{self.sid}] close Service successfully.")
+        logger.info(f"[{self.short_sid}] close Service successfully.")
 
 
 async def main():

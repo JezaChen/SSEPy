@@ -15,6 +15,7 @@ import asyncio
 from websockets.legacy.server import WebSocketServerProtocol
 
 from frontend.common.constants import MsgType
+from frontend.common.utils import shorten_sid
 from frontend.server.services.comm import send_message
 from frontend.server.services.service import Service
 from toolkit.logger.logger import getSSELogger
@@ -30,14 +31,15 @@ class ServicesManager:
         self._service_dict = {}
 
     async def create_service(self, sid: str, websocket: WebSocketServerProtocol):
-        logger.info(f"A new request for service {sid} found, creating...")
+        short_sid = shorten_sid(sid)  # shorten sid for display and log
+        logger.info(f"A new request for service {short_sid} found, creating...")
         # initialize a service first to send control message when the previous connection is not closed
         # a new service created with the same sid just to send init or control messages will not affect the database.
         service = Service(sid, websocket)
 
         if sid in self._service_dict:
             prev_server = self._service_dict[sid]
-            reason = f"Service {sid} is already running, we need to wait for the previous connection to close..."
+            reason = f"Service {short_sid} is already running, we need to wait for the previous connection to close..."
             logger.warning(reason)
             # In the previous practice, if the previous connection was not closed,
             # the later connection was closed, which resulted in a anomalous behavior of the client.
@@ -58,4 +60,4 @@ class ServicesManager:
             await asyncio.sleep(1)
             self._service_dict[sid].close_service()
             del self._service_dict[sid]
-        logger.info(f"Clean service {sid} successfully.")
+        logger.info(f"Clean service {shorten_sid(sid)} successfully.")
